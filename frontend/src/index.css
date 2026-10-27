@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-navy: #0C1A2D;
+    --color-lime: #C9F16A;
+    --color-mint: #68DCC5;
+    --color-coral: #FF876D;
+    --color-lavender: #B8A8FA;
+    --color-gold: #FFCE7D;
+    --color-offwhite: #F8FAFC;
+    --color-slate: #758193;
+  }
+
+  body {
+    background-color: #F8FAFC;
+    color: #0C1A2D;
+    font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Bento grid patterns */
+.bento-card {
+  @apply bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all duration-200;
+}
+
+.bento-card-dark {
+  @apply bg-signal-navy rounded-2xl text-white p-6 shadow-lg border border-signal-navy-border;
+}
+
+/* Glassmorphism accents */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
