@@ -24,7 +24,7 @@ services:
           name: hiresense-db
           property: connectionString
       - key: BACKEND_CORS_ORIGINS
-        value: "*"
+        value: '["*"]'
 
   # 2. React + Vite Frontend Static Site
   - type: web
