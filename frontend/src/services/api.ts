@@ -2,11 +2,14 @@ import axios from 'axios';
 import { Job, CV, Application, Company, MatchScoreBreakdown } from '../types';
 import { INITIAL_JOBS, INITIAL_CVS, INITIAL_APPLICATIONS, INITIAL_COMPANIES } from './mockData';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1').trim();
+const API_BASE_URL = rawApiUrl.endsWith('/api/v1')
+  ? rawApiUrl
+  : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 15000,
 });
 
 apiClient.interceptors.request.use((config) => {
