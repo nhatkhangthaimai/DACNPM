@@ -2,9 +2,32 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 from app.core.database import get_db
 from app.models.entities import Job, JobSkill, Skill, JobStatus, Company
 from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse
+
+COMMON_TECH_SKILLS = [
+    "Python", "FastAPI", "PostgreSQL", "Docker", "Redis", "ReactJS", "React",
+    "TypeScript", "JavaScript", "SQL", "Git", "Linux", "PyTorch", "TensorFlow",
+    "Machine Learning", "LLMs", "NLP", "Kubernetes", "AWS", "CI/CD", "Tailwind CSS",
+    "Node.js", "MongoDB", "RESTful API", "Microservices"
+]
+
+def extract_job_skills(title: str, requirements: str, description: str):
+    import re
+    text = f"{title or ''} {requirements or ''} {description or ''}"
+    reqs = []
+    prefs = []
+    for s in COMMON_TECH_SKILLS:
+        if re.search(r'\b' + re.escape(s) + r'\b', text, re.IGNORECASE):
+            if "ưu tiên" in text.lower() and s.lower() in text.lower().split("ưu tiên")[-1]:
+                prefs.append(s)
+            else:
+                reqs.append(s)
+    reqs = list(dict.fromkeys(reqs))
+    prefs = [p for p in dict.fromkeys(prefs) if p not in reqs]
+    return reqs or ["Python", "FastAPI"], prefs
 
 router = APIRouter()
 
@@ -18,7 +41,7 @@ async def get_jobs(
     status_filter: Optional[str] = None,
     db: AsyncSession = Depends(get_db)
 ):
-    query = select(Job).join(Company)
+    query = select(Job).options(selectinload(Job.company))
     if status_filter:
         query = query.where(Job.status == status_filter)
     else:
@@ -38,6 +61,7 @@ async def get_jobs(
 
     response = []
     for j in jobs:
+        r_skills, p_skills = extract_job_skills(j.title, j.requirements, j.description)
         response.append(JobResponse(
             id=j.id,
             company_id=j.company_id,
@@ -54,8 +78,8 @@ async def get_jobs(
             currency=j.currency,
             experience_level=j.experience_level,
             status=j.status,
-            required_skills=[],
-            preferred_skills=[],
+            required_skills=r_skills,
+            preferred_skills=p_skills,
             created_at=j.created_at
         ))
     return response
@@ -63,11 +87,12 @@ async def get_jobs(
 
 @router.get("/{job_id}", response_model=JobResponse)
 async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Job).where(Job.id == job_id))
+    result = await db.execute(select(Job).options(selectinload(Job.company)).where(Job.id == job_id))
     job = result.scalars().first()
     if not job:
         raise HTTPException(status_code=404, detail="Không tìm thấy tin tuyển dụng.")
     
+    r_skills, p_skills = extract_job_skills(job.title, job.requirements, job.description)
     return JobResponse(
         id=job.id,
         company_id=job.company_id,
@@ -84,8 +109,8 @@ async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
         currency=job.currency,
         experience_level=job.experience_level,
         status=job.status,
-        required_skills=[],
-        preferred_skills=[],
+        required_skills=r_skills,
+        preferred_skills=p_skills,
         created_at=job.created_at
     )
 

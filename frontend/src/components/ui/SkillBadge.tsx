@@ -76,10 +76,11 @@ export const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
       case 'closed':
       case 'rejected':
       case 'failed':
+      case 'extraction_failed':
         return {
           bg: 'bg-signal-coral/15 text-[#b8381d] border-signal-coral/30',
           dot: 'bg-signal-coral',
-          label: st === 'closed' ? 'Đã đóng' : st === 'rejected' ? 'Từ chối' : 'Thất bại'
+          label: st === 'closed' ? 'Đã đóng' : st === 'rejected' ? 'Từ chối' : st === 'extraction_failed' ? 'Lỗi trích xuất' : 'Thất bại'
         };
       default:
         return {

@@ -102,12 +102,12 @@ export const JobCard: React.FC<JobCardProps> = ({
 
         {/* Required Skills tags */}
         <div className="flex flex-wrap gap-1.5 mb-6">
-          {job.requiredSkills.slice(0, 4).map((skill, idx) => (
+          {(job.requiredSkills || []).slice(0, 4).map((skill, idx) => (
             <SkillBadge key={idx} name={skill} size="sm" variant="default" />
           ))}
-          {job.requiredSkills.length > 4 && (
+          {(job.requiredSkills || []).length > 4 && (
             <span className="text-xs text-slate-400 self-center px-1">
-              +{job.requiredSkills.length - 4} kỹ năng
+              +{(job.requiredSkills || []).length - 4} kỹ năng
             </span>
           )}
         </div>

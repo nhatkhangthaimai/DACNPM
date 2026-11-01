@@ -41,3 +41,36 @@ def decode_access_token(token: str) -> Optional[dict]:
         return payload
     except JWTError:
         return None
+
+
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import HTTPException, status, Depends
+
+security_bearer = HTTPBearer(auto_error=False)
+
+def get_current_user_payload(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_bearer)) -> Optional[dict]:
+    if not credentials:
+        return None
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token không hợp lệ hoặc đã hết hạn.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return payload
+
+
+def require_role(*allowed_roles: str):
+    def role_checker(payload: Optional[dict] = Depends(get_current_user_payload)) -> Optional[dict]:
+        if payload is None:
+            return None
+        role = payload.get("role")
+        if role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Quyền truy cập bị từ chối: vai trò '{role}' không có quyền truy cập tài nguyên này."
+            )
+        return payload
+    return role_checker
+

@@ -22,6 +22,7 @@ export const RegisterCandidatePage: React.FC = () => {
       email,
       phone,
       title,
+      password,
     });
     setIsLoading(false);
     navigate('/candidate/dashboard');

@@ -85,11 +85,14 @@ export interface CVExtractedData {
   fullName?: string;
   email?: string;
   phone?: string;
+  address?: string;
   summary?: string;
+  yearsOfExperience?: number;
   hardSkills: string[];
   softSkills: string[];
   education: EducationItem[];
   experience: ExperienceItem[];
+  projects?: any[];
   certifications: string[];
   languages: string[];
   missingFields: string[];
@@ -102,7 +105,10 @@ export interface CV {
   fileUrl: string;
   fileSize: number;
   isPrimary: boolean;
-  extractionStatus: 'pending' | 'processing' | 'completed' | 'failed';
+  extractionStatus: 'pending' | 'processing' | 'completed' | 'failed' | 'extraction_failed';
+  extractionError?: string;
+  contentValidated?: boolean;
+  userConfirmed?: boolean;
   parsedData?: CVExtractedData;
   createdAt: string;
 }

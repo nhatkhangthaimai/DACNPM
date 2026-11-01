@@ -183,11 +183,13 @@ class CVExtractedData(BaseModel):
     full_name: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None
+    address: Optional[str] = None
     summary: Optional[str] = None
     hard_skills: List[str] = []
     soft_skills: List[str] = []
     education: List[EducationItem] = []
     experience: List[ExperienceItem] = []
+    projects: List[Dict[str, Any]] = []
     certifications: List[str] = []
     languages: List[str] = []
     missing_fields: List[str] = []
@@ -201,11 +203,20 @@ class CVResponse(BaseModel):
     file_size: int
     is_primary: bool
     extraction_status: str
+    extraction_error: Optional[str] = None
+    content_validated: bool = False
     parsed_data: Optional[CVExtractedData] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+
+class MatchBlockedResponse(BaseModel):
+    status: str = "blocked"
+    error_code: str
+    message: str
+    match_score: Optional[float] = None
 
 
 # ================= APPLICATION & MATCHING SCHEMAS =================

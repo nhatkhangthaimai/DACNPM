@@ -211,7 +211,7 @@ export const JobModeration: React.FC = () => {
             <div>
               <h5 className="font-heading font-bold text-xs uppercase text-signal-slate mb-1">Kỹ năng:</h5>
               <div className="flex flex-wrap gap-2">
-                {selectedJob.requiredSkills.map((s, idx) => (
+                {(selectedJob.requiredSkills || []).map((s, idx) => (
                   <SkillBadge key={idx} name={s} variant="default" />
                 ))}
               </div>

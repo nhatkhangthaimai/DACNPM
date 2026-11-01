@@ -203,7 +203,7 @@ export const JobDiscovery: React.FC = () => {
                 Kỹ năng chuyên môn yêu cầu
               </h4>
               <div className="flex flex-wrap gap-2">
-                {selectedJobForDetail.requiredSkills.map((sk, i) => (
+                {(selectedJobForDetail.requiredSkills || []).map((sk, i) => (
                   <SkillBadge key={i} name={sk} variant="default" />
                 ))}
               </div>

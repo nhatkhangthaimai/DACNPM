@@ -118,7 +118,7 @@ export const CandidateDashboard: React.FC = () => {
                     {topJob.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {topJob.requiredSkills.slice(0, 4).map((s, idx) => (
+                    {(topJob.requiredSkills || []).slice(0, 4).map((s, idx) => (
                       <span key={idx} className="px-2.5 py-1 rounded-full text-xs font-medium bg-signal-navy-light text-slate-200 border border-signal-navy-border">
                         {s}
                       </span>
@@ -184,7 +184,7 @@ export const CandidateDashboard: React.FC = () => {
                     Kỹ năng nổi trội đã xác thực:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {primaryCV.parsedData?.hardSkills.slice(0, 5).map((sk, i) => (
+                    {(primaryCV.parsedData?.hardSkills || []).slice(0, 5).map((sk, i) => (
                       <SkillBadge key={i} name={sk} variant="matched" size="sm" />
                     ))}
                   </div>

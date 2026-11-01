@@ -22,6 +22,7 @@ export const RegisterRecruiterPage: React.FC = () => {
       email,
       companyName,
       phone,
+      password,
     });
     setIsLoading(false);
     navigate('/recruiter/dashboard');

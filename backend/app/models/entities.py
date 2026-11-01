@@ -5,8 +5,26 @@ from sqlalchemy import (
     Column, String, Boolean, Integer, Float, Text, ForeignKey, 
     DateTime, Enum as SQLEnum, JSON, Table
 )
+from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm import relationship
 from app.core.database import Base
+
+try:
+    from pgvector.sqlalchemy import Vector
+    HAS_PGVECTOR = True
+except ImportError:
+    HAS_PGVECTOR = False
+
+
+class CompatVector(TypeDecorator):
+    """Compatible vector type: uses pgvector.Vector(768) on PostgreSQL, JSON on SQLite."""
+    impl = JSON
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql" and HAS_PGVECTOR:
+            return dialect.type_descriptor(Vector(768))
+        return dialect.type_descriptor(JSON())
 
 
 def utc_now():
@@ -120,8 +138,11 @@ class CV(Base):
     mime_type = Column(String(100), nullable=False)
     raw_text = Column(Text, nullable=True)
     is_primary = Column(Boolean, default=False)
-    extraction_status = Column(String(50), default="pending", nullable=False)  # pending, processing, completed, failed
+    extraction_status = Column(String(50), default="pending", nullable=False)  # pending, processing, completed, failed, extraction_failed
+    extraction_error = Column(Text, nullable=True)
+    content_validated = Column(Boolean, default=False)
     parsed_data = Column(JSON, nullable=True)
+    embedding = Column(CompatVector, nullable=True)
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
 
@@ -204,6 +225,7 @@ class Job(Base):
     experience_level = Column(String(50), default="mid")  # entry, junior, mid, senior, lead
     status = Column(String(50), default=JobStatus.PUBLISHED, nullable=False, index=True)
     rejection_reason = Column(Text, nullable=True)
+    embedding = Column(CompatVector, nullable=True)
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
 

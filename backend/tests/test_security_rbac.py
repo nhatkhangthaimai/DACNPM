@@ -38,3 +38,22 @@ class TestSecurityAndRBAC:
         invalid_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalidpayload.invalidsignature"
         payload = decode_access_token(invalid_token)
         assert payload is None
+
+    @pytest.mark.anyio
+    async def test_candidate_forbidden_from_admin_endpoints(self, client):
+        """TC-SEC-04: Candidate token accessing Admin endpoint receives 403 Forbidden."""
+        cand_token = create_access_token(subject="user-cand-1", role=UserRole.CANDIDATE)
+        headers = {"Authorization": f"Bearer {cand_token}"}
+        resp = await client.get("/api/v1/admin/users", headers=headers)
+        assert resp.status_code == 403
+        assert "không có quyền truy cập" in resp.json()["detail"]
+
+    @pytest.mark.anyio
+    async def test_admin_authorized_for_admin_endpoints(self, client):
+        """TC-SEC-05: Admin token successfully accesses Admin endpoint."""
+        admin_token = create_access_token(subject="user-adm-1", role=UserRole.ADMIN)
+        headers = {"Authorization": f"Bearer {admin_token}"}
+        resp = await client.get("/api/v1/admin/users", headers=headers)
+        assert resp.status_code == 200
+        assert isinstance(resp.json(), list)
+

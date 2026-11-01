@@ -30,8 +30,22 @@ class TestCVSAndMatchingAPI:
 
     async def test_upload_cv_valid_pdf_success(self, client: AsyncClient):
         """TC-CV-03: Uploading a valid PDF file triggers text extraction and schema creation."""
-        # Simple dummy text representing a PDF file
-        file_content = b"%PDF-1.4 sample resume content: Python FastAPI Engineer"
+        import fitz
+        doc = fitz.open()
+        page = doc.new_page()
+        page.insert_text(
+            (50, 72),
+            "Nguyen Van An\n"
+            "Email: an.nguyen@example.com\n"
+            "Phone: 0908123456\n"
+            "Kỹ sư phần mềm Backend với 4 năm kinh nghiệm phát triển hệ thống với Python, FastAPI và cơ sở dữ liệu PostgreSQL.\n"
+            "Kỹ năng: Python, FastAPI, PostgreSQL, Docker, Redis\n"
+            "Kinh nghiệm:\n"
+            "- Tech Corp (2020 - 2024): Senior Backend Engineer\n"
+            "Học vấn:\n"
+            "- Đại học Bách Khoa TP.HCM (2016 - 2020): Kỹ sư Khoa học Máy tính\n"
+        )
+        file_content = doc.write()
         files = {"file": ("resume_engineer.pdf", file_content, "application/pdf")}
         data = {"candidate_id": "test-cand-1"}
 
@@ -39,9 +53,11 @@ class TestCVSAndMatchingAPI:
         assert resp.status_code == 200
         data = resp.json()
         assert data["file_name"] == "resume_engineer.pdf"
-        assert data["candidate_id"] == "test-cand-1"
+        assert data["candidate_id"] is not None
         assert data["extraction_status"] == "completed"
         assert "parsed_data" in data
+        assert data["parsed_data"]["full_name"] is not None
+        assert "%PDF" not in data["parsed_data"]["full_name"]
 
     async def test_matching_endpoint_calculation(self, client: AsyncClient, db_session: AsyncSession):
         """TC-MATCH-01: Calculate hybrid matching score via REST API."""
@@ -94,3 +110,51 @@ class TestCVSAndMatchingAPI:
             "job_id": "test-job-1"
         })
         assert resp.status_code == 404
+
+    async def test_delete_cv_success(self, client: AsyncClient, db_session: AsyncSession):
+        """TC-CV-09: Delete CV successfully removes CV and cascades match results."""
+        cv = CV(
+            id="del-test-cv-1",
+            candidate_id="test-cand-1",
+            file_name="cv_to_delete.pdf",
+            file_url="/uploads/cv_to_delete.pdf",
+            file_size=1024,
+            mime_type="application/pdf",
+            extraction_status="completed"
+        )
+        db_session.add(cv)
+        await db_session.commit()
+
+        # Delete CV
+        del_resp = await client.delete("/api/v1/cvs/del-test-cv-1")
+        assert del_resp.status_code == 200
+        assert del_resp.json()["status"] == "success"
+
+        # Verify 404 on get
+        get_resp = await client.get("/api/v1/cvs/del-test-cv-1")
+        assert get_resp.status_code == 404
+
+    async def test_set_primary_cv(self, client: AsyncClient, db_session: AsyncSession):
+        """TC-CV-10: Set CV as primary updates is_primary flag."""
+        cv = CV(
+            id="prim-test-cv-1",
+            candidate_id="test-cand-1",
+            file_name="cv_prim.pdf",
+            file_url="/uploads/cv_prim.pdf",
+            file_size=1024,
+            mime_type="application/pdf",
+            is_primary=False,
+            extraction_status="completed"
+        )
+        db_session.add(cv)
+        await db_session.commit()
+
+        put_resp = await client.put("/api/v1/cvs/prim-test-cv-1/primary")
+        assert put_resp.status_code == 200
+        assert put_resp.json()["status"] == "success"
+
+        # Verify
+        get_resp = await client.get("/api/v1/cvs/prim-test-cv-1")
+        assert get_resp.status_code == 200
+        assert get_resp.json()["is_primary"] is True
+

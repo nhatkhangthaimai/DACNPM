@@ -107,11 +107,11 @@ export const CandidateRanking: React.FC = () => {
                 {app.matchBreakdown && (
                   <div className="flex flex-wrap items-center gap-1.5 text-xs">
                     <span className="text-emerald-700 font-semibold mr-1">
-                      Kỹ năng khớp: {app.matchBreakdown.matchedSkills.slice(0, 4).join(', ')}
+                      Kỹ năng khớp: {(app.matchBreakdown.matchedSkills || []).slice(0, 4).join(', ')}
                     </span>
-                    {app.matchBreakdown.missingRequiredSkills.length > 0 && (
+                    {(app.matchBreakdown.missingRequiredSkills || []).length > 0 && (
                       <span className="text-rose-600 font-semibold">
-                        · Thiếu: {app.matchBreakdown.missingRequiredSkills.join(', ')}
+                        · Thiếu: {(app.matchBreakdown.missingRequiredSkills || []).join(', ')}
                       </span>
                     )}
                   </div>

@@ -1,26 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { Button } from '../../components/ui/Button';
-import { User, Mail, Phone, MapPin, Briefcase, DollarSign, Globe, Code2, CheckCircle2 } from 'lucide-react';
+import { Code2, Globe, CheckCircle2 } from 'lucide-react';
+
+interface ProfileData {
+  fullName: string;
+  phone: string;
+  title: string;
+  location: string;
+  expectedSalary: string;
+  bio: string;
+  github: string;
+  linkedin: string;
+}
 
 export const CandidateProfilePage: React.FC = () => {
   const { user } = useAuth();
-  const [fullName, setFullName] = useState(user?.fullName || 'Nguyễn Văn An');
-  const [phone, setPhone] = useState('0908 123 456');
-  const [title, setTitle] = useState('Senior AI / Machine Learning Engineer');
-  const [location, setLocation] = useState('TP. Hồ Chí Minh');
-  const [yearsExp, setYearsExp] = useState('3.5');
-  const [expectedSalary, setExpectedSalary] = useState('50000000');
-  const [bio, setBio] = useState('Kỹ sư AI đam mê nghiên cứu và ứng dụng thực tiễn các mô hình ngôn ngữ lớn (LLMs), RAG và kiến trúc microservices.');
-  const [github, setGithub] = useState('https://github.com/nguyenvanan-ai');
-  const [linkedin, setLinkedin] = useState('https://linkedin.com/in/nguyenvanan-ai');
+  const storageKey = `hiresense_profile_${user?.id || 'default'}`;
+
+  const loadProfile = (): ProfileData => {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // fall through to defaults
+      }
+    }
+    // Lần đầu: lấy thông tin cơ bản từ user auth, còn lại để trống
+    return {
+      fullName: user?.fullName || '',
+      phone: user?.phone || '',
+      title: '',
+      location: '',
+      expectedSalary: '',
+      bio: '',
+      github: '',
+      linkedin: '',
+    };
+  };
+
+  const [profile, setProfile] = useState<ProfileData>(loadProfile);
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  // Khi user thay đổi (switch account) thì tải lại profile
+  useEffect(() => {
+    setProfile(loadProfile());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
+  const handleChange = (field: keyof ProfileData, value: string) => {
+    setProfile(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem(storageKey, JSON.stringify(profile));
     setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 2000);
+    setTimeout(() => setSavedSuccess(false), 3000);
   };
 
   return (
@@ -45,8 +83,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              value={profile.fullName}
+              onChange={(e) => handleChange('fullName', e.target.value)}
+              placeholder="Nhập họ và tên đầy đủ"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -58,7 +97,7 @@ export const CandidateProfilePage: React.FC = () => {
             <input
               type="email"
               disabled
-              value={user?.email || 'nguyenvanan.ai@gmail.com'}
+              value={user?.email || ''}
               className="w-full bg-slate-100 text-slate-500 text-sm rounded-xl px-4 py-2.5 border border-slate-200 cursor-not-allowed"
             />
           </div>
@@ -69,8 +108,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={profile.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              placeholder="Nhập số điện thoại"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -81,8 +121,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={profile.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+              placeholder="Ví dụ: Frontend Developer"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -93,8 +134,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={profile.location}
+              onChange={(e) => handleChange('location', e.target.value)}
+              placeholder="Ví dụ: Đà Nẵng, TP.HCM"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -105,8 +147,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="number"
-              value={expectedSalary}
-              onChange={(e) => setExpectedSalary(e.target.value)}
+              value={profile.expectedSalary}
+              onChange={(e) => handleChange('expectedSalary', e.target.value)}
+              placeholder="Ví dụ: 15000000"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -118,8 +161,9 @@ export const CandidateProfilePage: React.FC = () => {
           </label>
           <textarea
             rows={3}
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            value={profile.bio}
+            onChange={(e) => handleChange('bio', e.target.value)}
+            placeholder="Mô tả ngắn về kinh nghiệm, thế mạnh và định hướng nghề nghiệp của bạn..."
             className="w-full bg-signal-offwhite text-sm rounded-xl p-3 border border-slate-200 focus:outline-none focus:border-signal-navy"
           />
         </div>
@@ -131,8 +175,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="url"
-              value={github}
-              onChange={(e) => setGithub(e.target.value)}
+              value={profile.github}
+              onChange={(e) => handleChange('github', e.target.value)}
+              placeholder="https://github.com/username"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>
@@ -143,8 +188,9 @@ export const CandidateProfilePage: React.FC = () => {
             </label>
             <input
               type="url"
-              value={linkedin}
-              onChange={(e) => setLinkedin(e.target.value)}
+              value={profile.linkedin}
+              onChange={(e) => handleChange('linkedin', e.target.value)}
+              placeholder="https://linkedin.com/in/username"
               className="w-full bg-signal-offwhite text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-signal-navy"
             />
           </div>

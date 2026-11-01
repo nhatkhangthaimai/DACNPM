@@ -2,6 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 from app.core.database import get_db
 from app.models.entities import Application, Job, CV, User, MatchResult
 from app.schemas.all_schemas import ApplicationCreate, ApplicationStatusUpdate, ApplicationResponse, MatchScoreBreakdown
@@ -12,7 +13,11 @@ router = APIRouter()
 
 @router.get("", response_model=List[ApplicationResponse])
 async def get_applications(candidate_id: Optional[str] = None, job_id: Optional[str] = None, db: AsyncSession = Depends(get_db)):
-    query = select(Application)
+    query = select(Application).options(
+        selectinload(Application.job).selectinload(Job.company),
+        selectinload(Application.cv),
+        selectinload(Application.match_result)
+    )
     if candidate_id:
         query = query.where(Application.candidate_id == candidate_id)
     if job_id:
@@ -44,7 +49,7 @@ async def get_applications(candidate_id: Optional[str] = None, job_id: Optional[
 @router.post("", response_model=ApplicationResponse)
 async def submit_application(data: ApplicationCreate, db: AsyncSession = Depends(get_db)):
     # Fetch job & cv
-    job = (await db.execute(select(Job).where(Job.id == data.job_id))).scalars().first()
+    job = (await db.execute(select(Job).options(selectinload(Job.company)).where(Job.id == data.job_id))).scalars().first()
     cv = (await db.execute(select(CV).where(CV.id == data.cv_id))).scalars().first()
 
     if not job or not cv:

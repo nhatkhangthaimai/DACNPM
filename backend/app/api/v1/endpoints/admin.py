@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.core.database import get_db
+from app.core.security import require_role
 from app.models.entities import User, Job, AuditLog
 from app.schemas.all_schemas import UserResponse
 
@@ -10,7 +11,11 @@ router = APIRouter()
 
 
 @router.get("/users", response_model=List[UserResponse])
-async def list_users(role: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+async def list_users(
+    role: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    _auth: Optional[dict] = Depends(require_role("admin"))
+):
     query = select(User)
     if role and role != "all":
         query = query.where(User.role == role)
@@ -32,7 +37,11 @@ async def list_users(role: Optional[str] = None, db: AsyncSession = Depends(get_
 
 
 @router.put("/users/{user_id}/toggle-active", response_model=UserResponse)
-async def toggle_user_active(user_id: str, db: AsyncSession = Depends(get_db)):
+async def toggle_user_active(
+    user_id: str,
+    db: AsyncSession = Depends(get_db),
+    _auth: Optional[dict] = Depends(require_role("admin"))
+):
     res = await db.execute(select(User).where(User.id == user_id))
     user = res.scalars().first()
     if not user:
@@ -55,7 +64,13 @@ async def toggle_user_active(user_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/jobs/{job_id}/moderate")
-async def moderate_job(job_id: str, status: str, rejection_reason: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+async def moderate_job(
+    job_id: str,
+    status: str,
+    rejection_reason: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    _auth: Optional[dict] = Depends(require_role("admin"))
+):
     res = await db.execute(select(Job).where(Job.id == job_id))
     job = res.scalars().first()
     if not job:
