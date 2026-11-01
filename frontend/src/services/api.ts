@@ -464,7 +464,30 @@ export const apiService = {
       cv_id: cvId,
       job_id: jobId,
     });
-    return res.data;
+    const d = res.data || {};
+    return {
+      overallScore: d.overallScore ?? d.overall_score ?? 0,
+      hardSkillsScore: d.hardSkillsScore ?? d.hard_skills_score ?? 0,
+      semanticScore: d.semanticScore ?? d.semantic_score ?? 0,
+      experienceScore: d.experienceScore ?? d.experience_score ?? 0,
+      matchedSkills: Array.isArray(d.matchedSkills)
+        ? d.matchedSkills
+        : Array.isArray(d.matched_skills)
+        ? d.matched_skills
+        : [],
+      missingRequiredSkills: Array.isArray(d.missingRequiredSkills)
+        ? d.missingRequiredSkills
+        : Array.isArray(d.missing_required_skills)
+        ? d.missing_required_skills
+        : [],
+      missingPreferredSkills: Array.isArray(d.missingPreferredSkills)
+        ? d.missingPreferredSkills
+        : Array.isArray(d.missing_preferred_skills)
+        ? d.missing_preferred_skills
+        : [],
+      aiExplanation: d.aiExplanation || d.ai_explanation || '',
+      recommendations: Array.isArray(d.recommendations) ? d.recommendations : [],
+    };
   },
 
   // APPLICATIONS

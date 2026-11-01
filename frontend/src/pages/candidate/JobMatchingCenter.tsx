@@ -24,18 +24,18 @@ export const JobMatchingCenter: React.FC = () => {
     ]).then(([jobsData, cvsData]) => {
       setJobs(jobsData);
       setCvs(cvsData);
-      if (jobsData.length > 0) setSelectedJobId(jobsData[0].id);
-      if (cvsData.length > 0) setSelectedCvId(cvsData[0].id);
+      const initialJob = jobsData.length > 0 ? jobsData[0] : null;
+      const initialCv = cvsData.length > 0 ? (cvsData.find(c => c.isPrimary) || cvsData[0]) : null;
 
-      // Only compute initial match if the first CV is verified completed
-      if (jobsData.length > 0 && cvsData.length > 0) {
-        const firstCv = cvsData[0];
-        if (firstCv.extractionStatus === 'completed' && firstCv.parsedData) {
-          const initialResult = apiService.calculateMatchScore(firstCv, jobsData[0]);
-          setMatchResult(initialResult);
-        } else {
-          setMatchResult(null);
-        }
+      if (initialJob) setSelectedJobId(initialJob.id);
+      if (initialCv) setSelectedCvId(initialCv.id);
+
+      // Compute initial match if valid
+      if (initialJob && initialCv && initialCv.extractionStatus === 'completed' && initialCv.parsedData) {
+        const initialResult = apiService.calculateMatchScore(initialCv, initialJob);
+        setMatchResult(initialResult);
+      } else {
+        setMatchResult(null);
       }
     });
   }, [user?.id]);
@@ -46,6 +46,32 @@ export const JobMatchingCenter: React.FC = () => {
   const isCvValid = currentCv?.extractionStatus === 'completed' && Boolean(currentCv?.parsedData);
   const isCvFailed = currentCv?.extractionStatus === 'failed' || currentCv?.extractionStatus === 'extraction_failed';
   const isCvProcessing = currentCv?.extractionStatus === 'processing' || currentCv?.extractionStatus === 'pending';
+
+  // Instant recalculation when candidate chooses another CV
+  const handleSelectCv = (cvId: string) => {
+    setSelectedCvId(cvId);
+    setErrorMessage(null);
+    const newCv = cvs.find(c => c.id === cvId);
+    if (newCv && currentJob && newCv.extractionStatus === 'completed' && newCv.parsedData) {
+      const instantResult = apiService.calculateMatchScore(newCv, currentJob);
+      setMatchResult(instantResult);
+    } else {
+      setMatchResult(null);
+    }
+  };
+
+  // Instant recalculation when candidate chooses another Job
+  const handleSelectJob = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setErrorMessage(null);
+    const newJob = jobs.find(j => j.id === jobId);
+    if (currentCv && newJob && currentCv.extractionStatus === 'completed' && currentCv.parsedData) {
+      const instantResult = apiService.calculateMatchScore(currentCv, newJob);
+      setMatchResult(instantResult);
+    } else {
+      setMatchResult(null);
+    }
+  };
 
   const handleRunMatch = async () => {
     if (!currentJob || !currentCv) return;
@@ -60,7 +86,7 @@ export const JobMatchingCenter: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      // Try backend endpoint first
+      // Try backend endpoint first (with proper camelCase normalization in apiService)
       const result = await apiService.calculateMatchViaBackend(currentCv.id, currentJob.id);
       setMatchResult(result);
     } catch (err: any) {
@@ -98,11 +124,7 @@ export const JobMatchingCenter: React.FC = () => {
             {cvs.length > 0 ? (
               <select
                 value={selectedCvId}
-                onChange={(e) => {
-                  setSelectedCvId(e.target.value);
-                  setErrorMessage(null);
-                  setMatchResult(null);
-                }}
+                onChange={(e) => handleSelectCv(e.target.value)}
                 className="w-full bg-signal-offwhite text-sm font-semibold rounded-2xl px-4 py-3 border border-slate-200 focus:outline-none focus:border-signal-navy cursor-pointer"
               >
                 {cvs.map((c) => (
@@ -147,11 +169,7 @@ export const JobMatchingCenter: React.FC = () => {
             </label>
             <select
               value={selectedJobId}
-              onChange={(e) => {
-                setSelectedJobId(e.target.value);
-                setErrorMessage(null);
-                setMatchResult(null);
-              }}
+              onChange={(e) => handleSelectJob(e.target.value)}
               className="w-full bg-signal-offwhite text-sm font-semibold rounded-2xl px-4 py-3 border border-slate-200 focus:outline-none focus:border-signal-navy cursor-pointer"
             >
               {jobs.map((j) => (
@@ -190,14 +208,28 @@ export const JobMatchingCenter: React.FC = () => {
         </div>
       </div>
 
-      {/* Match Result Output - Only render when valid result exists */}
-      {matchResult && isCvValid && (
+      {/* Match Result Output */}
+      {matchResult && isCvValid ? (
         <SkillGapPanel
           breakdown={matchResult}
           jobTitle={currentJob?.title}
           candidateName={currentCv?.parsedData?.fullName || user?.fullName || 'Ứng viên'}
         />
-      )}
+      ) : !matchResult && isCvValid ? (
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-12 text-center space-y-4 shadow-sm">
+          <div className="w-14 h-14 bg-signal-lime/20 text-[#557512] rounded-2xl flex items-center justify-center mx-auto">
+            <Sparkles className="w-7 h-7" />
+          </div>
+          <div className="max-w-md mx-auto space-y-1">
+            <h3 className="font-heading font-bold text-lg text-signal-navy">
+              Sẵn sàng phân tích độ tương thích
+            </h3>
+            <p className="text-sm text-signal-slate">
+              Nhấn nút <strong className="text-signal-navy">"Chạy Phân tích So khớp AI"</strong> để hệ thống đối sánh kỹ năng và kinh nghiệm giữa hồ sơ của bạn với vị trí tuyển dụng mục tiêu.
+            </p>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
