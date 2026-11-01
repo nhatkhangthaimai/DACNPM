@@ -2,14 +2,20 @@ import axios from 'axios';
 import { Job, CV, Application, Company, MatchScoreBreakdown } from '../types';
 import { INITIAL_JOBS, INITIAL_CVS, INITIAL_APPLICATIONS, INITIAL_COMPANIES } from './mockData';
 
-const rawApiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1').trim();
-const API_BASE_URL = rawApiUrl.endsWith('/api/v1')
-  ? rawApiUrl
-  : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`;
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim();
+let resolvedBaseUrl = '/api/v1';
+if (rawApiUrl) {
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && rawApiUrl.includes('localhost')) {
+    resolvedBaseUrl = '/api/v1';
+  } else {
+    resolvedBaseUrl = rawApiUrl.endsWith('/api/v1') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`;
+  }
+}
+const API_BASE_URL = resolvedBaseUrl;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000,
+  timeout: 60000, // 60s for AI extraction pipeline
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -28,7 +34,15 @@ const getStored = <T>(key: string, fallback: T): T => {
     return fallback;
   }
   try {
-    return JSON.parse(val);
+    let parsed = JSON.parse(val);
+    // Auto-clean stale error items from previous client-side reader bug
+    if (key === 'hiresense_cvs' && Array.isArray(parsed)) {
+      parsed = parsed.filter((c: any) => 
+        c.extractionError !== 'Tệp PDF dạng binary không có text layer hoặc chưa qua parser backend.'
+      );
+      localStorage.setItem(key, JSON.stringify(parsed));
+    }
+    return parsed;
   } catch {
     return fallback;
   }
@@ -228,9 +242,7 @@ export const apiService = {
       formData.append('file', file);
       formData.append('candidate_id', candidateId);
 
-      const res = await apiClient.post('/cvs/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await apiClient.post('/cvs/upload', formData);
 
       const serverCV = res.data;
       const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
@@ -277,280 +289,48 @@ export const apiService = {
       setStored('hiresense_cvs', [cv, ...cvs]);
       return cv;
     } catch (apiErr: any) {
-      console.warn('Backend API upload returned error or is offline, running client parser with validation:', apiErr);
+      console.error('Lỗi khi tải lên và phân tích CV:', apiErr);
 
-      if (apiErr.response?.data?.detail) {
-        const detailMsg = typeof apiErr.response.data.detail === 'string'
+      let detailMsg = 'Không thể kết nối đến máy chủ Backend AI. Vui lòng kiểm tra lại dịch vụ Backend.';
+      if (apiErr.code === 'ECONNABORTED' || apiErr.message?.includes('timeout')) {
+        detailMsg = 'Hệ thống AI xử lý tệp quá thời gian chờ (timeout). Vui lòng thử lại.';
+      } else if (apiErr.response?.data?.detail) {
+        detailMsg = typeof apiErr.response.data.detail === 'string'
           ? apiErr.response.data.detail
-          : apiErr.response.data.detail.message || 'Tệp không hợp lệ';
-        const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
-        const failedCv: CV = {
-          id: `cv-${Date.now()}`,
-          candidateId,
-          fileName: file.name,
-          fileUrl: URL.createObjectURL(file),
-          fileSize: file.size,
-          isPrimary: cvs.length === 0,
-          extractionStatus: 'failed',
-          extractionError: detailMsg,
-          contentValidated: false,
-          parsedData: {
-            fullName: 'Lỗi định dạng',
-            email: '',
-            phone: '',
-            summary: detailMsg,
-            hardSkills: [],
-            softSkills: [],
-            education: [],
-            experience: [],
-            certifications: [],
-            languages: [],
-            missingFields: [detailMsg]
-          },
-          createdAt: new Date().toISOString(),
-        };
-        setStored('hiresense_cvs', [failedCv, ...cvs]);
-        return failedCv;
+          : (apiErr.response.data.detail.message || JSON.stringify(apiErr.response.data.detail));
+      } else if (apiErr.message) {
+        detailMsg = `Lỗi kết nối máy chủ: ${apiErr.message}`;
       }
+
+      const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
+      const failedCv: CV = {
+        id: `cv-${Date.now()}`,
+        candidateId,
+        fileName: file.name,
+        fileUrl: URL.createObjectURL(file),
+        fileSize: file.size,
+        isPrimary: cvs.length === 0,
+        extractionStatus: 'failed',
+        extractionError: detailMsg,
+        contentValidated: false,
+        parsedData: {
+          fullName: 'Lỗi tải lên',
+          email: '',
+          phone: '',
+          summary: detailMsg,
+          hardSkills: [],
+          softSkills: [],
+          education: [],
+          experience: [],
+          certifications: [],
+          languages: [],
+          missingFields: [detailMsg]
+        },
+        createdAt: new Date().toISOString(),
+      };
+      setStored('hiresense_cvs', [failedCv, ...cvs]);
+      return failedCv;
     }
-
-    // 2. Client-side fallback with strict validation against raw binary PDF
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const rawText = (event.target?.result as string) || '';
-        const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
-
-        // Quality check: Reject raw binary PDF leaks (%PDF- or /Type /Pages)
-        const isBinaryPdf = rawText.startsWith('%PDF-') || rawText.includes('/Type') || rawText.includes('/Pages') || rawText.includes('endobj');
-        if (isBinaryPdf) {
-          const failedCv: CV = {
-            id: `cv-${Date.now()}`,
-            candidateId,
-            fileName: file.name,
-            fileUrl: URL.createObjectURL(file),
-            fileSize: file.size,
-            isPrimary: cvs.length === 0,
-            extractionStatus: 'failed',
-            extractionError: 'Tệp PDF dạng binary không có text layer hoặc chưa qua parser backend.',
-            contentValidated: false,
-            parsedData: {
-              fullName: 'Lỗi đọc tệp',
-              email: '',
-              phone: '',
-              summary: 'Không thể đọc nội dung CV. Vui lòng tải lên file PDF có văn bản hoặc file DOCX.',
-              hardSkills: [],
-              softSkills: [],
-              education: [],
-              experience: [],
-              certifications: [],
-              languages: [],
-              missingFields: ['Tệp PDF dạng binary']
-            },
-            createdAt: new Date().toISOString(),
-          };
-          setStored('hiresense_cvs', [failedCv, ...cvs]);
-          resolve(failedCv);
-          return;
-        }
-
-        // --- Bóc tách thông tin từ văn bản thực tế ---
-        const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        const allText = rawText;
-
-        // Tìm Email
-        const emailMatch = allText.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/);
-        const extractedEmail = emailMatch ? emailMatch[0] : '';
-
-        // Tìm số điện thoại (VN format)
-        const phoneMatch = allText.match(/(?:0|\+84)[0-9\s]{8,11}/);
-        const extractedPhone = phoneMatch ? phoneMatch[0].trim() : '';
-
-        // Tìm tên (dòng đầu tiên có chữ thường là tên, hoặc dòng sau "Họ tên" / "Họ và tên")
-        let extractedName = '';
-        const namePatterns = [
-          /(?:Họ(?:\s+và)?\s+tên|Full\s*Name|Candidate|Ứng viên)[:\s]+([^\n\r]+)/i,
-        ];
-        for (const pat of namePatterns) {
-          const m = allText.match(pat);
-          if (m) { extractedName = m[1].trim(); break; }
-        }
-        // Nếu không tìm được, dùng dòng đầu tiên (thường là tên trong CV)
-        if (!extractedName && lines.length > 0) {
-          // Lấy dòng đầu không phải email/sđt/url
-          for (const line of lines.slice(0, 5)) {
-            if (!line.includes('@') && !line.match(/^\d/) && !line.match(/^http/i) && line.length > 3 && line.length < 80) {
-              extractedName = line;
-              break;
-            }
-          }
-        }
-
-        // Tóm tắt / Bio
-        const bioPatterns = [
-          /(?:Đôi nét về bản thân|Giới thiệu|Mục tiêu|Objective|Summary|About me)[:\s]*\n?([\s\S]{20,400}?)(?:\n\n|\n(?=[A-ZĐÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂẮẰẶẲẴỔỒỐỔỔỘỘỢỜỜỚ]))/i
-        ];
-        let extractedSummary = '';
-        for (const pat of bioPatterns) {
-          const m = allText.match(pat);
-          if (m) { extractedSummary = m[1].replace(/\r?\n/g, ' ').trim().slice(0, 400); break; }
-        }
-
-        // Kỹ năng cứng - tìm phần Kỹ năng / Skills
-        const skillKeywords = [
-          'Python','JavaScript','TypeScript','ReactJS','React','NodeJS','Node.js',
-          'FastAPI','Django','Flask','Java','C++','C#','PHP','Ruby','Go','Rust','Swift',
-          'PostgreSQL','MySQL','MongoDB','Redis','Elasticsearch',
-          'Docker','Kubernetes','AWS','Azure','GCP','Git','CI/CD',
-          'Machine Learning','Deep Learning','TensorFlow','PyTorch','LLMs','AI',
-          'HTML','CSS','Tailwind','Vue','Angular','NextJS',
-          'Tiếng Anh','English','Photoshop','Figma','Excel','Word','PowerPoint',
-          'Housekeeping','Dealer','Quản lý','Lễ tân','Du lịch','Khách sạn',
-          'Nhà hàng','Phục vụ','Marketing','Sales','Kế toán','Kinh doanh',
-          'Giao tiếp','Teamwork','Leadership','Problem solving',
-        ];
-        const foundHardSkills = skillKeywords.filter(sk =>
-          new RegExp('\\b' + sk.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(allText)
-        );
-
-        // Kỹ năng mềm - tìm trong nội dung
-        const softKeywordMap: Record<string, string> = {
-          'giao tiếp': 'Giao tiếp',
-          'teamwork': 'Làm việc nhóm',
-          'làm việc nhóm': 'Làm việc nhóm',
-          'tự chủ': 'Tự chủ trong công việc',
-          'tiếp thu': 'Tiếp thu nhanh',
-          'thích ứng': 'Thích ứng nhanh',
-          'chịu áp lực': 'Chịu áp lực tốt',
-          'sáng tạo': 'Sáng tạo',
-          'tư duy': 'Tư duy phản biện',
-          'trách nhiệm': 'Có trách nhiệm',
-          'cẩn thận': 'Cẩn thận, tỉ mỉ',
-          'nhiệt tình': 'Nhiệt tình',
-          'năng động': 'Năng động',
-        };
-        const foundSoftSkills: string[] = [];
-        const lowerText = allText.toLowerCase();
-        for (const [kw, label] of Object.entries(softKeywordMap)) {
-          if (lowerText.includes(kw) && !foundSoftSkills.includes(label)) {
-            foundSoftSkills.push(label);
-          }
-        }
-
-        // Kinh nghiệm - tìm các đoạn có năm/tháng kèm tên công ty
-        const expBlocks: { companyName: string; jobTitle: string; startDate: string; endDate: string; isCurrent: boolean; description: string }[] = [];
-        // Pattern: "Từ MM/YYYY - MM/YYYY" hoặc "YYYY - YYYY"
-        const expPattern = /(?:Từ\s+)?(\d{1,2}\/\d{4}|\d{4})\s*[-–]\s*(\d{1,2}\/\d{4}|\d{4}|Hiện tại|nay|present|current)([\s\S]{0,600}?)(?=(?:Từ\s+)?\d{1,2}\/\d{4}|\d{4}\s*[-–]|$)/gi;
-        let expMatch;
-        while ((expMatch = expPattern.exec(allText)) !== null && expBlocks.length < 5) {
-          const block = expMatch[3] || '';
-          const blockLines = block.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-          // Tìm công ty và vị trí trong block
-          const companyLine = blockLines.find(l => /công ty|company|resort|hotel|club|service|corp|co\.|ltd/i.test(l)) || blockLines[0] || '';
-          const positionLine = blockLines.find(l => /vị trí|position|nhân viên|staff|engineer|developer|manager|supervisor|leader/i.test(l)) || blockLines[1] || '';
-          const desc = blockLines.slice(2, 6).join(' ').trim();
-          const isCurrent = /hiện tại|nay|present|current/i.test(expMatch[2]);
-          expBlocks.push({
-            companyName: companyLine.replace(/^[-•*]\s*(?:Công ty:|Company:)?\s*/i, '').trim() || 'Chưa xác định',
-            jobTitle: positionLine.replace(/^[-•*]\s*(?:Vị trí:|Position:)?\s*/i, '').trim() || 'Nhân viên',
-            startDate: expMatch[1],
-            endDate: isCurrent ? 'Hiện tại' : expMatch[2],
-            isCurrent,
-            description: desc,
-          });
-        }
-
-        // Học vấn
-        const eduBlocks: { institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate: string; gpa?: string }[] = [];
-        const eduPattern = /(?:Trường|University|College|Học viện|Cao đẳng|Đại học)[^\n]{0,100}/gi;
-        let eduMatch;
-        while ((eduMatch = eduPattern.exec(allText)) !== null && eduBlocks.length < 3) {
-          const eduLine = eduMatch[0].trim();
-          // Tìm ngành trong 3 dòng tiếp theo
-          const afterIdx = allText.indexOf(eduLine) + eduLine.length;
-          const afterText = allText.slice(afterIdx, afterIdx + 300);
-          const majorMatch = afterText.match(/(?:Ngành|Chuyên ngành|Major|Field)[:\s]+([^\n\r.]+)/i);
-          const yearMatch = afterText.match(/(\d{4})\s*[-–]\s*(\d{4})/);
-          const gpaMatch = afterText.match(/GPA[:\s]+([\d.]+)/i);
-          const degreeMatch = afterText.match(/(?:Bằng|Degree|Cử nhân|Kỹ sư|Tốt nghiệp)[^\n]{0,60}/i);
-          eduBlocks.push({
-            institution: eduLine,
-            degree: degreeMatch ? degreeMatch[0].trim() : 'Tốt nghiệp',
-            fieldOfStudy: majorMatch ? majorMatch[1].trim() : '',
-            startDate: yearMatch ? yearMatch[1] : '',
-            endDate: yearMatch ? yearMatch[2] : '',
-            gpa: gpaMatch ? gpaMatch[1] : undefined,
-          });
-        }
-
-        const fileName = file.name;
-        const newCv: CV = {
-          id: `cv-${Date.now()}`,
-          candidateId: 'user-cand-1',
-          fileName: fileName,
-          fileUrl: URL.createObjectURL(file),
-          fileSize: file.size,
-          isPrimary: cvs.length === 0,
-          extractionStatus: 'completed',
-          parsedData: {
-            fullName: extractedName || fileName.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
-            email: extractedEmail,
-            phone: extractedPhone,
-            summary: extractedSummary,
-            hardSkills: foundHardSkills.slice(0, 15),
-            softSkills: foundSoftSkills.slice(0, 8),
-            education: eduBlocks.length > 0 ? eduBlocks : [],
-            experience: expBlocks.length > 0 ? expBlocks : [],
-            certifications: [],
-            languages: allText.match(/tiếng anh/i) ? ['Tiếng Anh'] : [],
-            missingFields: [
-              ...(!extractedName ? ['Họ tên'] : []),
-              ...(!extractedEmail ? ['Email'] : []),
-              ...(!extractedPhone ? ['Số điện thoại'] : []),
-              ...(expBlocks.length === 0 ? ['Kinh nghiệm làm việc'] : []),
-            ]
-          },
-          createdAt: new Date().toISOString(),
-        };
-        const updated = [newCv, ...cvs];
-        setStored('hiresense_cvs', updated);
-        resolve(newCv);
-      };
-
-      reader.onerror = () => {
-        // Fallback nếu không đọc được file
-        const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
-        const newCv: CV = {
-          id: `cv-${Date.now()}`,
-          candidateId: 'user-cand-1',
-          fileName: file.name,
-          fileUrl: URL.createObjectURL(file),
-          fileSize: file.size,
-          isPrimary: cvs.length === 0,
-          extractionStatus: 'failed',
-          parsedData: {
-            fullName: file.name.replace(/\.[^/.]+$/, ''),
-            email: '',
-            phone: '',
-            summary: 'Không thể đọc nội dung file. Vui lòng tải lên file .pdf có text layer hoặc file .txt.',
-            hardSkills: [],
-            softSkills: [],
-            education: [],
-            experience: [],
-            certifications: [],
-            languages: [],
-            missingFields: ['Không đọc được file']
-          },
-          createdAt: new Date().toISOString(),
-        };
-        setStored('hiresense_cvs', [newCv, ...cvs]);
-        resolve(newCv);
-      };
-
-      // Đọc file dưới dạng text (hỗ trợ PDF text layer và .txt)
-      reader.readAsText(file, 'UTF-8');
-    });
   },
 
 
@@ -768,9 +548,7 @@ export const apiService = {
       const formData = new FormData();
       formData.append('file', file);
       if (userId) formData.append('user_id', userId);
-      const res = await apiClient.post('/cvs/upload-avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await apiClient.post('/cvs/upload-avatar', formData);
       return res.data.file_url;
     } catch (err) {
       console.warn('Backend upload-avatar failed, fallback to local object URL:', err);
@@ -783,9 +561,7 @@ export const apiService = {
       const formData = new FormData();
       formData.append('file', file);
       if (companyId) formData.append('company_id', companyId);
-      const res = await apiClient.post('/cvs/upload-logo', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await apiClient.post('/cvs/upload-logo', formData);
       return res.data.logo_url;
     } catch (err) {
       console.warn('Backend upload-logo failed, fallback to local object URL:', err);

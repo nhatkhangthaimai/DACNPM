@@ -5,6 +5,7 @@ import re
 import math
 import unicodedata
 import uuid
+import asyncio
 from collections import Counter
 from typing import Dict, Any, List, Optional, Set, Tuple
 
@@ -226,9 +227,23 @@ def extract_pdf_text(file_bytes: bytes) -> Tuple[str, bool, str]:
                 cleaned = clean_and_normalize_text(combined)
                 return cleaned, True, ""
 
-            # Detect scanned PDF (has images/pages but negligible text)
+            # Detect scanned PDF or graphics-only PDF: render pages to images and run OCR
+            if doc.page_count > 0:
+                ocr_texts = []
+                for pno in range(min(doc.page_count, 3)):
+                    page = doc[pno]
+                    pix = page.get_pixmap(dpi=150)
+                    img_bytes = pix.tobytes("png")
+                    img_text, img_ok, _ = extract_image_cv(img_bytes, f"page_{pno}.png")
+                    if img_ok and img_text:
+                        ocr_texts.append(img_text)
+                if ocr_texts:
+                    ocr_combined = "\n".join(ocr_texts).strip()
+                    if len(ocr_combined) >= 30:
+                        return clean_and_normalize_text(ocr_combined), True, ""
+
             if doc.page_count > 0 and (not combined or len(combined) < 30) and has_images:
-                return "", False, "Tài liệu PDF là bản scan/ảnh không chứa lớp văn bản (text layer). Vui lòng tải lên file PDF có văn bản hoặc file DOCX."
+                return "", False, "Tài liệu PDF là bản scan/ảnh không chứa lớp văn bản (text layer) và không thể nhận diện qua OCR. Vui lòng tải lên file PDF rõ nét hoặc file DOCX."
     except Exception as e:
         # PyMuPDF failed, fall through to pdfplumber
         pass
@@ -790,7 +805,7 @@ async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
             "missing_fields": [string]
         }}
         """
-        response = await model.generate_content_async(prompt)
+        response = await asyncio.wait_for(model.generate_content_async(prompt), timeout=12.0)
         text = response.text.strip()
         if text.startswith("```json"):
             text = text[7:]
