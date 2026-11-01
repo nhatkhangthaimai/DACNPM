@@ -41,9 +41,14 @@ class Settings(BaseSettings):
     def assemble_db_connection(cls, v: str) -> str:
         if isinstance(v, str):
             if v.startswith("postgres://"):
-                return v.replace("postgres://", "postgresql+asyncpg://", 1)
+                v = v.replace("postgres://", "postgresql+asyncpg://", 1)
             elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
-                return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+                v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+            # Strip ?sslmode=... which causes asyncpg TypeError: connect() got an unexpected keyword argument 'sslmode'
+            if "?" in v:
+                base_part, query_part = v.split("?", 1)
+                params = [p for p in query_part.split("&") if not p.startswith("sslmode=")]
+                v = f"{base_part}?{'&'.join(params)}" if params else base_part
         return v
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")

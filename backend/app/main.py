@@ -120,6 +120,12 @@ async def lifespan(app: FastAPI):
     # Attempt to create tables on startup if database is available
     try:
         async with engine.begin() as conn:
+            if "postgresql" in settings.DATABASE_URL:
+                from sqlalchemy import text
+                try:
+                    await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+                except Exception as e:
+                    print(f"[HireSense AI] Vector extension notice: {e}")
             await conn.run_sync(Base.metadata.create_all)
         print("[HireSense AI] Database tables verified successfully.")
         await seed_initial_data()
