@@ -4,8 +4,19 @@ import io
 import re
 import math
 import unicodedata
+import uuid
 from collections import Counter
 from typing import Dict, Any, List, Optional, Set, Tuple
+
+import numpy as np
+from PIL import Image, ImageOps
+
+try:
+    import pillow_heif
+    pillow_heif.register_heif_opener()
+    HAS_HEIF = True
+except Exception:
+    HAS_HEIF = False
 
 try:
     import google.generativeai as genai
@@ -123,42 +134,65 @@ def compute_cosine_similarity(text1: str, text2: str) -> float:
     return float(numerator) / denominator
 
 
+SUPPORTED_DOC_EXTENSIONS = ["pdf", "docx", "doc"]
+SUPPORTED_IMG_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "heic", "heif"]
+ALL_SUPPORTED_EXTENSIONS = SUPPORTED_DOC_EXTENSIONS + SUPPORTED_IMG_EXTENSIONS
+
+
 # ================= STEP 1: FILE VALIDATION =================
 def validate_cv_file(file_name: str, file_bytes: bytes, mime_type: Optional[str] = None) -> Tuple[bool, str, str]:
     """
     Validate uploaded CV file.
     Checks:
-    - Extension (.pdf, .docx, .doc)
-    - File size (not empty, <= MAX_FILE_SIZE_MB)
+    - Extension (.pdf, .docx, .doc, .jpg, .jpeg, .png, .webp, .heic, .heif)
+    - File size (not empty, <= MAX_FILE_SIZE_MB for docs, <= 15MB for mobile camera photos)
     - Magic bytes / file signatures (never trust client name or mime alone)
     Returns: (is_valid, file_type, error_message)
     """
     if not file_bytes or len(file_bytes) == 0:
         return False, "", "Tệp tải lên rỗng (0 bytes). Vui lòng chọn tệp CV hợp lệ."
 
-    max_bytes = settings.MAX_FILE_SIZE_MB * 1024 * 1024
-    if len(file_bytes) > max_bytes:
-        return False, "", f"Kích thước tệp ({round(len(file_bytes) / (1024*1024), 2)}MB) vượt quá giới hạn {settings.MAX_FILE_SIZE_MB}MB."
-
     ext = file_name.split(".")[-1].lower() if file_name and "." in file_name else ""
-    if ext not in ["pdf", "docx", "doc"]:
-        return False, "", "Định dạng tệp không được hỗ trợ. Hệ thống chỉ chấp nhận tệp PDF hoặc DOCX."
+    if ext not in ALL_SUPPORTED_EXTENSIONS:
+        return False, "", "Định dạng tệp không được hỗ trợ. Hệ thống chấp nhận tệp PDF, DOCX hoặc ảnh CV (JPG, PNG, WEBP, HEIC)."
 
-    # Verify signature
+    # Size check: 10MB for documents, 15MB for high-res smartphone photos
+    is_img = ext in SUPPORTED_IMG_EXTENSIONS
+    max_mb = 15 if is_img else settings.MAX_FILE_SIZE_MB
+    max_bytes = max_mb * 1024 * 1024
+    if len(file_bytes) > max_bytes:
+        return False, "", f"Kích thước tệp ({round(len(file_bytes) / (1024*1024), 2)}MB) vượt quá giới hạn cho phép {max_mb}MB."
+
+    # Verify signature for PDF
     if ext == "pdf":
-        # Standard PDF files have %PDF- within the first 1024 bytes
         if b"%PDF-" not in file_bytes[:1024]:
             return False, "", "Tệp không phải là định dạng PDF hợp lệ hoặc cấu trúc tệp đã bị hỏng (thiếu chữ ký %PDF-)."
         return True, "pdf", "Hợp lệ"
 
+    # Verify signature for DOCX / DOC
     if ext in ["docx", "doc"]:
-        # DOCX is an OpenXML ZIP archive, starts with PK\x03\x04
         if file_bytes[:4] == b"PK\x03\x04" or b"PK" in file_bytes[:8]:
             return True, "docx", "Hợp lệ"
-        # Legacy binary .doc (OLE CFB)
         if file_bytes[:4] == b"\xd0\xcf\x11\xe0":
             return True, "doc", "Hợp lệ"
         return False, "", "Tệp không phải là định dạng DOCX hợp lệ hoặc tệp đã bị hỏng."
+
+    # Verify signature for Images (JPG, PNG, WEBP, HEIC/HEIF)
+    if is_img:
+        if ext in ["jpg", "jpeg"] and file_bytes[:3] != b"\xff\xd8\xff":
+            return False, "", "Tệp không phải là định dạng ảnh JPEG hợp lệ hoặc dữ liệu ảnh bị hỏng."
+        if ext == "png" and file_bytes[:8] != b"\x89PNG\r\n\x1a\n":
+            return False, "", "Tệp không phải là định dạng ảnh PNG hợp lệ hoặc dữ liệu ảnh bị hỏng."
+        if ext == "webp" and (file_bytes[:4] != b"RIFF" or file_bytes[8:12] != b"WEBP"):
+            return False, "", "Tệp không phải là định dạng ảnh WEBP hợp lệ hoặc dữ liệu ảnh bị hỏng."
+
+        # Deep validation via Pillow
+        try:
+            with Image.open(io.BytesIO(file_bytes)) as test_img:
+                test_img.verify()
+            return True, ext, "Hợp lệ"
+        except Exception as e:
+            return False, "", f"Tệp hình ảnh không hợp lệ hoặc bị hỏng ({str(e)})."
 
     return False, "", "Định dạng tệp không hợp lệ."
 
@@ -327,12 +361,150 @@ def validate_extracted_text(text: str) -> Tuple[bool, str]:
     return True, "Hợp lệ"
 
 
+# ================= STEP 3.5: IMAGE CV TEXT EXTRACTION (VISION OCR) =================
+def extract_image_cv(file_bytes: bytes, file_name: str) -> Tuple[str, bool, str]:
+    """
+    Extract text from image CV (JPG, PNG, WEBP, HEIC/HEIF).
+    Supports smartphone photos, gallery images, and scans.
+    Performs auto-orientation (EXIF transpose), blank image detection,
+    and Gemini Multimodal Vision OCR extraction.
+    Returns: (extracted_text, success, error_message)
+    """
+    try:
+        image = Image.open(io.BytesIO(file_bytes))
+        # Auto-rotate smartphone photos based on EXIF tag
+        image = ImageOps.exif_transpose(image)
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+    except Exception as e:
+        return "", False, f"Không thể giải mã dữ liệu hình ảnh: {str(e)}"
+
+    # Dimension validation (must be at least 150x150 to be a document)
+    w, h = image.size
+    if w < 150 or h < 150:
+        return "", False, f"Kích thước hình ảnh quá nhỏ ({w}x{h}px) để nhận diện nội dung văn bản CV."
+
+    # Blank / solid-color image detection
+    try:
+        gray = image.convert("L")
+        arr = np.array(gray)
+        variance = float(np.var(arr))
+        if variance < 8.0:
+            return "", False, "Hình ảnh rỗng hoặc không chứa nội dung (ảnh đơn sắc/trắng tinh). Vui lòng chọn ảnh chụp CV rõ nét."
+    except Exception:
+        pass
+
+    # Check if Gemini Vision is configured
+    has_valid_key = bool(
+        settings.GEMINI_API_KEY and 
+        settings.GEMINI_API_KEY.strip() and 
+        settings.GEMINI_API_KEY != "your_gemini_api_key_here"
+    )
+
+    if genai and has_valid_key:
+        try:
+            model = genai.GenerativeModel(settings.GEMINI_MODEL)
+            prompt = """
+            Bạn là Chuyên gia AI Phân tích CV & Nhận diện Tài liệu Tuyển dụng (HireSense AI Vision Engine).
+            Hãy đọc kỹ toàn bộ văn bản trong bức ảnh này (hỗ trợ cả tiếng Việt có dấu và tiếng Anh).
+
+            YÊU CẦU:
+            1. Đọc và trích xuất TOÀN BỘ nội dung chữ xuất hiện trong tài liệu CV từ trên xuống dưới, bao gồm:
+               - Họ và tên, email, số điện thoại, địa chỉ
+               - Mục tiêu nghề nghiệp, tóm tắt
+               - Kỹ năng chuyên môn (Hard Skills), kỹ năng mềm (Soft Skills)
+               - Quá trình học vấn, trường lớp, chuyên ngành
+               - Lịch sử kinh nghiệm làm việc, tên công ty, chức danh, thời gian, mô tả công việc
+               - Các dự án, chứng chỉ, ngoại ngữ
+            2. Giữ nguyên định dạng đoạn văn bản rõ ràng.
+            3. Nếu ảnh bị mờ hoàn toàn, không có chữ, hoặc không phải là CV, hãy trả về đúng từ khóa:
+               ERROR: IMAGE_UNREADABLE
+            """
+            response = model.generate_content([image, prompt])
+            resp_text = response.text.strip() if response and response.text else ""
+
+            if not resp_text or "ERROR: IMAGE_UNREADABLE" in resp_text:
+                return "", False, "Hình ảnh CV bị mờ hoặc không chứa nội dung văn bản có thể đọc được. Vui lòng chụp rõ nét hơn hoặc tải file PDF/DOCX."
+
+            cleaned = clean_and_normalize_text(resp_text)
+            if len(cleaned) < 30:
+                return "", False, "Hình ảnh CV chứa quá ít văn bản để phân tích. Vui lòng chọn ảnh CV đầy đủ thông tin."
+
+            return cleaned, True, ""
+        except Exception as e:
+            print(f"[Gemini Vision OCR Error]: {e}")
+            # Fall through if Gemini API returns error
+
+    # If Gemini Vision is unavailable, do not fake hallucinated CV data
+    return "", False, "Không thể đọc nội dung văn bản từ hình ảnh CV khi không có dịch vụ AI Vision. Vui lòng đảm bảo ảnh chụp rõ nét hoặc tải lên file PDF/DOCX."
+
+
+# ================= AVATAR & COMPANY LOGO IMAGE PROCESSOR =================
+def process_and_save_image(
+    file_bytes: bytes, 
+    original_filename: str, 
+    max_size_mb: int = 5, 
+    is_avatar: bool = False,
+    is_logo: bool = False
+) -> Tuple[bool, str, str]:
+    """
+    Validate, sanitize, resize and save profile avatar or company logo.
+    - Limits size <= max_size_mb (default 5MB)
+    - Validates image signature
+    - Fixes smartphone camera rotation (EXIF transpose)
+    - Crops to square if avatar
+    - Generates safe unique filename (no user input in path)
+    - Saves in settings.UPLOAD_DIR as WebP/JPEG
+    Returns: (success, file_url, error_message)
+    """
+    if not file_bytes or len(file_bytes) == 0:
+        return False, "", "Tệp ảnh rỗng (0 bytes). Vui lòng chọn ảnh hợp lệ."
+
+    if len(file_bytes) > max_size_mb * 1024 * 1024:
+        return False, "", f"Kích thước ảnh vượt quá giới hạn {max_size_mb}MB."
+
+    try:
+        image = Image.open(io.BytesIO(file_bytes))
+        image = ImageOps.exif_transpose(image)
+    except Exception as e:
+        return False, "", f"Tệp không phải là định dạng hình ảnh hợp lệ hoặc đã bị hỏng: {str(e)}"
+
+    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+    prefix = "avatar" if is_avatar else ("logo" if is_logo else "img")
+    safe_name = f"{prefix}_{uuid.uuid4().hex}.webp"
+    file_path = os.path.join(settings.UPLOAD_DIR, safe_name)
+
+    try:
+        if is_avatar:
+            # Center crop to square
+            w, h = image.size
+            min_dim = min(w, h)
+            left = (w - min_dim) // 2
+            top = (h - min_dim) // 2
+            image = image.crop((left, top, left + min_dim, top + min_dim))
+            image = image.resize((400, 400), Image.Resampling.LANCZOS)
+        elif is_logo:
+            image.thumbnail((500, 500), Image.Resampling.LANCZOS)
+        else:
+            image.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+
+        if image.mode in ("RGBA", "LA") or (image.mode == "P" and "transparency" in image.info):
+            image.save(file_path, format="WEBP", quality=90)
+        else:
+            image = image.convert("RGB")
+            image.save(file_path, format="WEBP", quality=90)
+
+        return True, f"/uploads/{safe_name}", ""
+    except Exception as e:
+        return False, "", f"Lỗi khi lưu trữ hình ảnh: {str(e)}"
+
+
 # ================= HIGH-LEVEL EXTRACTION ENTRYPOINT =================
 def extract_text_from_cv(file_bytes: bytes, file_name: str, mime_type: Optional[str] = None) -> Tuple[str, bool, str]:
     """
     Complete CV extraction pipeline:
     1. Validate file (format, signature, size)
-    2. Extract text (PyMuPDF / pdfplumber for PDF, python-docx for DOCX)
+    2. Extract text (PyMuPDF / pdfplumber for PDF, python-docx for DOCX, Gemini Vision for Images)
     3. Validate extracted text quality
     Returns: (clean_text, success, error_message)
     """
@@ -344,6 +516,8 @@ def extract_text_from_cv(file_bytes: bytes, file_name: str, mime_type: Optional[
         raw_text, ext_ok, ext_err = extract_pdf_text(file_bytes)
     elif file_type in ["docx", "doc"]:
         raw_text, ext_ok, ext_err = extract_docx_text(file_bytes)
+    elif file_type in SUPPORTED_IMG_EXTENSIONS:
+        raw_text, ext_ok, ext_err = extract_image_cv(file_bytes, file_name)
     else:
         return "", False, "Định dạng tệp không được hỗ trợ."
 

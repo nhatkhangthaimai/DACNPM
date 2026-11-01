@@ -1,13 +1,13 @@
 import os
 import uuid
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
+from typing import List, Optional, Dict, Any
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Body, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import delete
 from app.core.database import get_db
 from app.core.config import settings
-from app.models.entities import CV, CandidateProfile, MatchResult, User
+from app.models.entities import CV, CandidateProfile, MatchResult, User, Company
 from app.schemas.all_schemas import CVResponse, CVExtractedData
 from app.ai.pipeline import (
     validate_cv_file,
@@ -99,13 +99,18 @@ async def upload_and_process_cv(
     if not is_valid_file:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=file_err)
 
-    # Save to uploads dir
+    # Save to uploads dir with safe sanitized unique filename (protects against path traversal & non-ASCII filenames)
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-    file_path = os.path.join(settings.UPLOAD_DIR, file.filename)
+    import re
+    clean_base = re.sub(r'[^a-zA-Z0-9_-]', '_', os.path.splitext(file.filename)[0][:35]) or "cv"
+    safe_storage_name = f"cv_{uuid.uuid4().hex[:10]}_{clean_base}.{file_type}"
+    file_path = os.path.join(settings.UPLOAD_DIR, safe_storage_name)
     with open(file_path, "wb") as f:
         f.write(contents)
 
-    # Step 2 & 3: Extract & Validate text quality
+    saved_file_url = f"/uploads/{safe_storage_name}"
+
+    # Step 2 & 3: Extract & Validate text quality (Supports PDF, DOCX, and Mobile Image CVs)
     raw_text, ext_ok, ext_err = extract_text_from_cv(contents, file.filename, file.content_type)
 
     # Resolve target_candidate_id
@@ -136,7 +141,7 @@ async def upload_and_process_cv(
         cv = CV(
             candidate_id=target_candidate_id,
             file_name=file.filename,
-            file_url=f"/uploads/{file.filename}",
+            file_url=saved_file_url,
             file_size=len(contents),
             mime_type=file.content_type or f"application/{file_type}",
             raw_text=None,
@@ -190,7 +195,7 @@ async def upload_and_process_cv(
     cv = CV(
         candidate_id=target_candidate_id,
         file_name=file.filename,
-        file_url=f"/uploads/{file.filename}",
+        file_url=saved_file_url,
         file_size=len(contents),
         mime_type=file.content_type or f"application/{file_type}",
         raw_text=raw_text[:20000],
@@ -256,4 +261,124 @@ async def set_primary_cv(cv_id: str, db: AsyncSession = Depends(get_db)):
 
     await db.commit()
     return {"status": "success", "message": "Đã đặt CV làm CV chính."}
+
+
+@router.put("/{cv_id}/parsed-data", response_model=CVResponse)
+async def update_cv_parsed_data(
+    cv_id: str,
+    updated_data: Dict[str, Any] = Body(...),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Allow candidate to review, correct, and confirm AI-extracted CV information.
+    """
+    result = await db.execute(select(CV).where(CV.id == cv_id))
+    cv = result.scalars().first()
+    if not cv:
+        raise HTTPException(status_code=404, detail="Không tìm thấy CV.")
+
+    # Merge or overwrite parsed_data
+    current_data = dict(cv.parsed_data or {})
+    if "error" in current_data:
+        del current_data["error"]
+    for key, val in updated_data.items():
+        if val is not None:
+            current_data[key] = val
+
+    # Ensure list defaults
+    for list_field in ["hard_skills", "soft_skills", "education", "experience", "projects", "certifications", "languages"]:
+        if list_field not in current_data:
+            current_data[list_field] = []
+
+    cv.parsed_data = current_data
+    cv.content_validated = True
+    cv.extraction_status = "completed"
+    cv.extraction_error = None
+
+    # Re-generate embedding based on confirmed skills & summary
+    skills_text = " ".join(current_data.get("hard_skills", []))
+    summary_text = current_data.get("summary", "") or ""
+    combined_text = f"{cv.raw_text or ''} {skills_text} {summary_text}".strip()
+    if combined_text:
+        cv.embedding = generate_embedding(combined_text)
+
+    await db.commit()
+    await db.refresh(cv)
+
+    parsed_obj = None
+    if "error" not in cv.parsed_data:
+        try:
+            parsed_obj = CVExtractedData(**cv.parsed_data)
+        except Exception:
+            parsed_obj = None
+
+    return CVResponse(
+        id=cv.id,
+        candidate_id=cv.candidate_id,
+        file_name=cv.file_name,
+        file_url=cv.file_url,
+        file_size=cv.file_size,
+        is_primary=cv.is_primary,
+        extraction_status=cv.extraction_status,
+        extraction_error=None,
+        content_validated=cv.content_validated,
+        parsed_data=parsed_obj,
+        created_at=cv.created_at
+    )
+
+
+# ================= AVATAR & COMPANY LOGO UPLOAD ENDPOINTS =================
+@router.post("/upload-avatar")
+async def upload_candidate_avatar(
+    file: UploadFile = File(...),
+    user_id: Optional[str] = Form(None),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Upload and sanitize candidate avatar (JPG, PNG, WEBP, HEIC/HEIF).
+    Fixes mobile orientation, crops to square, and limits to 5MB.
+    """
+    contents = await file.read()
+    from app.ai.pipeline import process_and_save_image
+
+    ok, img_url, err = process_and_save_image(contents, file.filename, max_size_mb=5, is_avatar=True)
+    if not ok:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+
+    return {
+        "status": "success",
+        "file_url": img_url,
+        "message": "Tải ảnh đại diện thành công."
+    }
+
+
+@router.post("/upload-logo")
+async def upload_company_logo(
+    file: UploadFile = File(...),
+    company_id: Optional[str] = Form(None),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Upload and sanitize company logo (JPG, PNG, WEBP, HEIC/HEIF).
+    """
+    contents = await file.read()
+    from app.ai.pipeline import process_and_save_image
+
+    ok, img_url, err = process_and_save_image(contents, file.filename, max_size_mb=5, is_logo=True)
+    if not ok:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+
+    if company_id:
+        res = await db.execute(select(Company).where(Company.id == company_id))
+        comp = res.scalars().first()
+        if comp:
+            comp.logo_url = img_url
+            await db.commit()
+
+    return {
+        "status": "success",
+        "logo_url": img_url,
+        "message": "Tải logo công ty thành công."
+    }
+
 

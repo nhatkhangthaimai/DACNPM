@@ -162,7 +162,7 @@ class JobResponse(BaseModel):
 
 # ================= CV SCHEMAS =================
 class EducationItem(BaseModel):
-    institution: str
+    institution: Optional[str] = "Đang cập nhật"
     degree: Optional[str] = None
     field_of_study: Optional[str] = None
     start_date: Optional[str] = None
@@ -171,8 +171,8 @@ class EducationItem(BaseModel):
 
 
 class ExperienceItem(BaseModel):
-    company_name: str
-    job_title: str
+    company_name: Optional[str] = "Đang cập nhật"
+    job_title: Optional[str] = "Chuyên viên"
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     is_current: bool = False

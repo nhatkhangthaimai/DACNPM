@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { Button } from '../../components/ui/Button';
-import { Code2, Globe, CheckCircle2 } from 'lucide-react';
+import { Code2, Globe, CheckCircle2, Camera, Image as ImageIcon, Loader2, User as UserIcon } from 'lucide-react';
+import { apiService } from '../../services/api';
 
 interface ProfileData {
   fullName: string;
@@ -13,6 +14,7 @@ interface ProfileData {
   bio: string;
   github: string;
   linkedin: string;
+  avatarUrl?: string;
 }
 
 export const CandidateProfilePage: React.FC = () => {
@@ -28,7 +30,6 @@ export const CandidateProfilePage: React.FC = () => {
         // fall through to defaults
       }
     }
-    // Lần đầu: lấy thông tin cơ bản từ user auth, còn lại để trống
     return {
       fullName: user?.fullName || '',
       phone: user?.phone || '',
@@ -38,13 +39,18 @@ export const CandidateProfilePage: React.FC = () => {
       bio: '',
       github: '',
       linkedin: '',
+      avatarUrl: '',
     };
   };
 
   const [profile, setProfile] = useState<ProfileData>(loadProfile);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
 
-  // Khi user thay đổi (switch account) thì tải lại profile
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     setProfile(loadProfile());
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,6 +58,36 @@ export const CandidateProfilePage: React.FC = () => {
 
   const handleChange = (field: keyof ProfileData, value: string) => {
     setProfile(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    e.target.value = '';
+
+    setAvatarError(null);
+    if (!file.type.startsWith('image/') && !file.name.match(/\.(jpg|jpeg|png|webp|heic|heif)$/i)) {
+      setAvatarError('Định dạng không được hỗ trợ. Vui lòng chọn ảnh JPG, PNG, WEBP hoặc HEIC.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError('Kích thước ảnh đại diện vượt quá 5MB.');
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    try {
+      const uploadedUrl = await apiService.uploadAvatar(file, user?.id);
+      setProfile(prev => {
+        const next = { ...prev, avatarUrl: uploadedUrl };
+        localStorage.setItem(storageKey, JSON.stringify(next));
+        return next;
+      });
+    } catch {
+      setAvatarError('Không thể tải lên ảnh đại diện. Vui lòng thử lại.');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -68,6 +104,23 @@ export const CandidateProfilePage: React.FC = () => {
         subtitle="Thông tin này sẽ được đồng bộ với hồ sơ ứng tuyển và thuật toán đề xuất việc làm AI."
       />
 
+      {/* Hidden Inputs for Avatar Mobile Selection */}
+      <input
+        ref={photoInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/heic,.jpg,.jpeg,.png,.webp,.heic,.heif"
+        onChange={handleAvatarFile}
+        className="hidden"
+      />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="user"
+        onChange={handleAvatarFile}
+        className="hidden"
+      />
+
       <form onSubmit={handleSave} className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
         {savedSuccess && (
           <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 text-emerald-800 text-sm border border-emerald-200">
@@ -75,6 +128,63 @@ export const CandidateProfilePage: React.FC = () => {
             <span>Đã cập nhật hồ sơ cá nhân thành công!</span>
           </div>
         )}
+
+        {/* Avatar Upload Section */}
+        <div className="p-5 rounded-2xl bg-signal-offwhite/80 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-signal-lime bg-slate-200 flex items-center justify-center shadow-md">
+              {profile.avatarUrl ? (
+                <img 
+                  src={profile.avatarUrl} 
+                  alt={profile.fullName || 'Ảnh đại diện'} 
+                  className="w-full h-full object-cover" 
+                />
+              ) : (
+                <UserIcon className="w-12 h-12 text-slate-400" />
+              )}
+            </div>
+            {isUploadingAvatar && (
+              <div className="absolute inset-0 rounded-full bg-signal-navy/60 flex items-center justify-center">
+                <Loader2 className="w-6 h-6 text-signal-lime animate-spin" />
+              </div>
+            )}
+          </div>
+
+          <div className="flex-1 text-center sm:text-left space-y-2">
+            <div>
+              <h4 className="text-sm font-heading font-semibold text-signal-navy">Ảnh đại diện hồ sơ</h4>
+              <p className="text-xs text-signal-slate">
+                Hỗ trợ tải từ thư viện ảnh điện thoại hoặc chụp camera (JPG, PNG, WEBP, HEIC tối đa 5MB)
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <button
+                type="button"
+                onClick={() => photoInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-signal-navy text-xs font-semibold text-signal-navy shadow-sm hover:bg-slate-50 transition-colors"
+              >
+                <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Thư viện ảnh điện thoại</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => cameraInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-signal-navy text-xs font-semibold text-signal-navy shadow-sm hover:bg-slate-50 transition-colors"
+              >
+                <Camera className="w-3.5 h-3.5 text-amber-600" />
+                <span>Chụp ảnh mới</span>
+              </button>
+            </div>
+
+            {avatarError && (
+              <p className="text-xs text-rose-600 font-medium">{avatarError}</p>
+            )}
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>

@@ -760,5 +760,87 @@ export const apiService = {
   // COMPANIES
   async getCompanies(): Promise<Company[]> {
     return getStored<Company[]>('hiresense_companies', INITIAL_COMPANIES);
+  },
+
+  // MOBILE AVATAR & LOGO UPLOAD
+  async uploadAvatar(file: File, userId?: string): Promise<string> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (userId) formData.append('user_id', userId);
+      const res = await apiClient.post('/cvs/upload-avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return res.data.file_url;
+    } catch (err) {
+      console.warn('Backend upload-avatar failed, fallback to local object URL:', err);
+      return URL.createObjectURL(file);
+    }
+  },
+
+  async uploadCompanyLogo(file: File, companyId?: string): Promise<string> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (companyId) formData.append('company_id', companyId);
+      const res = await apiClient.post('/cvs/upload-logo', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return res.data.logo_url;
+    } catch (err) {
+      console.warn('Backend upload-logo failed, fallback to local object URL:', err);
+      return URL.createObjectURL(file);
+    }
+  },
+
+  // CANDIDATE REVIEW & EDIT CV PARSED DATA
+  async updateCVParsedData(cvId: string, updatedData: any): Promise<CV> {
+    try {
+      const res = await apiClient.put(`/cvs/${cvId}/parsed-data`, updatedData);
+      const serverCV = res.data;
+      const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
+      const idx = cvs.findIndex(c => c.id === cvId);
+      const updated: CV = {
+        ...cvs[idx],
+        contentValidated: serverCV.content_validated,
+        extractionStatus: serverCV.extraction_status,
+        parsedData: serverCV.parsed_data ? {
+          fullName: serverCV.parsed_data.full_name,
+          email: serverCV.parsed_data.email,
+          phone: serverCV.parsed_data.phone,
+          summary: serverCV.parsed_data.summary,
+          hardSkills: serverCV.parsed_data.hard_skills || [],
+          softSkills: serverCV.parsed_data.soft_skills || [],
+          education: serverCV.parsed_data.education || [],
+          experience: serverCV.parsed_data.experience || [],
+          projects: serverCV.parsed_data.projects || [],
+          certifications: serverCV.parsed_data.certifications || [],
+          languages: serverCV.parsed_data.languages || [],
+          missingFields: serverCV.parsed_data.missing_fields || [],
+        } : cvs[idx]?.parsedData,
+      };
+      if (idx !== -1) {
+        cvs[idx] = updated;
+        setStored('hiresense_cvs', cvs);
+      }
+      return updated;
+    } catch {
+      // Offline fallback
+      const cvs = getStored<CV[]>('hiresense_cvs', INITIAL_CVS);
+      const idx = cvs.findIndex(c => c.id === cvId);
+      if (idx !== -1) {
+        cvs[idx] = {
+          ...cvs[idx],
+          contentValidated: true,
+          parsedData: {
+            ...cvs[idx].parsedData,
+            ...updatedData,
+          } as any,
+        };
+        setStored('hiresense_cvs', cvs);
+        return cvs[idx];
+      }
+      throw new Error('CV not found');
+    }
   }
 };
