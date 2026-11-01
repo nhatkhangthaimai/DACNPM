@@ -48,5 +48,4 @@ services:
 databases:
   - name: hiresense-db
     databaseName: hiresense_db
-    user: postgres
     plan: free
