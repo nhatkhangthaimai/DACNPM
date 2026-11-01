@@ -3,15 +3,11 @@ import { Job, CV, Application, Company, MatchScoreBreakdown } from '../types';
 import { INITIAL_JOBS, INITIAL_CVS, INITIAL_APPLICATIONS, INITIAL_COMPANIES } from './mockData';
 
 const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim();
-let resolvedBaseUrl = '/api/v1';
-if (rawApiUrl) {
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && rawApiUrl.includes('localhost')) {
-    resolvedBaseUrl = '/api/v1';
-  } else {
-    resolvedBaseUrl = rawApiUrl.endsWith('/api/v1') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`;
-  }
-}
-const API_BASE_URL = resolvedBaseUrl;
+// Use absolute remote HTTPS API if provided (e.g. on Render), otherwise always use relative '/api/v1'
+// so all requests seamlessly pass through Nginx (port 5173 -> backend:8000) or Vite dev proxy on the same origin.
+const API_BASE_URL = (rawApiUrl && rawApiUrl.startsWith('https://'))
+  ? (rawApiUrl.endsWith('/api/v1') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`)
+  : '/api/v1';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

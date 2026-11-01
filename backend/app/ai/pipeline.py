@@ -435,7 +435,7 @@ def extract_image_cv(file_bytes: bytes, file_name: str) -> Tuple[str, bool, str]
             3. Nếu ảnh bị mờ hoàn toàn, không có chữ, hoặc không phải là CV, hãy trả về đúng từ khóa:
                ERROR: IMAGE_UNREADABLE
             """
-            response = model.generate_content([image, prompt])
+            response = model.generate_content([image, prompt], request_options={"timeout": 10.0})
             resp_text = response.text.strip() if response and response.text else ""
 
             if not resp_text or "ERROR: IMAGE_UNREADABLE" in resp_text:
@@ -805,7 +805,7 @@ async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
             "missing_fields": [string]
         }}
         """
-        response = await asyncio.wait_for(model.generate_content_async(prompt), timeout=12.0)
+        response = await asyncio.wait_for(asyncio.to_thread(model.generate_content, prompt), timeout=12.0)
         text = response.text.strip()
         if text.startswith("```json"):
             text = text[7:]
