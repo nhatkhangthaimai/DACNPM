@@ -1,0 +1,50 @@
+{
+  "candidate_id": "cand-seed-19",
+  "expected_name": "Huỳnh Trúc Mai",
+  "expected_email": "candidate19@example.test",
+  "expected_phone": "09010010019",
+  "file_name": "CV19_Huynh_Truc_Mai_HR_Junior_to_HRBP.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2191,
+  "test_case": "Case E - Junior vs Senior",
+  "target_job_id": "job-seed-29",
+  "expected_title": "Trợ lý Nhân sự (HR Assistant)",
+  "expected_hard_skills": [
+    "Quản trị nhân lực",
+    "Tuyển dụng",
+    "Tin học văn phòng",
+    "Soạn thảo văn bản"
+  ],
+  "expected_soft_skills": [
+    "Giao tiếp",
+    "Hòa đồng",
+    "Chu đáo"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Lao động - Xã hội"
+  ],
+  "expected_experience_companies": [
+    "Công ty TNHH Truyền thông Ánh Dương"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    40,
+    58
+  ],
+  "expected_evaluation": "Lệch cấp bậc (Junior vs Senior): Đúng chuyên ngành Nhân sự nhưng chỉ có 1 năm kinh nghiệm trợ lý, không đáp ứng vai trò chiến lược HRBP 5 năm kinh nghiệm.",
+  "source_evidence": {
+    "summary": "Trợ lý nhân sự có 1 năm kinh nghiệm làm việc hỗ trợ lưu trữ hồ sơ nhân viên, tổ chức sự kiện sinh nhật nội bộ và đăng tin tuyển dụng. Chưa có kinh nghiệm xây dựng chiến lược nhân sự hay tư vấn C-level.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty TNHH Truyền thông Ánh Dương",
+        "job_title": "HR Assistant",
+        "start_date": "07/2023",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Hỗ trợ chấm công bằng phần mềm vân tay, chuẩn bị quà sinh nhật và soạn thảo thông báo nội bộ."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

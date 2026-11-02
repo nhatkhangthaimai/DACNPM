@@ -1,0 +1,51 @@
+{
+  "candidate_id": "cand-seed-15",
+  "expected_name": "Hồ Nhật Tân",
+  "expected_email": "candidate15@example.test",
+  "expected_phone": "09010010015",
+  "file_name": "CV15_Ho_Nhat_Tan_Missing_React.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2253,
+  "test_case": "Case D - Missing Critical Skills",
+  "target_job_id": "job-seed-02",
+  "expected_title": "Web Developer (HTML/CSS & PHP/WordPress)",
+  "expected_hard_skills": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "PHP",
+    "WordPress",
+    "Git"
+  ],
+  "expected_soft_skills": [
+    "Làm việc chăm chỉ",
+    "Trách nhiệm"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Cao đẳng Thực hành FPT Polytechnic"
+  ],
+  "expected_experience_companies": [
+    "Web Media Đà Nẵng"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    30,
+    48
+  ],
+  "expected_evaluation": "Thiếu kỹ năng cốt lõi (Missing Skills): Mặc dù có kinh nghiệm Web và HTML/CSS/Git, nhưng thiếu hoàn toàn kỹ năng bắt buộc số 1: React và TypeScript.",
+  "source_evidence": {
+    "summary": "Lập trình viên Web với 4 năm kinh nghiệm xây dựng các website bán hàng và landing page bằng HTML5, CSS3, jQuery và PHP/WordPress. Chưa từng làm việc với ReactJS, TypeScript hay Next.js.",
+    "experience_evidence": [
+      {
+        "company_name": "Web Media Đà Nẵng",
+        "job_title": "Web Designer & PHP Coder",
+        "start_date": "10/2019",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Cắt HTML/CSS từ bản vẽ Photoshop, tích hợp theme WordPress bằng ngôn ngữ PHP và quản lý mã nguồn bằng Git."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

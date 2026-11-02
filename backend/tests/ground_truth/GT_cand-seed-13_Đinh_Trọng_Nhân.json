@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-13",
+  "expected_name": "Đinh Trọng Nhân",
+  "expected_email": "candidate13@example.test",
+  "expected_phone": "09010010013",
+  "file_name": "CV13_Dinh_Trong_Nhan_Hotel_to_AI.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2245,
+  "test_case": "Case C - Low Match / Cross-Industry",
+  "target_job_id": "job-seed-07",
+  "expected_title": "Nhân viên Lễ tân Khách sạn cao cấp",
+  "expected_hard_skills": [
+    "Lễ tân",
+    "Hospitality Management",
+    "Tiếng Anh giao tiếp",
+    "Customer Service",
+    "Opera PMS"
+  ],
+  "expected_soft_skills": [
+    "Thân thiện",
+    "Khéo léo",
+    "Ngoại giao"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Ngoại ngữ Huế"
+  ],
+  "expected_experience_companies": [
+    "Imperial Hotel Hue"
+  ],
+  "expected_certifications": [
+    "TOEIC 850"
+  ],
+  "expected_match_score_range": [
+    0,
+    20
+  ],
+  "expected_evaluation": "Không phù hợp (Low Match): Ứng viên ngành Khách sạn nộp vào Kỹ sư Trí tuệ nhân tạo (AI Engineer).",
+  "source_evidence": {
+    "summary": "Chuyên viên dịch vụ tiền sảnh khách sạn 5 sao với khả năng giao tiếp tiếng Anh trôi chảy và kỹ năng chăm sóc khách hàng lưu trú xuất sắc.",
+    "experience_evidence": [
+      {
+        "company_name": "Imperial Hotel Hue",
+        "job_title": "Receptionist",
+        "start_date": "05/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Chào đón khách VIP, hỗ trợ check-in trên hệ thống Opera PMS, giới thiệu tour khám phá cố đô."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

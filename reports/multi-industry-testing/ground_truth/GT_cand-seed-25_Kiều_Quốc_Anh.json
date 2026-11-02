@@ -1,0 +1,57 @@
+{
+  "candidate_id": "cand-seed-25",
+  "expected_name": "Kiều Quốc Anh",
+  "expected_email": "candidate25@example.test",
+  "expected_phone": "09010010025",
+  "file_name": "CV25_Kieu_Quoc_Anh_Negative_Docker.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2396,
+  "test_case": "Case G - Negative Skills",
+  "target_job_id": "job-seed-12",
+  "expected_title": "Quản trị mạng văn phòng",
+  "expected_hard_skills": [
+    "Linux",
+    "Networking",
+    "VPN",
+    "Bash Scripting"
+  ],
+  "expected_soft_skills": [
+    "Nhiệt tình",
+    "Kỷ luật"
+  ],
+  "expected_negative_skills": [
+    "Docker",
+    "Kubernetes"
+  ],
+  "expected_education_institutions": [
+    "Đại học Giao thông Vận tải Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Công ty Cổ phần Tin học Thủ Đô"
+  ],
+  "expected_certifications": [
+    "CCNA"
+  ],
+  "expected_match_score_range": [
+    28,
+    48
+  ],
+  "expected_evaluation": "Kiểm tra kỹ năng phủ định (Negative Skills): Ứng viên ghi rõ 'Chưa có kinh nghiệm sử dụng Docker. Chưa từng làm việc với Kubernetes', AI bắt buộc KHÔNG ĐƯỢC tính điểm cho Docker và Kubernetes.",
+  "source_evidence": {
+    "summary": "Quản trị viên mạng nội bộ có 2 năm kinh nghiệm bảo trì hệ thống máy tính, cấu hình mạng LAN và máy chủ Linux. Lưu ý: Chưa có kinh nghiệm sử dụng Docker. Chưa từng làm việc với Kubernetes hay triển khai ứng dụng đám mây.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Cổ phần Tin học Thủ Đô",
+        "job_title": "IT Helpdesk & Network Admin",
+        "start_date": "07/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Bảo trì thiết bị mạng nội bộ Cisco. Cài đặt hệ điều hành Linux Ubuntu Server. Đang tìm hiểu công nghệ mới nhưng chưa từng triển khai Docker và Kubernetes trên thực tế."
+      }
+    ],
+    "negative_skills_statement": [
+      "Chưa có kinh nghiệm sử dụng Docker",
+      "Chưa có kinh nghiệm sử dụng Kubernetes"
+    ]
+  }
+}

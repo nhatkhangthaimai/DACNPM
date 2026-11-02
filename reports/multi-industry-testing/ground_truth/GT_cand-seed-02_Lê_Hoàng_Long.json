@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cand-seed-02",
+  "expected_name": "Lê Hoàng Long",
+  "expected_email": "candidate02@example.test",
+  "expected_phone": "0901001002",
+  "file_name": "CV02_Le_Hoang_Long_Python_Backend.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37445,
+  "test_case": "Case A - High Match",
+  "target_job_id": "job-seed-03",
+  "expected_title": "Middle Python Backend Developer",
+  "expected_hard_skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Docker",
+    "Redis",
+    "Git",
+    "SQL"
+  ],
+  "expected_soft_skills": [
+    "Làm việc nhóm",
+    "Quản lý thời gian",
+    "Chủ động học hỏi"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Sư phạm Kỹ thuật TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "KMS Technology"
+  ],
+  "expected_certifications": [
+    "Certified Entry-Level Python Programmer (PCEP)"
+  ],
+  "expected_match_score_range": [
+    85,
+    96
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đáp ứng 100% kỹ năng bắt buộc Python, FastAPI, PostgreSQL, Docker, Redis và đúng cấp bậc kinh nghiệm.",
+  "source_evidence": {
+    "summary": "Lập trình viên Backend với 3 năm kinh nghiệm phát triển microservices hiệu năng cao sử dụng Python, FastAPI, PostgreSQL và Docker. Đam mê thiết kế cơ sở dữ liệu tối ưu và hệ thống xử lý bất đồng bộ.",
+    "experience_evidence": [
+      {
+        "company_name": "KMS Technology",
+        "job_title": "Python Backend Engineer",
+        "start_date": "08/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Thiết kế RESTful APIs bằng FastAPI và SQLAlchemy. Tối ưu câu lệnh truy vấn PostgreSQL, cấu hình cache Redis tăng tốc độ phản hồi API lên 40%. Triển khai container hóa ứng dụng qua Docker."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

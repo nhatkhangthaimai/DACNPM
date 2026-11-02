@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cand-seed-29",
+  "expected_name": "Chu Văn An",
+  "expected_email": "candidate29@example.test",
+  "expected_phone": "09010010029",
+  "file_name": "CV29_Chu_Van_An_Giao_Vien_IELTS.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2295,
+  "test_case": "Case A - High Match (Education)",
+  "target_job_id": "job-seed-40",
+  "expected_title": "Giảng viên tiếng Anh IELTS 8.0",
+  "expected_hard_skills": [
+    "English Teaching",
+    "IELTS",
+    "CELTA",
+    "TESOL",
+    "Soạn giáo án",
+    "Quản lý lớp học"
+  ],
+  "expected_soft_skills": [
+    "Sư phạm truyền cảm",
+    "Tận tâm",
+    "Truyền động lực"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Hà Nội (HANU)"
+  ],
+  "expected_experience_companies": [
+    "Học viện Ngôn ngữ The IELTS Workshop"
+  ],
+  "expected_certifications": [
+    "IELTS Academic 8.0 (2023)",
+    "Cambridge CELTA Pass A"
+  ],
+  "expected_match_score_range": [
+    88,
+    98
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Điểm IELTS 8.0, chứng chỉ CELTA chuẩn Cambridge và có 4 năm kinh nghiệm giảng dạy thực tế.",
+  "source_evidence": {
+    "summary": "Giảng viên tiếng Anh 4 năm kinh nghiệm luyện thi IELTS cho hơn 500 học viên đạt mục tiêu 6.5 - 7.5. Sở hữu chứng chỉ IELTS 8.0 và chứng chỉ giảng dạy quốc tế CELTA loại Xuất sắc.",
+    "experience_evidence": [
+      {
+        "company_name": "Học viện Ngôn ngữ The IELTS Workshop",
+        "job_title": "Giáo viên tiếng Anh IELTS",
+        "start_date": "10/2020",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Giảng dạy các khóa học IELTS mục tiêu 6.5 - 7.5, biên soạn giáo trình bổ trợ Speaking & Writing, tổ chức thi thử hàng tháng."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

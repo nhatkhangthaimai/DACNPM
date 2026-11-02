@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cand-seed-21",
+  "expected_name": "Đoàn Minh Trí",
+  "expected_email": "candidate21@example.test",
+  "expected_phone": "09010010021",
+  "file_name": "CV21_Doan_Minh_Tri_Semantic_AI.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2389,
+  "test_case": "Case F - Semantic Matching",
+  "target_job_id": "job-seed-07",
+  "expected_title": "Kỹ sư Trí tuệ Nhân tạo & Xử lý Ngôn ngữ",
+  "expected_hard_skills": [
+    "Trí tuệ nhân tạo",
+    "Học máy",
+    "NLP",
+    "PyTorch",
+    "Python",
+    "RAG",
+    "LLMs"
+  ],
+  "expected_soft_skills": [
+    "Nghiên cứu khoa học",
+    "Tư duy phản biện",
+    "Thuyết trình học thuật"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Bách Khoa Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Viện Nghiên cứu Trí tuệ Nhân tạo VAST"
+  ],
+  "expected_certifications": [
+    "DeepLearning.AI TensorFlow Developer Professional Certificate"
+  ],
+  "expected_match_score_range": [
+    82,
+    95
+  ],
+  "expected_evaluation": "Tương đồng ngữ nghĩa (Semantic Matching): Sử dụng cách diễn đạt 'Trí tuệ nhân tạo', 'Học máy' đồng nghĩa với AI, Machine Learning, hệ thống nhận diện chính xác và cho điểm cao.",
+  "source_evidence": {
+    "summary": "Chuyên gia Trí tuệ nhân tạo có 4 năm kinh nghiệm nghiên cứu mô hình Học máy và Xử lý ngôn ngữ tự nhiên. Đã xây dựng các hệ thống khuyến nghị thông minh và truy xuất tăng cường cho bài toán phân tích tài liệu tự động.",
+    "experience_evidence": [
+      {
+        "company_name": "Viện Nghiên cứu Trí tuệ Nhân tạo VAST",
+        "job_title": "Nghiên cứu viên Trí tuệ Nhân tạo",
+        "start_date": "08/2020",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Huấn luyện các mạng nơ-ron sâu với PyTorch, phát triển giải pháp truy xuất tăng cường (RAG) và tối ưu hóa mô hình ngôn ngữ lớn (LLMs) cho ngữ cảnh tiếng Việt."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

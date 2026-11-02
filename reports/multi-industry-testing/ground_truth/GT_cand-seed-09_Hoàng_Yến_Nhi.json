@@ -1,0 +1,51 @@
+{
+  "candidate_id": "cand-seed-09",
+  "expected_name": "Hoàng Yến Nhi",
+  "expected_email": "candidate09@example.test",
+  "expected_phone": "0901001009",
+  "file_name": "CV09_Hoang_Yen_Nhi_HR_Intern.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37330,
+  "test_case": "Case B - Medium Match",
+  "target_job_id": "job-seed-28",
+  "expected_title": "Chuyên viên Tuyển dụng tập sự",
+  "expected_hard_skills": [
+    "Tuyển dụng",
+    "Đăng tin",
+    "Lọc hồ sơ",
+    "Phỏng vấn sơ bộ",
+    "Tin học văn phòng"
+  ],
+  "expected_soft_skills": [
+    "Giao tiếp",
+    "Lắng nghe",
+    "Nhiệt tình"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Thương Mại"
+  ],
+  "expected_experience_companies": [
+    "Công ty Dịch vụ Tiêu dùng Hà Nội"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    50,
+    70
+  ],
+  "expected_evaluation": "Phù hợp một phần (Medium Match): Có kỹ năng tuyển dụng cơ bản nhưng thiếu kinh nghiệm Headhunting chuyên sâu và kỹ năng sourcing qua LinkedIn.",
+  "source_evidence": {
+    "summary": "Nhân viên nhân sự trẻ với 1 năm kinh nghiệm đăng tin tuyển dụng và tìm kiếm hồ sơ ứng viên khối ngành dịch vụ bán lẻ. Mong muốn chuyển hướng chuyên sâu sang mảng tuyển dụng nhân sự công nghệ.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Dịch vụ Tiêu dùng Hà Nội",
+        "job_title": "Nhân viên Tuyển dụng",
+        "start_date": "08/2023",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Tiếp nhận nhu cầu tuyển dụng vị trí bán hàng, đăng tin trên các kênh tuyển dụng, liên hệ hẹn lịch phỏng vấn với ứng viên."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

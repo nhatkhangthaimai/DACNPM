@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-22",
+  "expected_name": "Tống Mỹ Linh",
+  "expected_email": "candidate22@example.test",
+  "expected_phone": "09010010022",
+  "file_name": "CV22_Tong_My_Linh_Semantic_Finance.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37427,
+  "test_case": "Case F - Semantic Matching",
+  "target_job_id": "job-seed-17",
+  "expected_title": "Senior Financial Planning & Analysis (FP&A)",
+  "expected_hard_skills": [
+    "Financial Analysis",
+    "Financial Modeling",
+    "Cash Flow Management",
+    "Excel",
+    "Báo cáo tài chính"
+  ],
+  "expected_soft_skills": [
+    "Giao tiếp tiếng Anh chuẩn",
+    "Tư duy chiến lược",
+    "Đàm phán"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "RMIT University Vietnam"
+  ],
+  "expected_experience_companies": [
+    "PwC Vietnam"
+  ],
+  "expected_certifications": [
+    "CFA Charterholder Candidate (Passed Level II)"
+  ],
+  "expected_match_score_range": [
+    85,
+    96
+  ],
+  "expected_evaluation": "Tương đồng ngữ nghĩa (Semantic Matching): Sử dụng thuật ngữ tiếng Anh chuẩn FP&A, Cash Flow Management, Financial Modeling tương đương với Phân tích tài chính và Quản trị dòng tiền.",
+  "source_evidence": {
+    "summary": "Chuyên gia hoạch định và phân tích tài chính doanh nghiệp với 4 năm kinh nghiệm xây dựng Financial Modeling, dự báo dòng tiền (Cash Flow Forecasting) và đánh giá danh mục vốn đầu tư.",
+    "experience_evidence": [
+      {
+        "company_name": "PwC Vietnam",
+        "job_title": "Financial Advisory Senior Associate",
+        "start_date": "10/2020",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Xây dựng mô hình định giá DCF, phân tích độ nhạy tài chính dự án, lập báo cáo thẩm định ngân sách và đánh giá dòng tiền cho các thương vụ M&A."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

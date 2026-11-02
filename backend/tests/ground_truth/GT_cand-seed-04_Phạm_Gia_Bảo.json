@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cand-seed-04",
+  "expected_name": "Phạm Gia Bảo",
+  "expected_email": "candidate04@example.test",
+  "expected_phone": "0901001004",
+  "file_name": "CV04_Pham_Gia_Bao_Digital_Marketing.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37419,
+  "test_case": "Case A - High Match",
+  "target_job_id": "job-seed-20",
+  "expected_title": "Digital Performance Marketing Specialist",
+  "expected_hard_skills": [
+    "Digital Marketing",
+    "Facebook Ads",
+    "Google Ads",
+    "Google Analytics",
+    "SEM",
+    "A/B Testing"
+  ],
+  "expected_soft_skills": [
+    "Tư duy số liệu",
+    "Sáng tạo thông điệp",
+    "Quản lý ngân sách"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Ngoại Thương Cơ sở 2"
+  ],
+  "expected_experience_companies": [
+    "Ogilvy Vietnam Partner"
+  ],
+  "expected_certifications": [
+    "Google Ads Search Certification",
+    "Google Analytics (GA4) Certification"
+  ],
+  "expected_match_score_range": [
+    85,
+    96
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đầy đủ công cụ Digital Marketing, Facebook Ads, Google Ads, GA4 và có kinh nghiệm thực tế tại Agency uy tín.",
+  "source_evidence": {
+    "summary": "Chuyên viên Digital Marketing 3 năm kinh nghiệm thực chiến tối ưu hóa quảng cáo chuyển đổi trên Google Ads và Meta Ads. Quản trị ngân sách trên 500 triệu/tháng với ROAS trung bình 4.5.",
+    "experience_evidence": [
+      {
+        "company_name": "Ogilvy Vietnam Partner",
+        "job_title": "Digital Marketing Executive",
+        "start_date": "07/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Thiết lập và vận hành chiến dịch Google Search, GDN, Facebook Conversion Ads. Phân tích phễu chuyển đổi trên Google Analytics 4 và tối ưu hóa chi phí CPA."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

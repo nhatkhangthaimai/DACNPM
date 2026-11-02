@@ -20,12 +20,12 @@ class TokenPayload(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 
 class RegisterCandidateRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: str
     phone: Optional[str] = None
@@ -33,7 +33,7 @@ class RegisterCandidateRequest(BaseModel):
 
 
 class RegisterRecruiterRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: str
     phone: Optional[str] = None
@@ -51,6 +51,8 @@ class UserResponse(BaseModel):
     role: str
     is_active: bool
     is_verified: bool
+    company_id: Optional[str] = None
+    company_name: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -107,6 +109,7 @@ class SkillItem(BaseModel):
 
 # ================= JOB SCHEMAS =================
 class JobCreate(BaseModel):
+    company_id: Optional[str] = None
     title: str
     description: str
     requirements: str

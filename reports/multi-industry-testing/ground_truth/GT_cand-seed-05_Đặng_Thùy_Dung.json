@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-05",
+  "expected_name": "Đặng Thùy Dung",
+  "expected_email": "candidate05@example.test",
+  "expected_phone": "0901001005",
+  "file_name": "CV05_Dang_Thuy_Dung_UI_UX_Designer.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2373,
+  "test_case": "Case A - High Match",
+  "target_job_id": "job-seed-25",
+  "expected_title": "Product Designer (UI/UX)",
+  "expected_hard_skills": [
+    "Figma",
+    "UI/UX",
+    "Wireframing",
+    "Prototyping",
+    "User Research",
+    "Design System"
+  ],
+  "expected_soft_skills": [
+    "Đồng cảm người dùng",
+    "Trình bày giải pháp",
+    "Phản biện thiết kế"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Kiến Trúc Đà Nẵng"
+  ],
+  "expected_experience_companies": [
+    "Paradox Vietnam"
+  ],
+  "expected_certifications": [
+    "Google UX Design Professional Certificate"
+  ],
+  "expected_match_score_range": [
+    85,
+    98
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Sở hữu toàn bộ kỹ năng Figma, Wireframing, Prototyping, Design System và chứng chỉ Google UX uy tín.",
+  "source_evidence": {
+    "summary": "Nhà thiết kế sản phẩm số (UI/UX) với 3 năm kinh nghiệm thiết kế ứng dụng di động Fintech và Web App. Thành thạo quy trình Design Thinking từ User Research, Wireframing đến xây dựng Design System hoàn chỉnh trên Figma.",
+    "experience_evidence": [
+      {
+        "company_name": "Paradox Vietnam",
+        "job_title": "UI/UX Designer",
+        "start_date": "08/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Chịu trách nhiệm thiết kế trải nghiệm người dùng cho ứng dụng quản trị nhân sự. Xây dựng bộ Design System với hơn 200 components đồng nhất trên Figma. Phối hợp chặt chẽ cùng kỹ sư Frontend."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

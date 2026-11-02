@@ -48,6 +48,22 @@ const setStored = <T>(key: string, val: T): void => {
   localStorage.setItem(key, JSON.stringify(val));
 };
 
+export function mapServerCompany(raw: any): Company {
+  if (!raw) return raw;
+  return {
+    id: raw.id,
+    name: raw.name || '',
+    slug: raw.slug || '',
+    logoUrl: raw.logo_url || raw.logoUrl,
+    website: raw.website,
+    industry: raw.industry || 'Công nghệ',
+    companySize: raw.company_size || raw.companySize || '50-100',
+    address: raw.address || 'Việt Nam',
+    description: raw.description || '',
+    status: raw.status || 'approved',
+  };
+}
+
 export function mapServerJob(raw: any): Job {
   if (!raw) return raw;
   return {
@@ -132,9 +148,36 @@ export function mapServerCV(raw: any): CV {
 
 export const apiService = {
   // JOBS
-  async getJobs(filters?: { search?: string; location?: string; jobType?: string }): Promise<Job[]> {
+  async getJobs(filters?: {
+    search?: string;
+    location?: string;
+    jobType?: string;
+    industry?: string;
+    experienceLevel?: string;
+    minSalary?: number;
+    maxSalary?: number;
+    sortBy?: string;
+    companyId?: string;
+    status?: string;
+    limit?: number;
+    skip?: number;
+  }): Promise<Job[]> {
     try {
-      const res = await apiClient.get('/jobs', { params: filters });
+      const params: Record<string, any> = {};
+      if (filters?.search) params.search = filters.search;
+      if (filters?.location && filters.location !== 'all') params.location = filters.location;
+      if (filters?.jobType && filters.jobType !== 'all') params.job_type = filters.jobType;
+      if (filters?.industry && filters.industry !== 'all') params.industry = filters.industry;
+      if (filters?.experienceLevel && filters.experienceLevel !== 'all') params.experience_level = filters.experienceLevel;
+      if (filters?.minSalary !== undefined) params.min_salary = filters.minSalary;
+      if (filters?.maxSalary !== undefined) params.max_salary = filters.maxSalary;
+      if (filters?.sortBy && filters.sortBy !== 'match') params.sort_by = filters.sortBy;
+      if (filters?.companyId) params.company_id = filters.companyId;
+      if (filters?.status) params.status = filters.status;
+      if (filters?.limit) params.limit = filters.limit;
+      if (filters?.skip) params.skip = filters.skip;
+
+      const res = await apiClient.get('/jobs', { params });
       return Array.isArray(res.data) ? res.data.map(mapServerJob) : [];
     } catch {
       // Fallback to local storage
@@ -148,6 +191,12 @@ export const apiService = {
       }
       if (filters?.jobType && filters.jobType !== 'all') {
         jobs = jobs.filter(j => j.jobType === filters.jobType);
+      }
+      if (filters?.experienceLevel && filters.experienceLevel !== 'all') {
+        jobs = jobs.filter(j => j.experienceLevel === filters.experienceLevel);
+      }
+      if (filters?.status && filters.status !== 'all') {
+        jobs = jobs.filter(j => j.status === filters.status);
       }
       return jobs;
     }
@@ -195,6 +244,14 @@ export const apiService = {
   },
 
   async updateJobStatus(jobId: string, status: Job['status'], reason?: string): Promise<Job> {
+    try {
+      const res = await apiClient.put(`/jobs/${jobId}`, { status });
+      if (res.data) {
+        return mapServerJob(res.data);
+      }
+    } catch (e) {
+      console.warn('Backend updateJobStatus failed, fallback to local storage:', e);
+    }
     const jobs = getStored<Job[]>('hiresense_jobs', INITIAL_JOBS);
     const updated = jobs.map(j => {
       if (j.id === jobId) {
@@ -558,6 +615,14 @@ export const apiService = {
 
   // COMPANIES
   async getCompanies(): Promise<Company[]> {
+    try {
+      const res = await apiClient.get('/companies');
+      if (Array.isArray(res.data) && res.data.length > 0) {
+        return res.data.map(mapServerCompany);
+      }
+    } catch (e) {
+      console.warn('Backend getCompanies failed, fallback to local storage:', e);
+    }
     return getStored<Company[]>('hiresense_companies', INITIAL_COMPANIES);
   },
 

@@ -5,7 +5,9 @@ from app.core.config import settings
 
 connect_args = {}
 # Remote databases (e.g. Render PostgreSQL) require SSL
-if "localhost" not in settings.DATABASE_URL and "127.0.0.1" not in settings.DATABASE_URL and "sqlite" not in settings.DATABASE_URL:
+# Local environments (localhost, 127.0.0.1, Docker service "postgres", SQLite) do not use SSL
+is_local_db = any(host in settings.DATABASE_URL for host in ["localhost", "127.0.0.1", "@postgres", "sqlite"])
+if not is_local_db:
     import ssl
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False

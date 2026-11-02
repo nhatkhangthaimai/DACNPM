@@ -1,9 +1,10 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, jobs, cvs, matching, applications, admin
+from app.api.v1.endpoints import auth, jobs, cvs, matching, applications, admin, companies
 
 api_router = APIRouter()
 
 api_router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+api_router.include_router(companies.router, prefix="/companies", tags=["Companies"])
 api_router.include_router(jobs.router, prefix="/jobs", tags=["Jobs"])
 api_router.include_router(cvs.router, prefix="/cvs", tags=["CVs & Extraction"])
 api_router.include_router(matching.router, prefix="/matching", tags=["AI Job Matching"])

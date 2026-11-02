@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-28",
+  "expected_name": "Lương Bích Trâm",
+  "expected_email": "candidate28@example.test",
+  "expected_phone": "09010010028",
+  "file_name": "CV28_Luong_Bich_Tram_Y_Te.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37447,
+  "test_case": "Case A - High Match (Healthcare)",
+  "target_job_id": "job-seed-47",
+  "expected_title": "Cử nhân Y tế Công cộng - Điều phối y tế",
+  "expected_hard_skills": [
+    "Clinical Coordination",
+    "Điều phối y tế",
+    "Chăm sóc bệnh nhân",
+    "Thuật ngữ y khoa",
+    "HIS",
+    "Bảo hiểm y tế"
+  ],
+  "expected_soft_skills": [
+    "Ân cần",
+    "Giao tiếp y khoa",
+    "Bình tĩnh trước áp lực"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Y Dược TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "Phòng khám Quốc tế Victoria Healthcare"
+  ],
+  "expected_certifications": [
+    "Chứng chỉ Sơ cấp cứu hồi sinh tim phổi (CPR/BLS)"
+  ],
+  "expected_match_score_range": [
+    85,
+    96
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đầy đủ các tiêu chuẩn điều phối y tế, chăm sóc bệnh nhân và thuật ngữ chuyên môn.",
+  "source_evidence": {
+    "summary": "3 năm kinh nghiệm trong vai trò điều phối khám chữa bệnh và hướng dẫn bệnh nhân tại phòng khám đa khoa quốc tế. Nắm vững quy trình khám bệnh, thuật ngữ y khoa và phần mềm hồ sơ bệnh viện (HIS).",
+    "experience_evidence": [
+      {
+        "company_name": "Phòng khám Quốc tế Victoria Healthcare",
+        "job_title": "Nhân viên Điều phối Y tế",
+        "start_date": "09/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Sắp xếp lịch hẹn khám của bệnh nhân, hướng dẫn làm các xét nghiệm cận lâm sàng và bảo lãnh viện phí bảo hiểm sức khỏe trên hệ thống HIS."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

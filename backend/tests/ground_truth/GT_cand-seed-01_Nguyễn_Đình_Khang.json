@@ -1,0 +1,65 @@
+{
+  "candidate_id": "cand-seed-01",
+  "expected_name": "Nguyễn Đình Khang",
+  "expected_email": "candidate01@example.test",
+  "expected_phone": "0901001001",
+  "file_name": "CV01_Nguyen_Dinh_Khang_Senior_React.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2568,
+  "test_case": "Case A - High Match",
+  "target_job_id": "job-seed-02",
+  "expected_title": "Senior React & TypeScript Developer",
+  "expected_hard_skills": [
+    "React",
+    "TypeScript",
+    "Next.js",
+    "Redux",
+    "CI/CD",
+    "Git",
+    "Tailwind CSS"
+  ],
+  "expected_soft_skills": [
+    "Lãnh đạo đội nhóm",
+    "Giao tiếp tiếng Anh",
+    "Tư duy giải quyết vấn đề"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Bách Khoa Đà Nẵng"
+  ],
+  "expected_experience_companies": [
+    "FPT Software Đà Nẵng",
+    "Enclave Technology"
+  ],
+  "expected_certifications": [
+    "AWS Certified Cloud Practitioner",
+    "Meta Front-End Developer Professional Certificate"
+  ],
+  "expected_match_score_range": [
+    85,
+    98
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đầy đủ các kỹ năng cốt lõi React, TypeScript, Next.js, Redux, CI/CD và trên 5 năm kinh nghiệm thực tế.",
+  "source_evidence": {
+    "summary": "Kỹ sư Frontend với hơn 5 năm kinh nghiệm chuyên sâu về React, TypeScript, Next.js và kiến trúc Design System quy mô lớn. Tối ưu hiệu năng Web Core Vitals và dẫn dắt đội ngũ kỹ thuật phát triển sản phẩm SaaS.",
+    "experience_evidence": [
+      {
+        "company_name": "FPT Software Đà Nẵng",
+        "job_title": "Senior Frontend Engineer",
+        "start_date": "06/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Chịu trách nhiệm kiến trúc Frontend sử dụng React, TypeScript và Next.js. Tối ưu hóa bundle size giảm 35%, tích hợp CI/CD tự động hóa kiểm thử bằng Jest và Cypress."
+      },
+      {
+        "company_name": "Enclave Technology",
+        "job_title": "Frontend Developer",
+        "start_date": "01/2020",
+        "end_date": "05/2021",
+        "is_current": false,
+        "description": "Phát triển giao diện ứng dụng web thương mại điện tử với ReactJS, Redux Toolkit, Tailwind CSS và RESTful API."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

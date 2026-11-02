@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-14",
+  "expected_name": "Cao Mỹ Duyên",
+  "expected_email": "candidate14@example.test",
+  "expected_phone": "09010010014",
+  "file_name": "CV14_Cao_My_Duyen_Teacher_to_Mechanical.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37324,
+  "test_case": "Case C - Low Match / Cross-Industry",
+  "target_job_id": "job-seed-44",
+  "expected_title": "Giáo viên tiếng Anh IELTS",
+  "expected_hard_skills": [
+    "English Teaching",
+    "IELTS",
+    "Soạn giáo án",
+    "Quản lý lớp học",
+    "TESOL"
+  ],
+  "expected_soft_skills": [
+    "Truyền cảm hứng",
+    "Sư phạm",
+    "Kiên nhẫn"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Sư phạm Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Trung tâm Anh ngữ Quốc tế Ocean Edu"
+  ],
+  "expected_certifications": [
+    "IELTS 8.0",
+    "TESOL Certificate 120 hours"
+  ],
+  "expected_match_score_range": [
+    0,
+    20
+  ],
+  "expected_evaluation": "Không phù hợp (Low Match): Giáo viên Tiếng Anh ứng tuyển Kỹ sư Cơ khí chế tạo; hoàn toàn khác biệt về lĩnh vực chuyên môn.",
+  "source_evidence": {
+    "summary": "Giảng viên tiếng Anh với 3 năm kinh nghiệm giảng dạy ngữ pháp, từ vựng và luyện kỹ năng Speaking cho học viên chuẩn bị du học.",
+    "experience_evidence": [
+      {
+        "company_name": "Trung tâm Anh ngữ Quốc tế Ocean Edu",
+        "job_title": "Giáo viên tiếng Anh",
+        "start_date": "09/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Soạn giáo án điện tử, giảng dạy các lớp IELTS từ 5.0 - 6.5, chấm bài và hỗ trợ phát âm chuẩn IPA."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

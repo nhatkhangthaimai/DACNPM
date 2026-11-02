@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-11",
+  "expected_name": "Mai Thanh Tùng",
+  "expected_email": "candidate11@example.test",
+  "expected_phone": "09010010011",
+  "file_name": "CV11_Mai_Thanh_Tung_Graphic_to_Python.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2300,
+  "test_case": "Case C - Low Match / Cross-Industry",
+  "target_job_id": "job-seed-03",
+  "expected_title": "Chuyên viên Thiết kế đồ họa & Mỹ thuật số",
+  "expected_hard_skills": [
+    "Photoshop",
+    "Illustrator",
+    "Thiết kế đồ họa",
+    "Branding",
+    "InDesign",
+    "Typography"
+  ],
+  "expected_soft_skills": [
+    "Thẩm mỹ thị giác",
+    "Sáng tạo nghệ thuật",
+    "Tỉ mỉ"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Mỹ thuật TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "Leo Burnett Vietnam"
+  ],
+  "expected_certifications": [
+    "Adobe Certified Professional in Visual Design"
+  ],
+  "expected_match_score_range": [
+    0,
+    25
+  ],
+  "expected_evaluation": "Không phù hợp (Low Match): Ứng viên ngành Thiết kế đồ họa nộp cho vị trí Lập trình viên Backend Python; thiếu toàn bộ kỹ năng lập trình (Python, FastAPI, Database).",
+  "source_evidence": {
+    "summary": "Thiết kế đồ họa 4 năm kinh nghiệm chuyên về tạo mẫu nhận diện thương hiệu, vẽ minh họa vector và xử lý hình ảnh sản phẩm. Đam mê nghệ thuật thị giác và sáng tạo không giới hạn.",
+    "experience_evidence": [
+      {
+        "company_name": "Leo Burnett Vietnam",
+        "job_title": "Senior Graphic Designer",
+        "start_date": "09/2020",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Thiết kế poster quảng cáo, bao bì nhãn mác sản phẩm và ấn phẩm truyền thông bằng Photoshop, Illustrator, InDesign."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

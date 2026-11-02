@@ -1,0 +1,56 @@
+{
+  "candidate_id": "cand-seed-03",
+  "expected_name": "Trần Thu Hà",
+  "expected_email": "candidate03@example.test",
+  "expected_phone": "0901001003",
+  "file_name": "CV03_Tran_Thu_Ha_Ke_Toan_Tong_Hop.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2336,
+  "test_case": "Case A - High Match",
+  "target_job_id": "job-seed-16",
+  "expected_title": "Chuyên viên Kế toán tổng hợp",
+  "expected_hard_skills": [
+    "Kế toán tổng hợp",
+    "Báo cáo tài chính",
+    "Kế toán thuế",
+    "MISA",
+    "Excel",
+    "VAS"
+  ],
+  "expected_soft_skills": [
+    "Cẩn thận",
+    "Trung thực",
+    "Chính xác",
+    "Chịu áp lực tốt"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Kinh tế TP.HCM (UEH)"
+  ],
+  "expected_experience_companies": [
+    "Công ty TNHH Đầu tư Tài chính Á Châu"
+  ],
+  "expected_certifications": [
+    "Chứng chỉ Kế toán trưởng",
+    "Chứng chỉ Tin học văn phòng MOS Excel Expert"
+  ],
+  "expected_match_score_range": [
+    85,
+    98
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đạt trọn vẹn yêu cầu Kế toán tổng hợp, Báo cáo tài chính, MISA, Kế toán thuế và có chứng chỉ chuyên môn cao.",
+  "source_evidence": {
+    "summary": "Kế toán viên tổng hợp với hơn 4 năm kinh nghiệm làm việc tại doanh nghiệp dịch vụ tài chính. Thành thạo lập báo cáo tài chính, quyết toán thuế GTGT, TNDN, TNCN và sử dụng chuyên sâu phần mềm MISA, Excel.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty TNHH Đầu tư Tài chính Á Châu",
+        "job_title": "Kế toán tổng hợp",
+        "start_date": "10/2020",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Kiểm soát toàn bộ định khoản kế toán, lập báo cáo tài chính năm theo chuẩn mực VAS. Trực tiếp làm việc với cơ quan thuế quận 1 trong các kỳ quyết toán thuế định kỳ. Quản lý hệ thống chứng từ trên MISA SME."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-27",
+  "expected_name": "Văn Đức Thành",
+  "expected_email": "candidate27@example.test",
+  "expected_phone": "09010010027",
+  "file_name": "CV27_Van_Duc_Thanh_Negative_Ads.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2368,
+  "test_case": "Case G - Negative Skills",
+  "target_job_id": "job-seed-20",
+  "expected_title": "Nhân viên Telesales & Chăm sóc khách hàng",
+  "expected_hard_skills": [
+    "Telesales",
+    "Customer Service",
+    "Giao tiếp"
+  ],
+  "expected_soft_skills": [
+    "Thuyết phục",
+    "Kiên trì"
+  ],
+  "expected_negative_skills": [
+    "Facebook Ads",
+    "Google Analytics"
+  ],
+  "expected_education_institutions": [
+    "Đại học Mở TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "Công ty Bảo hiểm Nhân thọ Prudential Agency"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    20,
+    38
+  ],
+  "expected_evaluation": "Kiểm tra kỹ năng phủ định (Negative Skills): 'Chưa từng chạy Facebook Ads và chưa biết sử dụng Google Analytics' phải được nhận diện là kỹ năng thiếu.",
+  "source_evidence": {
+    "summary": "Chuyên viên tư vấn bán hàng có 2 năm kinh nghiệm gọi điện thoại thuyết phục khách hàng. Cần ghi chú rõ: Chưa từng chạy Facebook Ads và chưa biết sử dụng Google Analytics; mong muốn được đào tạo thêm về mảng Marketing số.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Bảo hiểm Nhân thọ Prudential Agency",
+        "job_title": "Telesales Executive",
+        "start_date": "08/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Tư vấn hợp đồng bảo hiểm qua điện thoại. Không phụ trách marketing trực tuyến và chưa từng chạy Facebook Ads."
+      }
+    ],
+    "negative_skills_statement": [
+      "Chưa có kinh nghiệm sử dụng Facebook Ads",
+      "Chưa có kinh nghiệm sử dụng Google Analytics"
+    ]
+  }
+}

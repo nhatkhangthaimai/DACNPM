@@ -1,0 +1,48 @@
+{
+  "candidate_id": "cand-seed-17",
+  "expected_name": "Võ Thành Đạt",
+  "expected_email": "candidate17@example.test",
+  "expected_phone": "09010010017",
+  "file_name": "CV17_Vo_Thanh_Dat_Missing_SEO.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2207,
+  "test_case": "Case D - Missing Critical Skills",
+  "target_job_id": "job-seed-21",
+  "expected_title": "Content Writer & Cộng tác viên viết bài",
+  "expected_hard_skills": [
+    "Sáng tạo nội dung",
+    "Viết lách",
+    "Biên tập văn bản"
+  ],
+  "expected_soft_skills": [
+    "Cảm xúc ngôn từ",
+    "Đúng hạn"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Khoa học Xã hội & Nhân văn TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "Tạp chí Văn hóa Trẻ"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    25,
+    45
+  ],
+  "expected_evaluation": "Thiếu kỹ năng cốt lõi: Có khả năng viết nhưng thiếu hoàn toàn SEO On-page/Off-page, Google Analytics, Technical SEO.",
+  "source_evidence": {
+    "summary": "Người viết lách tự do với 2 năm kinh nghiệm sáng tạo nội dung truyện ngắn và bài PR báo chí. Chưa từng thực hiện tối ưu hóa công cụ tìm kiếm (Technical SEO) hay sử dụng Google Analytics.",
+    "experience_evidence": [
+      {
+        "company_name": "Tạp chí Văn hóa Trẻ",
+        "job_title": "Cộng tác viên nội dung",
+        "start_date": "09/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Viết bài xã luận và tản văn theo chủ đề hàng tuần. Biên tập câu từ và kiểm tra lỗi chính tả."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-26",
+  "expected_name": "Tạ Hồng Nhung",
+  "expected_email": "candidate26@example.test",
+  "expected_phone": "09010010026",
+  "file_name": "CV26_Ta_Hong_Nhung_Negative_MISA.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37387,
+  "test_case": "Case G - Negative Skills",
+  "target_job_id": "job-seed-16",
+  "expected_title": "Thực tập sinh Kế toán",
+  "expected_hard_skills": [
+    "Excel",
+    "Kế toán cơ bản"
+  ],
+  "expected_soft_skills": [
+    "Cẩn thận",
+    "Trung thực"
+  ],
+  "expected_negative_skills": [
+    "MISA",
+    "Báo cáo tài chính"
+  ],
+  "expected_education_institutions": [
+    "Đại học Sài Gòn"
+  ],
+  "expected_experience_companies": [
+    "Cửa hàng Tiện lợi An Khang (Bán thời gian)"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    25,
+    45
+  ],
+  "expected_evaluation": "Kiểm tra kỹ năng phủ định (Negative Skills): Câu 'Không thành thạo MISA, chưa có kinh nghiệm lập Báo cáo tài chính' phải bị loại trừ, không cộng điểm kỹ năng.",
+  "source_evidence": {
+    "summary": "Sinh viên mới tốt nghiệp có kiến thức kế toán căn bản. Cần lưu ý: Chưa có kinh nghiệm lập Báo cáo tài chính thực tế và không thành thạo MISA do trước đây chỉ học lý thuyết tại trường.",
+    "experience_evidence": [
+      {
+        "company_name": "Cửa hàng Tiện lợi An Khang (Bán thời gian)",
+        "job_title": "Thu ngân & Thu chi nội bộ",
+        "start_date": "01/2024",
+        "end_date": "06/2024",
+        "is_current": false,
+        "description": "Kiểm đếm tiền mặt, nhập số liệu bán hàng vào Excel. Chưa từng làm việc với phần mềm kế toán chuyên dụng MISA hay lập Báo cáo tài chính năm."
+      }
+    ],
+    "negative_skills_statement": [
+      "Chưa có kinh nghiệm sử dụng MISA",
+      "Chưa có kinh nghiệm sử dụng Báo cáo tài chính"
+    ]
+  }
+}

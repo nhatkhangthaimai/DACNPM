@@ -18,7 +18,7 @@ export const JobModeration: React.FC = () => {
   }, []);
 
   const loadJobs = () => {
-    apiService.getJobs().then(setJobs);
+    apiService.getJobs({ status: 'all' }).then(setJobs);
   };
 
   const handleApprove = async (jobId: string) => {

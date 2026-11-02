@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-08",
+  "expected_name": "Đỗ Quang Huy",
+  "expected_email": "candidate08@example.test",
+  "expected_phone": "0901001008",
+  "file_name": "CV08_Do_Quang_Huy_DevOps_Partial.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2358,
+  "test_case": "Case B - Medium Match",
+  "target_job_id": "job-seed-12",
+  "expected_title": "Linux System Admin / DevOps Associate",
+  "expected_hard_skills": [
+    "Linux",
+    "Docker",
+    "Bash Scripting",
+    "Networking",
+    "Git"
+  ],
+  "expected_soft_skills": [
+    "Kiên nhẫn",
+    "Cẩn thận",
+    "Trực ca sự cố"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Bách Khoa Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "NetNam Telecom"
+  ],
+  "expected_certifications": [
+    "Linux Professional Institute LPIC-1"
+  ],
+  "expected_match_score_range": [
+    50,
+    68
+  ],
+  "expected_evaluation": "Phù hợp một phần (Medium Match): Thành thạo Linux, Docker nhưng thiếu Kubernetes, CI/CD pipeline hoàn chỉnh và AWS.",
+  "source_evidence": {
+    "summary": "Kỹ trị viên hệ thống Linux với 2 năm kinh nghiệm quản trị server, ảo hóa và container hóa ứng dụng với Docker. Đang tự học Kubernetes và AWS nhưng chưa từng trực tiếp quản trị cụm Production K8s trên đám mây.",
+    "experience_evidence": [
+      {
+        "company_name": "NetNam Telecom",
+        "job_title": "System Administrator",
+        "start_date": "03/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Quản trị máy chủ Ubuntu/CentOS, cài đặt Nginx, viết shell script sao lưu dữ liệu tự động. Đóng gói ứng dụng web vào Docker container."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_id": "cand-seed-24",
+  "expected_name": "Phùng Hải Yến",
+  "expected_email": "candidate24@example.test",
+  "expected_phone": "09010010024",
+  "file_name": "CV24_Phung_Hai_Yen_Semantic_Content.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37389,
+  "test_case": "Case F - Semantic Matching",
+  "target_job_id": "job-seed-22",
+  "expected_title": "Senior Copywriter & Creative Content Producer",
+  "expected_hard_skills": [
+    "Copywriting",
+    "Sáng tạo nội dung",
+    "Storytelling",
+    "Social Media",
+    "Kịch bản Video"
+  ],
+  "expected_soft_skills": [
+    "Tư duy thẩm mỹ từ ngữ",
+    "Nắm bắt tâm lý",
+    "Làm việc độc lập"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Khoa học Xã hội & Nhân văn Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Dentsu Redder Vietnam"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    82,
+    94
+  ],
+  "expected_evaluation": "Tương đồng ngữ nghĩa (Semantic Matching): Các từ khóa 'Copywriting', 'Sáng tạo nội dung', 'Storytelling' tương đồng với Content Marketing.",
+  "source_evidence": {
+    "summary": "Cây bút sáng tạo nội dung với 3 năm kinh nghiệm viết lời quảng cáo (Copywriting), xây dựng kịch bản video viral và dẫn dắt chiến dịch truyền thông đa kênh cho thương hiệu mỹ phẩm và F&B.",
+    "experience_evidence": [
+      {
+        "company_name": "Dentsu Redder Vietnam",
+        "job_title": "Copywriter",
+        "start_date": "09/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Sáng tạo thông điệp chiến dịch (Key Message), viết bài PR báo chí, biên kịch nội dung video ngắn cho TikTok và quản trị nội dung mạng xã hội."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

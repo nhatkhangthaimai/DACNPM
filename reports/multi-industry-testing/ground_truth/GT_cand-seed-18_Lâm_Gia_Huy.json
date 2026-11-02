@@ -1,0 +1,50 @@
+{
+  "candidate_id": "cand-seed-18",
+  "expected_name": "Lâm Gia Huy",
+  "expected_email": "candidate18@example.test",
+  "expected_phone": "09010010018",
+  "file_name": "CV18_Lam_Gia_Huy_Java_Intern_to_Senior.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37316,
+  "test_case": "Case E - Junior vs Senior",
+  "target_job_id": "job-seed-04",
+  "expected_title": "Sinh viên mới tốt nghiệp - Lập trình Java",
+  "expected_hard_skills": [
+    "Java",
+    "Spring Boot",
+    "MySQL",
+    "Git"
+  ],
+  "expected_soft_skills": [
+    "Nhiệt huyết",
+    "Cầu tiến",
+    "Ham học"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Học viện Công nghệ Bưu chính Viễn thông Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Công ty Phần mềm Thiên Hà"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    42,
+    60
+  ],
+  "expected_evaluation": "Lệch cấp bậc (Junior vs Senior): Có đúng công nghệ Java và Spring Boot nhưng chỉ có 6 tháng thực tập, hoàn toàn không đáp ứng yêu cầu 5 năm kinh nghiệm và kiến trúc phân tán Kafka.",
+  "source_evidence": {
+    "summary": "Sinh viên mới tốt nghiệp ngành CNTT loại Khá, nắm vững kiến thức lập trình hướng đối tượng với Java Core và đã làm đồ án tốt nghiệp với Spring Boot. Mong muốn tìm kiếm cơ hội học việc.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Phần mềm Thiên Hà",
+        "job_title": "Java Intern",
+        "start_date": "02/2024",
+        "end_date": "08/2024",
+        "is_current": false,
+        "description": "Thực tập 6 tháng hỗ trợ viết các câu lệnh truy vấn MySQL đơn giản và sửa lỗi nhỏ trong ứng dụng web Spring Boot."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

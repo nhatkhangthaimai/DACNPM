@@ -1,0 +1,48 @@
+{
+  "candidate_id": "cand-seed-20",
+  "expected_name": "Nguyễn Hữu Trí",
+  "expected_email": "candidate20@example.test",
+  "expected_phone": "09010010020",
+  "file_name": "CV20_Nguyen_Huu_Tri_Tech_to_Supervisor.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37250,
+  "test_case": "Case E - Junior vs Senior",
+  "target_job_id": "job-seed-46",
+  "expected_title": "Kỹ thuật viên Vận hành máy",
+  "expected_hard_skills": [
+    "5S",
+    "Vận hành máy",
+    "Cơ khí cơ bản"
+  ],
+  "expected_soft_skills": [
+    "Chăm chỉ",
+    "Tuân thủ kỷ luật"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Cao đẳng Kỹ thuật Công nghiệp Hải Phòng"
+  ],
+  "expected_experience_companies": [
+    "Xưởng Gia công Cơ khí Đình Vũ"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    38,
+    55
+  ],
+  "expected_evaluation": "Lệch cấp bậc (Junior vs Senior): Có hiểu biết 5S nhưng thiếu kỹ năng quản lý sản xuất, Lean Manufacturing và năng lực lãnh đạo ca sản xuất quy mô 100 người.",
+  "source_evidence": {
+    "summary": "Kỹ thuật viên có 8 tháng kinh nghiệm đứng máy gia công tại xưởng sản xuất, hiểu quy tắc 5S nhưng chưa từng quản lý con người hay điều hành ca sản xuất.",
+    "experience_evidence": [
+      {
+        "company_name": "Xưởng Gia công Cơ khí Đình Vũ",
+        "job_title": "Công nhân kỹ thuật",
+        "start_date": "10/2023",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Trực tiếp vận hành máy dập khuôn, vệ sinh khu vực làm việc theo tiêu chuẩn 5S."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

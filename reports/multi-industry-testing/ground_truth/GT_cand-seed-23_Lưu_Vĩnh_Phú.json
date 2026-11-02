@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-23",
+  "expected_name": "Lưu Vĩnh Phú",
+  "expected_email": "candidate23@example.test",
+  "expected_phone": "09010010023",
+  "file_name": "CV23_Luu_Vinh_Phu_Semantic_SupplyChain.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2319,
+  "test_case": "Case F - Semantic Matching",
+  "target_job_id": "job-seed-35",
+  "expected_title": "Chuyên viên Hoạch định Chuỗi cung ứng",
+  "expected_hard_skills": [
+    "Chuỗi cung ứng",
+    "Quản lý tồn kho",
+    "Phân tích dữ liệu",
+    "Excel",
+    "ERP"
+  ],
+  "expected_soft_skills": [
+    "Lập kế hoạch",
+    "Tư duy logic",
+    "Giải quyết vấn đề"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Giao thông Vận tải TP.HCM"
+  ],
+  "expected_experience_companies": [
+    "CP Vietnam Corporation"
+  ],
+  "expected_certifications": [
+    "APICS Certified Supply Chain Professional (CSCP)"
+  ],
+  "expected_match_score_range": [
+    82,
+    95
+  ],
+  "expected_evaluation": "Tương đồng ngữ nghĩa (Semantic Matching): Thuật ngữ 'Chuỗi cung ứng' khớp nối với 'Supply Chain', ERP và Quản trị tồn kho đáp ứng xuất sắc.",
+  "source_evidence": {
+    "summary": "3 năm kinh nghiệm trong quản trị chuỗi cung ứng, chuyên trách phân tích luân chuyển hàng hóa, điều phối kho lạnh và cân bằng tồn kho an toàn cho ngành hàng thực phẩm xuất khẩu.",
+    "experience_evidence": [
+      {
+        "company_name": "CP Vietnam Corporation",
+        "job_title": "Supply Chain Planner",
+        "start_date": "08/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Phân tích số liệu xuất nhập tồn bằng Excel và hệ thống ERP. Lập kế hoạch cung ứng nguyên liệu sản xuất, giảm 15% chi phí lưu kho."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-10",
+  "expected_name": "Bùi Quốc Cường",
+  "expected_email": "candidate10@example.test",
+  "expected_phone": "09010010010",
+  "file_name": "CV10_Bui_Quoc_Cuong_Ky_Su_Giam_Sat.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2291,
+  "test_case": "Case B - Medium Match",
+  "target_job_id": "job-seed-43",
+  "expected_title": "Kỹ sư Giám sát hiện trường",
+  "expected_hard_skills": [
+    "Kỹ sư xây dựng",
+    "AutoCAD",
+    "Bóc tách khối lượng",
+    "Giám sát thi công",
+    "TCVN"
+  ],
+  "expected_soft_skills": [
+    "Chịu được áp lực hiện trường",
+    "Quản lý tổ đội",
+    "Quyết đoán"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Xây dựng Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Công ty Cổ phần Xây dựng Hải Phòng"
+  ],
+  "expected_certifications": [
+    "Chứng chỉ Hành nghề Giám sát Xây dựng hạng III"
+  ],
+  "expected_match_score_range": [
+    52,
+    70
+  ],
+  "expected_evaluation": "Phù hợp một phần (Medium Match): Có bằng Kỹ sư xây dựng và AutoCAD, nhưng thiếu phần mềm tính toán kết cấu Etabs, SAFE, Revit Structure.",
+  "source_evidence": {
+    "summary": "Kỹ sư xây dựng có 3 năm kinh nghiệm giám sát thi công tại hiện trường công trình dân dụng. Đọc hiểu bản vẽ kết cấu và sử dụng AutoCAD thành thạo, nhưng chưa có nhiều kinh nghiệm lập mô hình tính toán tải trọng trên Etabs/SAP2000.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Cổ phần Xây dựng Hải Phòng",
+        "job_title": "Kỹ sư Giám sát công trường",
+        "start_date": "06/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Giám sát công tác cốt thép, đổ bê tông sàn dầm, nghiệm thu khối lượng thi công thực tế theo bản vẽ thiết kế bằng AutoCAD."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

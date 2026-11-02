@@ -1,0 +1,50 @@
+{
+  "candidate_id": "cand-seed-16",
+  "expected_name": "Trịnh Khánh Linh",
+  "expected_email": "candidate16@example.test",
+  "expected_phone": "09010010016",
+  "file_name": "CV16_Trinh_Khanh_Linh_Admin_to_KeToan.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37337,
+  "test_case": "Case D - Missing Critical Skills",
+  "target_job_id": "job-seed-16",
+  "expected_title": "Nhân viên Hành chính - Văn thư",
+  "expected_hard_skills": [
+    "Excel",
+    "Soạn thảo văn bản",
+    "Lưu trữ hồ sơ",
+    "Hành chính văn phòng"
+  ],
+  "expected_soft_skills": [
+    "Cẩn thận",
+    "Nhiệt tình",
+    "Giao tiếp nội bộ"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Văn Hiến"
+  ],
+  "expected_experience_companies": [
+    "Công ty TNHH Thương mại Phú Đạt"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    25,
+    42
+  ],
+  "expected_evaluation": "Thiếu kỹ năng cốt lõi: Chỉ có kỹ năng hành chính và Excel cơ bản, thiếu hoàn toàn MISA, Báo cáo tài chính và nghiệp vụ kế toán chuyên sâu.",
+  "source_evidence": {
+    "summary": "Nhân viên văn phòng có kinh nghiệm quản lý văn phòng phẩm, hỗ trợ lưu trữ chứng từ chi phí và phụ trách các công việc hành chính tổng hợp. Chưa có chuyên môn về lập báo cáo tài chính hay phần mềm MISA.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty TNHH Thương mại Phú Đạt",
+        "job_title": "Nhân viên Hành chính",
+        "start_date": "06/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Quản lý hợp đồng hành chính, theo dõi thanh toán các hóa đơn điện nước văn phòng bằng Excel cơ bản."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

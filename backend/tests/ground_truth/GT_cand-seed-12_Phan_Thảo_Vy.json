@@ -1,0 +1,51 @@
+{
+  "candidate_id": "cand-seed-12",
+  "expected_name": "Phan Thảo Vy",
+  "expected_email": "candidate12@example.test",
+  "expected_phone": "09010010012",
+  "file_name": "CV12_Phan_Thao_Vy_Accountant_to_Civil.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37314,
+  "test_case": "Case C - Low Match / Cross-Industry",
+  "target_job_id": "job-seed-43",
+  "expected_title": "Kế toán viên Thuế & Doanh nghiệp",
+  "expected_hard_skills": [
+    "Kế toán tổng hợp",
+    "Kế toán thuế",
+    "MISA",
+    "Excel",
+    "Báo cáo tài chính"
+  ],
+  "expected_soft_skills": [
+    "Cẩn trọng",
+    "Ngăn nắp",
+    "Trung thực"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Tài chính - Marketing"
+  ],
+  "expected_experience_companies": [
+    "Công ty TNHH Dịch vụ Kế toán Nam Việt"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    0,
+    20
+  ],
+  "expected_evaluation": "Không phù hợp (Low Match): Ứng viên ngành Kế toán ứng tuyển kỹ sư kết cấu xây dựng; hoàn toàn không có kiến thức kỹ thuật công trình.",
+  "source_evidence": {
+    "summary": "Kế toán viên 3 năm kinh nghiệm phụ trách kê khai hóa đơn, hạch toán sổ sách chứng từ và làm việc với cơ quan thuế. Nắm vững phần mềm kế toán MISA và bảng tính Excel.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty TNHH Dịch vụ Kế toán Nam Việt",
+        "job_title": "Nhân viên Kế toán thuế",
+        "start_date": "08/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Nhập liệu hóa đơn đầu vào đầu ra trên MISA, làm tờ khai thuế GTGT, đối chiếu công nợ nhà cung cấp."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

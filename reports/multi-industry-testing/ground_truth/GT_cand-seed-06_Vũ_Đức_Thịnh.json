@@ -1,0 +1,53 @@
+{
+  "candidate_id": "cand-seed-06",
+  "expected_name": "Vũ Đức Thịnh",
+  "expected_email": "candidate06@example.test",
+  "expected_phone": "0901001006",
+  "file_name": "CV06_Vu_Duc_Thinh_AI_Junior.pdf",
+  "file_type": "pdf",
+  "file_size_bytes": 2342,
+  "test_case": "Case B - Medium Match",
+  "target_job_id": "job-seed-07",
+  "expected_title": "Junior AI / Data Developer",
+  "expected_hard_skills": [
+    "Python",
+    "Machine Learning",
+    "Scikit-learn",
+    "SQL",
+    "Pandas"
+  ],
+  "expected_soft_skills": [
+    "Nhiệt tình",
+    "Chăm chỉ",
+    "Ham học hỏi"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Quốc gia Hà Nội"
+  ],
+  "expected_experience_companies": [
+    "Viettel AI Lab (Thực tập)"
+  ],
+  "expected_certifications": [
+    "IBM Data Science Professional Certificate"
+  ],
+  "expected_match_score_range": [
+    50,
+    70
+  ],
+  "expected_evaluation": "Phù hợp một phần (Medium Match): Có nền tảng Python và Machine Learning, nhưng thiếu các kỹ năng bắt buộc cao cấp như RAG, LLMs và kinh nghiệm chuyên sâu.",
+  "source_evidence": {
+    "summary": "Kỹ sư AI triển vọng có nền tảng vững chắc về Python, Machine Learning truyền thống và phân tích dữ liệu. Đã tham gia các dự án nhận diện hình ảnh và xử lý dữ liệu bảng nhưng chưa có nhiều kinh nghiệm chuyên sâu với kiến trúc RAG và LLMs.",
+    "experience_evidence": [
+      {
+        "company_name": "Viettel AI Lab (Thực tập)",
+        "job_title": "Junior Data / AI Intern",
+        "start_date": "06/2023",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Tiền xử lý tập dữ liệu lớn, huấn luyện các mô hình Scikit-learn và cơ bản về PyTorch phân loại hình ảnh. Viết script trích xuất dữ liệu bằng Python."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

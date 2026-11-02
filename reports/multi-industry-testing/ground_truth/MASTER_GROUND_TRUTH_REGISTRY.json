@@ -1,0 +1,302 @@
+[
+  {
+    "stt": 1,
+    "candidate_id": "cand-seed-01",
+    "name": "Nguyễn Đình Khang",
+    "file_name": "CV01_Nguyen_Dinh_Khang_Senior_React.pdf",
+    "format": "PDF",
+    "test_case": "Case A - High Match",
+    "target_job_id": "job-seed-02",
+    "expected_range": "85-98%"
+  },
+  {
+    "stt": 2,
+    "candidate_id": "cand-seed-02",
+    "name": "Lê Hoàng Long",
+    "file_name": "CV02_Le_Hoang_Long_Python_Backend.docx",
+    "format": "DOCX",
+    "test_case": "Case A - High Match",
+    "target_job_id": "job-seed-03",
+    "expected_range": "85-96%"
+  },
+  {
+    "stt": 3,
+    "candidate_id": "cand-seed-03",
+    "name": "Trần Thu Hà",
+    "file_name": "CV03_Tran_Thu_Ha_Ke_Toan_Tong_Hop.pdf",
+    "format": "PDF",
+    "test_case": "Case A - High Match",
+    "target_job_id": "job-seed-16",
+    "expected_range": "85-98%"
+  },
+  {
+    "stt": 4,
+    "candidate_id": "cand-seed-04",
+    "name": "Phạm Gia Bảo",
+    "file_name": "CV04_Pham_Gia_Bao_Digital_Marketing.docx",
+    "format": "DOCX",
+    "test_case": "Case A - High Match",
+    "target_job_id": "job-seed-20",
+    "expected_range": "85-96%"
+  },
+  {
+    "stt": 5,
+    "candidate_id": "cand-seed-05",
+    "name": "Đặng Thùy Dung",
+    "file_name": "CV05_Dang_Thuy_Dung_UI_UX_Designer.pdf",
+    "format": "PDF",
+    "test_case": "Case A - High Match",
+    "target_job_id": "job-seed-25",
+    "expected_range": "85-98%"
+  },
+  {
+    "stt": 6,
+    "candidate_id": "cand-seed-06",
+    "name": "Vũ Đức Thịnh",
+    "file_name": "CV06_Vu_Duc_Thinh_AI_Junior.pdf",
+    "format": "PDF",
+    "test_case": "Case B - Medium Match",
+    "target_job_id": "job-seed-07",
+    "expected_range": "50-70%"
+  },
+  {
+    "stt": 7,
+    "candidate_id": "cand-seed-07",
+    "name": "Ngô Bảo Ngọc",
+    "file_name": "CV07_Ngo_Bao_Ngoc_Logistics_Basic.docx",
+    "format": "DOCX",
+    "test_case": "Case B - Medium Match",
+    "target_job_id": "job-seed-34",
+    "expected_range": "55-72%"
+  },
+  {
+    "stt": 8,
+    "candidate_id": "cand-seed-08",
+    "name": "Đỗ Quang Huy",
+    "file_name": "CV08_Do_Quang_Huy_DevOps_Partial.pdf",
+    "format": "PDF",
+    "test_case": "Case B - Medium Match",
+    "target_job_id": "job-seed-12",
+    "expected_range": "50-68%"
+  },
+  {
+    "stt": 9,
+    "candidate_id": "cand-seed-09",
+    "name": "Hoàng Yến Nhi",
+    "file_name": "CV09_Hoang_Yen_Nhi_HR_Intern.docx",
+    "format": "DOCX",
+    "test_case": "Case B - Medium Match",
+    "target_job_id": "job-seed-28",
+    "expected_range": "50-70%"
+  },
+  {
+    "stt": 10,
+    "candidate_id": "cand-seed-10",
+    "name": "Bùi Quốc Cường",
+    "file_name": "CV10_Bui_Quoc_Cuong_Ky_Su_Giam_Sat.pdf",
+    "format": "PDF",
+    "test_case": "Case B - Medium Match",
+    "target_job_id": "job-seed-43",
+    "expected_range": "52-70%"
+  },
+  {
+    "stt": 11,
+    "candidate_id": "cand-seed-11",
+    "name": "Mai Thanh Tùng",
+    "file_name": "CV11_Mai_Thanh_Tung_Graphic_to_Python.pdf",
+    "format": "PDF",
+    "test_case": "Case C - Low Match / Cross-Industry",
+    "target_job_id": "job-seed-03",
+    "expected_range": "0-25%"
+  },
+  {
+    "stt": 12,
+    "candidate_id": "cand-seed-12",
+    "name": "Phan Thảo Vy",
+    "file_name": "CV12_Phan_Thao_Vy_Accountant_to_Civil.docx",
+    "format": "DOCX",
+    "test_case": "Case C - Low Match / Cross-Industry",
+    "target_job_id": "job-seed-43",
+    "expected_range": "0-20%"
+  },
+  {
+    "stt": 13,
+    "candidate_id": "cand-seed-13",
+    "name": "Đinh Trọng Nhân",
+    "file_name": "CV13_Dinh_Trong_Nhan_Hotel_to_AI.pdf",
+    "format": "PDF",
+    "test_case": "Case C - Low Match / Cross-Industry",
+    "target_job_id": "job-seed-07",
+    "expected_range": "0-20%"
+  },
+  {
+    "stt": 14,
+    "candidate_id": "cand-seed-14",
+    "name": "Cao Mỹ Duyên",
+    "file_name": "CV14_Cao_My_Duyen_Teacher_to_Mechanical.docx",
+    "format": "DOCX",
+    "test_case": "Case C - Low Match / Cross-Industry",
+    "target_job_id": "job-seed-44",
+    "expected_range": "0-20%"
+  },
+  {
+    "stt": 15,
+    "candidate_id": "cand-seed-15",
+    "name": "Hồ Nhật Tân",
+    "file_name": "CV15_Ho_Nhat_Tan_Missing_React.pdf",
+    "format": "PDF",
+    "test_case": "Case D - Missing Critical Skills",
+    "target_job_id": "job-seed-02",
+    "expected_range": "30-48%"
+  },
+  {
+    "stt": 16,
+    "candidate_id": "cand-seed-16",
+    "name": "Trịnh Khánh Linh",
+    "file_name": "CV16_Trinh_Khanh_Linh_Admin_to_KeToan.docx",
+    "format": "DOCX",
+    "test_case": "Case D - Missing Critical Skills",
+    "target_job_id": "job-seed-16",
+    "expected_range": "25-42%"
+  },
+  {
+    "stt": 17,
+    "candidate_id": "cand-seed-17",
+    "name": "Võ Thành Đạt",
+    "file_name": "CV17_Vo_Thanh_Dat_Missing_SEO.pdf",
+    "format": "PDF",
+    "test_case": "Case D - Missing Critical Skills",
+    "target_job_id": "job-seed-21",
+    "expected_range": "25-45%"
+  },
+  {
+    "stt": 18,
+    "candidate_id": "cand-seed-18",
+    "name": "Lâm Gia Huy",
+    "file_name": "CV18_Lam_Gia_Huy_Java_Intern_to_Senior.docx",
+    "format": "DOCX",
+    "test_case": "Case E - Junior vs Senior",
+    "target_job_id": "job-seed-04",
+    "expected_range": "42-60%"
+  },
+  {
+    "stt": 19,
+    "candidate_id": "cand-seed-19",
+    "name": "Huỳnh Trúc Mai",
+    "file_name": "CV19_Huynh_Truc_Mai_HR_Junior_to_HRBP.pdf",
+    "format": "PDF",
+    "test_case": "Case E - Junior vs Senior",
+    "target_job_id": "job-seed-29",
+    "expected_range": "40-58%"
+  },
+  {
+    "stt": 20,
+    "candidate_id": "cand-seed-20",
+    "name": "Nguyễn Hữu Trí",
+    "file_name": "CV20_Nguyen_Huu_Tri_Tech_to_Supervisor.docx",
+    "format": "DOCX",
+    "test_case": "Case E - Junior vs Senior",
+    "target_job_id": "job-seed-46",
+    "expected_range": "38-55%"
+  },
+  {
+    "stt": 21,
+    "candidate_id": "cand-seed-21",
+    "name": "Đoàn Minh Trí",
+    "file_name": "CV21_Doan_Minh_Tri_Semantic_AI.pdf",
+    "format": "PDF",
+    "test_case": "Case F - Semantic Matching",
+    "target_job_id": "job-seed-07",
+    "expected_range": "82-95%"
+  },
+  {
+    "stt": 22,
+    "candidate_id": "cand-seed-22",
+    "name": "Tống Mỹ Linh",
+    "file_name": "CV22_Tong_My_Linh_Semantic_Finance.docx",
+    "format": "DOCX",
+    "test_case": "Case F - Semantic Matching",
+    "target_job_id": "job-seed-17",
+    "expected_range": "85-96%"
+  },
+  {
+    "stt": 23,
+    "candidate_id": "cand-seed-23",
+    "name": "Lưu Vĩnh Phú",
+    "file_name": "CV23_Luu_Vinh_Phu_Semantic_SupplyChain.pdf",
+    "format": "PDF",
+    "test_case": "Case F - Semantic Matching",
+    "target_job_id": "job-seed-35",
+    "expected_range": "82-95%"
+  },
+  {
+    "stt": 24,
+    "candidate_id": "cand-seed-24",
+    "name": "Phùng Hải Yến",
+    "file_name": "CV24_Phung_Hai_Yen_Semantic_Content.docx",
+    "format": "DOCX",
+    "test_case": "Case F - Semantic Matching",
+    "target_job_id": "job-seed-22",
+    "expected_range": "82-94%"
+  },
+  {
+    "stt": 25,
+    "candidate_id": "cand-seed-25",
+    "name": "Kiều Quốc Anh",
+    "file_name": "CV25_Kieu_Quoc_Anh_Negative_Docker.pdf",
+    "format": "PDF",
+    "test_case": "Case G - Negative Skills",
+    "target_job_id": "job-seed-12",
+    "expected_range": "28-48%"
+  },
+  {
+    "stt": 26,
+    "candidate_id": "cand-seed-26",
+    "name": "Tạ Hồng Nhung",
+    "file_name": "CV26_Ta_Hong_Nhung_Negative_MISA.docx",
+    "format": "DOCX",
+    "test_case": "Case G - Negative Skills",
+    "target_job_id": "job-seed-16",
+    "expected_range": "25-45%"
+  },
+  {
+    "stt": 27,
+    "candidate_id": "cand-seed-27",
+    "name": "Văn Đức Thành",
+    "file_name": "CV27_Van_Duc_Thanh_Negative_Ads.pdf",
+    "format": "PDF",
+    "test_case": "Case G - Negative Skills",
+    "target_job_id": "job-seed-20",
+    "expected_range": "20-38%"
+  },
+  {
+    "stt": 28,
+    "candidate_id": "cand-seed-28",
+    "name": "Lương Bích Trâm",
+    "file_name": "CV28_Luong_Bich_Tram_Y_Te.docx",
+    "format": "DOCX",
+    "test_case": "Case A - High Match (Healthcare)",
+    "target_job_id": "job-seed-47",
+    "expected_range": "85-96%"
+  },
+  {
+    "stt": 29,
+    "candidate_id": "cand-seed-29",
+    "name": "Chu Văn An",
+    "file_name": "CV29_Chu_Van_An_Giao_Vien_IELTS.pdf",
+    "format": "PDF",
+    "test_case": "Case A - High Match (Education)",
+    "target_job_id": "job-seed-40",
+    "expected_range": "88-98%"
+  },
+  {
+    "stt": 30,
+    "candidate_id": "cand-seed-30",
+    "name": "Nông Quốc Tuấn",
+    "file_name": "CV30_Nong_Quoc_Tuan_Nong_Nghiep.docx",
+    "format": "DOCX",
+    "test_case": "Case A - High Match (Agriculture)",
+    "target_job_id": "job-seed-49",
+    "expected_range": "85-96%"
+  }
+]

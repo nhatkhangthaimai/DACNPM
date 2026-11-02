@@ -1,0 +1,54 @@
+{
+  "candidate_id": "cand-seed-30",
+  "expected_name": "Nông Quốc Tuấn",
+  "expected_email": "candidate30@example.test",
+  "expected_phone": "09010010030",
+  "file_name": "CV30_Nong_Quoc_Tuan_Nong_Nghiep.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37395,
+  "test_case": "Case A - High Match (Agriculture)",
+  "target_job_id": "job-seed-49",
+  "expected_title": "Kỹ sư Nông nghiệp Công nghệ cao",
+  "expected_hard_skills": [
+    "Smart Agriculture",
+    "Nông nghiệp công nghệ cao",
+    "VietGAP",
+    "Irrigation Systems",
+    "Pest Management",
+    "IoT nông nghiệp"
+  ],
+  "expected_soft_skills": [
+    "Chịu khó thực địa",
+    "Nghiên cứu ứng dụng",
+    "Trách nhiệm cao"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Cần Thơ"
+  ],
+  "expected_experience_companies": [
+    "Trang trại Sinh thái Nông nghiệp Cần Thơ"
+  ],
+  "expected_certifications": [
+    "Chứng chỉ Đánh giá viên VietGAP"
+  ],
+  "expected_match_score_range": [
+    85,
+    96
+  ],
+  "expected_evaluation": "Rất phù hợp (High Match): Đầy đủ kiến thức Smart Agriculture, VietGAP, hệ thống tưới và kinh nghiệm thực tiễn phong phú.",
+  "source_evidence": {
+    "summary": "Kỹ sư Nông nghiệp 3 năm kinh nghiệm vận hành hệ thống nhà màng thông minh, thiết lập chế độ tưới tự động qua cảm biến và quy trình canh tác rau quả chuẩn VietGAP tại ĐBSCL.",
+    "experience_evidence": [
+      {
+        "company_name": "Trang trại Sinh thái Nông nghiệp Cần Thơ",
+        "job_title": "Kỹ sư Canh tác thông minh",
+        "start_date": "08/2021",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Quản trị hệ thống tưới nhỏ giọt Israel tự động hóa, theo dõi dịch hại theo IPM và đảm bảo quy chuẩn an toàn thực phẩm VietGAP xuất khẩu."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

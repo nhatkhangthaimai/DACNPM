@@ -1,0 +1,51 @@
+{
+  "candidate_id": "cand-seed-07",
+  "expected_name": "Ngô Bảo Ngọc",
+  "expected_email": "candidate07@example.test",
+  "expected_phone": "0901001007",
+  "file_name": "CV07_Ngo_Bao_Ngoc_Logistics_Basic.docx",
+  "file_type": "docx",
+  "file_size_bytes": 37342,
+  "test_case": "Case B - Medium Match",
+  "target_job_id": "job-seed-34",
+  "expected_title": "Nhân viên Giao nhận vận tải",
+  "expected_hard_skills": [
+    "Logistics",
+    "Xuất nhập khẩu",
+    "Incoterms",
+    "Chứng từ hàng hóa",
+    "Excel"
+  ],
+  "expected_soft_skills": [
+    "Giao tiếp",
+    "Xử lý tình huống",
+    "Linh hoạt"
+  ],
+  "expected_negative_skills": [],
+  "expected_education_institutions": [
+    "Đại học Cần Thơ"
+  ],
+  "expected_experience_companies": [
+    "Công ty Giao nhận Vận tải Miền Tây"
+  ],
+  "expected_certifications": [],
+  "expected_match_score_range": [
+    55,
+    72
+  ],
+  "expected_evaluation": "Phù hợp một phần (Medium Match): Có kỹ năng Logistics, Incoterms và chứng từ, nhưng thiếu phần mềm WMS và tiếng Anh thương mại lưu loát.",
+  "source_evidence": {
+    "summary": "1.5 năm kinh nghiệm làm thủ tục giao nhận hàng hóa nội địa và xuất nhập khẩu tại kho bãi Cần Thơ. Nắm chắc Incoterms và chứng từ vận tải, tuy nhiên chưa có kinh nghiệm điều phối qua hệ thống phần mềm WMS chuyên nghiệp.",
+    "experience_evidence": [
+      {
+        "company_name": "Công ty Giao nhận Vận tải Miền Tây",
+        "job_title": "Nhân viên Điều vận",
+        "start_date": "07/2022",
+        "end_date": "Hiện tại",
+        "is_current": true,
+        "description": "Lập lệnh điều xe tải chở nông sản, kiểm tra Packing List và Invoice, theo dõi thời gian giao nhận hàng tại các điểm tập kết."
+      }
+    ],
+    "negative_skills_statement": []
+  }
+}

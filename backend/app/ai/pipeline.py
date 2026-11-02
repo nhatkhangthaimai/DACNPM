@@ -36,6 +36,7 @@ if genai and settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "your_gemini
 
 # ================= SKILL SYNONYM & CANONICAL DICTIONARY =================
 SYNONYM_MAP: Dict[str, str] = {
+    # Tech / IT
     "react": "react",
     "reactjs": "react",
     "react.js": "react",
@@ -86,25 +87,261 @@ SYNONYM_MAP: Dict[str, str] = {
     "rag": "rag",
     "pytorch": "pytorch",
     "tensorflow": "tensorflow",
-    "photoshop": "photoshop",
-    "graphic design": "graphic design",
+    "nlp": "nlp",
+    "natural language processing": "nlp",
+    "cybersecurity": "cybersecurity",
+    "an toàn thông tin": "cybersecurity",
+
+    # Finance & Accounting
+    "kế toán": "kế toán tổng hợp",
+    "kế toán tổng hợp": "kế toán tổng hợp",
+    "general accountant": "kế toán tổng hợp",
+    "báo cáo tài chính": "báo cáo tài chính",
+    "financial reporting": "báo cáo tài chính",
+    "phân tích tài chính": "phân tích tài chính",
+    "financial analysis": "phân tích tài chính",
+    "thuế": "kế toán thuế",
+    "kế toán thuế": "kế toán thuế",
+    "tax accounting": "kế toán thuế",
+    "misa": "misa",
+    "excel": "excel",
+    "advanced excel": "excel",
+    "kiểm toán": "kiểm toán",
+    "auditing": "kiểm toán",
+    "quản trị dòng tiền": "quản trị dòng tiền",
+    "cash flow management": "quản trị dòng tiền",
+
+    # Marketing & Media
+    "seo": "seo",
+    "search engine optimization": "seo",
+    "google analytics": "google analytics",
+    "ga4": "google analytics",
+    "content marketing": "content marketing",
+    "sáng tạo nội dung": "content marketing",
+    "content strategy": "content marketing",
+    "copywriting": "copywriting",
+    "social media": "social media",
+    "social media marketing": "social media",
+    "quản trị mạng xã hội": "social media",
+    "facebook ads": "facebook ads",
+    "google ads": "google ads",
+    "sem": "sem",
+    "digital marketing": "digital marketing",
+    "email marketing": "email marketing",
+
+    # Graphic Design & UI/UX
     "figma": "figma",
+    "photoshop": "photoshop",
+    "adobe photoshop": "photoshop",
+    "illustrator": "illustrator",
+    "adobe illustrator": "illustrator",
     "ui/ux": "ui/ux",
+    "ui design": "ui/ux",
+    "ux design": "ui/ux",
+    "motion graphics": "motion graphics",
+    "after effects": "after effects",
+    "premiere": "premiere",
+    "thiết kế đồ họa": "graphic design",
+    "graphic design": "graphic design",
+
+    # HR & Recruitment
+    "tuyển dụng": "tuyển dụng",
+    "recruitment": "tuyển dụng",
+    "talent acquisition": "tuyển dụng",
+    "payroll": "tính lương",
+    "tính lương": "tính lương",
+    "c&b": "c&b",
+    "compensation and benefits": "c&b",
+    "luật lao động": "luật lao động",
+    "labor law": "luật lao động",
+    "hrbp": "hrbp",
+    "employee relations": "quan hệ lao động",
+    "quan hệ lao động": "quan hệ lao động",
+    "đào tạo nhân sự": "đào tạo",
+    "training & development": "đào tạo",
+
+    # Sales & Business Development
+    "bán hàng": "sales",
+    "sales": "sales",
+    "b2b sales": "b2b sales",
+    "b2c sales": "b2c sales",
+    "business development": "business development",
+    "phát triển kinh doanh": "business development",
+    "chăm sóc khách hàng": "customer success",
+    "customer success": "customer success",
+    "account management": "account management",
+    "quản lý khách hàng": "account management",
+    "đàm phán": "đàm phán",
+    "negotiation": "đàm phán",
+    "crm": "crm",
+    "salesforce": "salesforce",
+    "hubspot": "hubspot",
+
+    # Logistics & Supply Chain
+    "logistics": "logistics",
+    "xuất nhập khẩu": "xuất nhập khẩu",
+    "import export": "xuất nhập khẩu",
+    "chuỗi cung ứng": "supply chain",
+    "supply chain": "supply chain",
+    "supply chain management": "supply chain",
+    "quản lý kho": "quản lý kho",
+    "warehouse management": "quản lý kho",
+    "wms": "wms",
+    "tms": "tms",
+    "hải quan": "thủ tục hải quan",
+    "customs clearance": "thủ tục hải quan",
+    "incoterms": "incoterms",
+    "freight forwarding": "giao nhận vận tải",
+
+    # Tourism & Hospitality
+    "lễ tân": "lễ tân",
+    "receptionist": "lễ tân",
+    "front office": "lễ tân",
+    "quản trị khách sạn": "hospitality management",
+    "hospitality management": "hospitality management",
+    "f&b": "f&b",
+    "opera pms": "opera pms",
+    "tour guide": "hướng dẫn viên",
+    "đặt phòng": "booking management",
+
+    # Education
+    "giảng dạy tiếng anh": "english teaching",
+    "english teaching": "english teaching",
+    "giáo viên tiếng anh": "english teaching",
+    "lesson planning": "soạn giáo án",
+    "soạn giáo án": "soạn giáo án",
+    "classroom management": "quản lý lớp học",
+    "quản lý lớp học": "quản lý lớp học",
+    "ielts": "ielts",
+    "toeic": "toeic",
+    "chuyên viên đào tạo": "corporate training",
+    "corporate training": "corporate training",
+
+    # Construction & Manufacturing
+    "kỹ sư xây dựng": "kỹ sư xây dựng",
+    "civil engineering": "kỹ sư xây dựng",
+    "autocad": "autocad",
+    "revit": "revit",
+    "kết cấu công trình": "kết cấu xây dựng",
+    "structural analysis": "kết cấu xây dựng",
+    "bóc tách khối lượng": "bóc tách khối lượng",
+    "quantity surveying": "bóc tách khối lượng",
+    "qa/qc": "qa/qc",
+    "iso 9001": "iso 9001",
+    "lean manufacturing": "lean manufacturing",
+    "5s": "5s",
+    "six sigma": "six sigma",
+    "solidworks": "solidworks",
+    "mechanical engineering": "kỹ sư cơ khí",
+
+    # Healthcare
+    "quản lý hồ sơ y tế": "medical records",
+    "medical records": "medical records",
+    "điều phối y tế": "clinical coordination",
+    "clinical coordination": "clinical coordination",
+    "his": "his",
+    "bảo hiểm y tế": "bảo hiểm y tế",
+
+    # Agriculture
+    "nông nghiệp công nghệ cao": "smart agriculture",
+    "smart agriculture": "smart agriculture",
+    "vietgap": "vietgap",
+    "globalgap": "globalgap",
+    "hệ thống tưới tự động": "irrigation systems",
+    "quản lý dịch hại": "pest management",
 }
 
-COMMON_TECH_SKILLS = [
+COMMON_MULTI_INDUSTRY_SKILLS = [
+    # Software & AI & Cloud
     "Python", "FastAPI", "Django", "Flask", "React", "ReactJS", "Node.js", "NodeJS",
     "TypeScript", "JavaScript", "PostgreSQL", "MySQL", "MongoDB", "Redis",
     "Docker", "Kubernetes", "AWS", "Azure", "GCP", "Git", "CI/CD",
     "C#", "C++", ".NET", "Java", "Go", "Golang", "Rust", "PHP",
-    "Machine Learning", "PyTorch", "TensorFlow", "LLMs", "RAG",
+    "Machine Learning", "PyTorch", "TensorFlow", "LLMs", "RAG", "NLP",
     "HTML", "CSS", "Tailwind CSS", "VueJS", "Angular", "GraphQL",
-    "Linux", "SQL Server", "Elasticsearch", "Figma", "UI/UX"
+    "Linux", "SQL Server", "Elasticsearch", "Cybersecurity", "DevOps",
+    # Graphic Design & UI/UX
+    "Figma", "UI/UX", "Photoshop", "Illustrator", "Motion Graphics", "After Effects",
+    # Finance & Accounting
+    "Kế toán tổng hợp", "Báo cáo tài chính", "Phân tích tài chính", "Kế toán thuế",
+    "MISA", "Excel", "Kiểm toán", "Quản trị dòng tiền",
+    # Marketing
+    "Digital Marketing", "SEO", "Google Analytics", "Content Marketing", "Copywriting",
+    "Social Media", "Facebook Ads", "Google Ads", "SEM", "Email Marketing",
+    # HR & Recruitment
+    "Tuyển dụng", "Tính lương", "C&B", "Luật lao động", "HRBP", "Quan hệ lao động",
+    "Đào tạo", "Onboarding",
+    # Sales & Business
+    "Sales", "B2B Sales", "B2C Sales", "Business Development", "Customer Success",
+    "Account Management", "Đàm phán", "CRM", "Salesforce", "HubSpot",
+    # Logistics & Supply Chain
+    "Logistics", "Xuất nhập khẩu", "Chuỗi cung ứng", "Quản lý kho", "WMS", "TMS",
+    "Thủ tục hải quan", "Incoterms", "Freight Forwarding",
+    # Tourism & Hospitality
+    "Lễ tân", "Hospitality Management", "F&B", "Opera PMS", "Hướng dẫn viên", "Booking Management",
+    # Education
+    "English Teaching", "Soạn giáo án", "Quản lý lớp học", "IELTS", "TOEIC", "Corporate Training",
+    # Construction & Manufacturing
+    "Kỹ sư xây dựng", "AutoCAD", "Revit", "Kết cấu xây dựng", "Bóc tách khối lượng",
+    "QA/QC", "ISO 9001", "Lean Manufacturing", "5S", "Six Sigma", "SolidWorks", "Kỹ sư cơ khí",
+    # Healthcare
+    "Medical Records", "Clinical Coordination", "HIS", "Bảo hiểm y tế",
+    # Agriculture
+    "Smart Agriculture", "VietGAP", "GlobalGAP", "Irrigation Systems", "Pest Management"
+]
+
+COMMON_TECH_SKILLS = COMMON_MULTI_INDUSTRY_SKILLS
+
+NEGATIVE_SKILL_CUES = [
+    "chưa có kinh nghiệm",
+    "chưa từng làm",
+    "chưa từng sử dụng",
+    "chưa từng",
+    "chưa biết",
+    "chưa sử dụng",
+    "chưa làm việc với",
+    "chưa áp dụng",
+    "không có kinh nghiệm",
+    "không thành thạo",
+    "không biết",
+    "không chuyên",
+    "chưa thành thạo",
+    "chưa tự tin",
+    "đang tìm hiểu chưa",
+    "đang học chưa",
+    "no experience",
+    "lack of experience",
+    "not familiar",
+    "not proficient",
+    "haven't worked with",
+    "haven't used",
+    "not yet experienced",
 ]
 
 
+def is_skill_in_negative_context(skill: str, text: str) -> bool:
+    """Detect if a skill is explicitly mentioned in a negative or lacking context in the text."""
+    if not skill or not text:
+        return False
+
+    skill_lower = skill.lower()
+    # Split text into sentences / segments
+    segments = re.split(r'[\.\n;\r•\*\-]+', text.lower())
+    for seg in segments:
+        if skill_lower in seg:
+            for cue in NEGATIVE_SKILL_CUES:
+                if cue in seg:
+                    return True
+    return False
+
+
 def normalize_skill(skill: str) -> str:
-    cleaned = re.sub(r'[^a-zA-Z0-9\+\#\.\s]', '', skill).strip().lower()
+    """Normalize skill preserving Unicode/Vietnamese diacritics and checking synonyms."""
+    if not skill:
+        return ""
+    cleaned = unicodedata.normalize("NFC", str(skill).strip().lower())
+    cleaned = re.sub(r'[^\w\+\#\.\s-]', '', cleaned, flags=re.UNICODE)
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
     return SYNONYM_MAP.get(cleaned, cleaned)
 
 
@@ -637,12 +874,15 @@ def heuristic_cv_extraction(raw_text: str) -> Dict[str, Any]:
                 full_name = line
                 break
 
-    # 4. Extract Hard Skills by matching actual text
+    # 4. Extract Hard Skills by matching actual text across all industries
     lower_text = raw_text.lower()
     found_hard_skills = []
-    for skill in COMMON_TECH_SKILLS:
-        pattern = r'(?:\b|\s|^)' + re.escape(skill.lower()) + r'(?:\b|\s|$|[,\.\:\;])'
+    for skill in COMMON_MULTI_INDUSTRY_SKILLS:
+        pattern = r'(?:\b|\s|^)' + re.escape(skill.lower()) + r'(?:\b|\s|$|[,\.\:\;\(\)])'
         if re.search(pattern, lower_text):
+            # Explicit negative skill detection: exclude if mentioned as lacked/missing
+            if is_skill_in_negative_context(skill, raw_text):
+                continue
             if skill not in found_hard_skills:
                 found_hard_skills.append(skill)
 
@@ -758,7 +998,8 @@ async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
         2. NEVER hallucinate or guess a candidate name. Under NO circumstances should you extract "%PDF-1.4" or PDF code as a name.
         3. NEVER use PDF operators (e.g. /Type, /E(, /Pg 9 0 R) as work experience, company names, or job titles.
         4. If a field is not present in the CV text, use null for strings, or an empty list [] for arrays.
-        5. For hard skills, extract only technical skills mentioned in the CV (e.g. programming languages, frameworks, databases, tools).
+        5. For hard skills, extract domain-relevant professional skills mentioned in the CV across diverse sectors (e.g. IT/Software, AI/Data, Cloud/DevOps, Finance/Accounting, Marketing, Design/UIUX, HR, Sales, Logistics, Tourism/Hospitality, Education, Construction/Manufacturing, Healthcare, Agriculture).
+        6. CRITICAL NEGATIVE SKILL RULE: If a skill is mentioned in a negative or lacking context (e.g. "Chưa có kinh nghiệm Docker", "Chưa từng làm việc với Kubernetes", "No experience in AWS", "Không thành thạo Photoshop"), you MUST EXCLUDE that skill from hard_skills and soft_skills completely. Extract ONLY skills the candidate actually possesses or has worked with.
         
         CV TEXT:
         \"\"\"{raw_text[:12000]}\"\"\"
@@ -819,6 +1060,18 @@ async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
         full_name = parsed.get("full_name") or ""
         if "%PDF" in full_name or "/" in full_name or len(full_name) > 80:
             parsed["full_name"] = None
+
+        # Filter out any negative skills that might have leaked into hard_skills
+        if "hard_skills" in parsed and isinstance(parsed["hard_skills"], list):
+            parsed["hard_skills"] = [
+                s for s in parsed["hard_skills"] 
+                if s and not is_skill_in_negative_context(s, raw_text)
+            ]
+        if "soft_skills" in parsed and isinstance(parsed["soft_skills"], list):
+            parsed["soft_skills"] = [
+                s for s in parsed["soft_skills"]
+                if s and not is_skill_in_negative_context(s, raw_text)
+            ]
 
         return parsed
     except Exception as e:
@@ -901,13 +1154,34 @@ def calculate_hybrid_match(cv_data: Dict[str, Any], job_data: Dict[str, Any]) ->
     has_experience = len(cv_experience) > 0
     pref_ratio = len(matched_pref) / len(pref_skills) if pref_skills else 0.5
 
+    cv_years = cv_data.get("years_of_experience")
+    if cv_years is None:
+        cv_years = 1.0 if has_experience else 0.0
+    try:
+        cv_years = float(cv_years)
+    except (ValueError, TypeError):
+        cv_years = 0.0
+
+    min_req_years = job_data.get("min_experience_years") or 0.0
+    try:
+        min_req_years = float(min_req_years)
+    except (ValueError, TypeError):
+        min_req_years = 0.0
+
     if hard_score == 0 and not norm_cv_skills:
         experience_score = 0.0
     elif hard_score == 0:
         experience_score = round(min(15.0, pref_ratio * 20.0), 1)
     else:
         base_exp = 55.0 if has_experience else 35.0
-        experience_score = round(min(100.0, base_exp + (pref_ratio * 25.0) + (hard_score * 0.2)), 1)
+        calculated_exp = base_exp + (pref_ratio * 25.0) + (hard_score * 0.2)
+        if min_req_years > 0:
+            if cv_years >= min_req_years:
+                calculated_exp += min(15.0, (cv_years - min_req_years) * 3.0)
+            else:
+                exp_ratio = cv_years / min_req_years
+                calculated_exp *= max(0.35, exp_ratio)
+        experience_score = round(min(100.0, max(0.0, calculated_exp)), 1)
 
     # Hybrid overall weighted score (0 - 100)
     overall_score = round(min(100.0, max(0.0, (hard_score * 0.5) + (semantic_score * 0.3) + (experience_score * 0.2))), 1)

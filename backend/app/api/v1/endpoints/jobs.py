@@ -1,33 +1,35 @@
+import re
+import uuid
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from app.core.database import get_db
-from app.models.entities import Job, JobSkill, Skill, JobStatus, Company
-from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse
 
-COMMON_TECH_SKILLS = [
-    "Python", "FastAPI", "PostgreSQL", "Docker", "Redis", "ReactJS", "React",
-    "TypeScript", "JavaScript", "SQL", "Git", "Linux", "PyTorch", "TensorFlow",
-    "Machine Learning", "LLMs", "NLP", "Kubernetes", "AWS", "CI/CD", "Tailwind CSS",
-    "Node.js", "MongoDB", "RESTful API", "Microservices"
-]
+from app.core.database import get_db
+from app.core.security import get_current_user_payload
+from app.models.entities import Job, JobSkill, Skill, JobStatus, Company, CompanyMember
+from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse
+from app.ai.pipeline import COMMON_MULTI_INDUSTRY_SKILLS, normalize_skill
+
 
 def extract_job_skills(title: str, requirements: str, description: str):
-    import re
+    """Fallback skill extractor across multiple industries if job_skills relation is empty."""
     text = f"{title or ''} {requirements or ''} {description or ''}"
     reqs = []
     prefs = []
-    for s in COMMON_TECH_SKILLS:
-        if re.search(r'\b' + re.escape(s) + r'\b', text, re.IGNORECASE):
-            if "ưu tiên" in text.lower() and s.lower() in text.lower().split("ưu tiên")[-1]:
+    text_lower = text.lower()
+    for s in COMMON_MULTI_INDUSTRY_SKILLS:
+        pattern = r'(?:\b|\s|^)' + re.escape(s.lower()) + r'(?:\b|\s|$|[,\.\:\;\(\)])'
+        if re.search(pattern, text_lower):
+            if "ưu tiên" in text_lower and s.lower() in text_lower.split("ưu tiên")[-1]:
                 prefs.append(s)
             else:
                 reqs.append(s)
     reqs = list(dict.fromkeys(reqs))
     prefs = [p for p in dict.fromkeys(prefs) if p not in reqs]
-    return reqs or ["Python", "FastAPI"], prefs
+    return reqs or ["Chuyên môn"], prefs
+
 
 router = APIRouter()
 
@@ -38,30 +40,85 @@ async def get_jobs(
     location: Optional[str] = None,
     job_type: Optional[str] = None,
     experience_level: Optional[str] = None,
-    status_filter: Optional[str] = None,
+    status_filter: Optional[str] = Query(None, alias="status"),
+    company_id: Optional[str] = None,
+    industry: Optional[str] = None,
+    min_salary: Optional[int] = None,
+    max_salary: Optional[int] = None,
+    sort_by: Optional[str] = None,
+    limit: int = Query(100, ge=1, le=200),
+    skip: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db)
 ):
-    query = select(Job).options(selectinload(Job.company))
-    if status_filter:
+    query = select(Job).options(
+        selectinload(Job.company),
+        selectinload(Job.job_skills).selectinload(JobSkill.skill)
+    )
+
+    if status_filter and status_filter != "all":
         query = query.where(Job.status == status_filter)
-    else:
+    elif not status_filter:
+        # Default public view shows published jobs
         query = query.where(Job.status == JobStatus.PUBLISHED)
+
+    if company_id:
+        query = query.where(Job.company_id == company_id)
 
     if location and location != "all":
         query = query.where(Job.location.ilike(f"%{location}%"))
+
     if job_type and job_type != "all":
         query = query.where(Job.job_type == job_type)
+
     if experience_level and experience_level != "all":
         query = query.where(Job.experience_level == experience_level)
-    if search:
-        query = query.where(Job.title.ilike(f"%{search}%") | Job.description.ilike(f"%{search}%"))
 
-    result = await db.execute(query.order_by(Job.created_at.desc()))
+    if min_salary is not None:
+        query = query.where(Job.salary_max >= min_salary)
+
+    if max_salary is not None:
+        query = query.where(Job.salary_min <= max_salary)
+
+    if industry and industry != "all":
+        query = query.join(Job.company).where(Company.industry.ilike(f"%{industry}%"))
+
+    if search:
+        search_pattern = f"%{search}%"
+        query = query.where(
+            Job.title.ilike(search_pattern) | 
+            Job.description.ilike(search_pattern) |
+            Job.requirements.ilike(search_pattern)
+        )
+
+    # Sorting
+    if sort_by == "salary_desc":
+        query = query.order_by(Job.salary_max.desc().nullslast(), Job.created_at.desc())
+    elif sort_by == "salary_asc":
+        query = query.order_by(Job.salary_min.asc().nullslast(), Job.created_at.desc())
+    elif sort_by == "title":
+        query = query.order_by(Job.title.asc())
+    else:
+        query = query.order_by(Job.created_at.desc())
+
+    query = query.offset(skip).limit(limit)
+    result = await db.execute(query)
     jobs = result.scalars().all()
 
     response = []
     for j in jobs:
-        r_skills, p_skills = extract_job_skills(j.title, j.requirements, j.description)
+        # Check if structured skills are attached
+        r_skills = []
+        p_skills = []
+        if j.job_skills:
+            for js in j.job_skills:
+                if js.skill:
+                    if js.is_required:
+                        r_skills.append(js.skill.name)
+                    else:
+                        p_skills.append(js.skill.name)
+        if not r_skills and not p_skills:
+            r_skills, p_skills = extract_job_skills(j.title, j.requirements, j.description)
+
         response.append(JobResponse(
             id=j.id,
             company_id=j.company_id,
@@ -87,12 +144,28 @@ async def get_jobs(
 
 @router.get("/{job_id}", response_model=JobResponse)
 async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Job).options(selectinload(Job.company)).where(Job.id == job_id))
+    result = await db.execute(
+        select(Job).options(
+            selectinload(Job.company),
+            selectinload(Job.job_skills).selectinload(JobSkill.skill)
+        ).where(Job.id == job_id)
+    )
     job = result.scalars().first()
     if not job:
         raise HTTPException(status_code=404, detail="Không tìm thấy tin tuyển dụng.")
-    
-    r_skills, p_skills = extract_job_skills(job.title, job.requirements, job.description)
+
+    r_skills = []
+    p_skills = []
+    if job.job_skills:
+        for js in job.job_skills:
+            if js.skill:
+                if js.is_required:
+                    r_skills.append(js.skill.name)
+                else:
+                    p_skills.append(js.skill.name)
+    if not r_skills and not p_skills:
+        r_skills, p_skills = extract_job_skills(job.title, job.requirements, job.description)
+
     return JobResponse(
         id=job.id,
         company_id=job.company_id,
@@ -116,17 +189,41 @@ async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("", response_model=JobResponse)
-async def create_job(data: JobCreate, db: AsyncSession = Depends(get_db)):
-    # Find or use default company
-    result = await db.execute(select(Company))
-    company = result.scalars().first()
-    if not company:
-        company = Company(name="HireSense Tech Partner", slug="hiresense-partner", status="approved")
-        db.add(company)
-        await db.flush()
+async def create_job(
+    data: JobCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_payload)
+):
+    target_company_id = data.company_id
+    creator_id = current_user.get("sub") if current_user else None
+
+    # If no company_id provided, find company of logged-in user
+    if not target_company_id and creator_id:
+        mem_res = await db.execute(
+            select(CompanyMember).where(CompanyMember.user_id == creator_id)
+        )
+        membership = mem_res.scalars().first()
+        if membership:
+            target_company_id = membership.company_id
+
+    # Fallback to first company
+    if not target_company_id:
+        res = await db.execute(select(Company))
+        company = res.scalars().first()
+        if not company:
+            company = Company(name="NovaTech Solutions", slug="novatech-solutions", status="approved")
+            db.add(company)
+            await db.flush()
+        target_company_id = company.id
+    else:
+        comp_res = await db.execute(select(Company).where(Company.id == target_company_id))
+        company = comp_res.scalars().first()
+        if not company:
+            raise HTTPException(status_code=400, detail="Doanh nghiệp không tồn tại.")
 
     job = Job(
-        company_id=company.id,
+        company_id=target_company_id,
+        creator_id=creator_id,
         title=data.title,
         description=data.description,
         requirements=data.requirements,
@@ -140,6 +237,29 @@ async def create_job(data: JobCreate, db: AsyncSession = Depends(get_db)):
         status=JobStatus.PUBLISHED,
     )
     db.add(job)
+    await db.flush()
+
+    # Save skills
+    for skill_name in (data.required_skills or []):
+        norm = normalize_skill(skill_name)
+        s_res = await db.execute(select(Skill).where(Skill.normalized_name == norm))
+        skill_obj = s_res.scalars().first()
+        if not skill_obj:
+            skill_obj = Skill(name=skill_name, normalized_name=norm, category="hard")
+            db.add(skill_obj)
+            await db.flush()
+        db.add(JobSkill(job_id=job.id, skill_id=skill_obj.id, is_required=True, importance_weight=1.0))
+
+    for skill_name in (data.preferred_skills or []):
+        norm = normalize_skill(skill_name)
+        s_res = await db.execute(select(Skill).where(Skill.normalized_name == norm))
+        skill_obj = s_res.scalars().first()
+        if not skill_obj:
+            skill_obj = Skill(name=skill_name, normalized_name=norm, category="hard")
+            db.add(skill_obj)
+            await db.flush()
+        db.add(JobSkill(job_id=job.id, skill_id=skill_obj.id, is_required=False, importance_weight=0.5))
+
     await db.commit()
     await db.refresh(job)
 
@@ -161,5 +281,59 @@ async def create_job(data: JobCreate, db: AsyncSession = Depends(get_db)):
         status=job.status,
         required_skills=data.required_skills,
         preferred_skills=data.preferred_skills,
+        created_at=job.created_at
+    )
+
+
+@router.put("/{job_id}", response_model=JobResponse)
+async def update_job(
+    job_id: str,
+    data: JobUpdate,
+    db: AsyncSession = Depends(get_db),
+    _auth: Optional[dict] = Depends(get_current_user_payload)
+):
+    result = await db.execute(
+        select(Job).options(
+            selectinload(Job.company),
+            selectinload(Job.job_skills).selectinload(JobSkill.skill)
+        ).where(Job.id == job_id)
+    )
+    job = result.scalars().first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tin tuyển dụng.")
+
+    if data.title is not None: job.title = data.title
+    if data.description is not None: job.description = data.description
+    if data.requirements is not None: job.requirements = data.requirements
+    if data.benefits is not None: job.benefits = data.benefits
+    if data.job_type is not None: job.job_type = data.job_type
+    if data.location is not None: job.location = data.location
+    if data.salary_min is not None: job.salary_min = data.salary_min
+    if data.salary_max is not None: job.salary_max = data.salary_max
+    if data.experience_level is not None: job.experience_level = data.experience_level
+    if data.status is not None: job.status = data.status
+
+    await db.commit()
+    await db.refresh(job)
+
+    r_skills, p_skills = extract_job_skills(job.title, job.requirements, job.description)
+    return JobResponse(
+        id=job.id,
+        company_id=job.company_id,
+        company_name=job.company.name if job.company else "Đối tác",
+        company_logo=job.company.logo_url if job.company else None,
+        title=job.title,
+        description=job.description,
+        requirements=job.requirements,
+        benefits=job.benefits,
+        job_type=job.job_type,
+        location=job.location,
+        salary_min=job.salary_min,
+        salary_max=job.salary_max,
+        currency=job.currency,
+        experience_level=job.experience_level,
+        status=job.status,
+        required_skills=r_skills,
+        preferred_skills=p_skills,
         created_at=job.created_at
     )

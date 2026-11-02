@@ -1,9 +1,10 @@
 from datetime import timedelta
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.core.database import get_db
-from app.core.security import verify_password, get_password_hash, create_access_token
+from app.core.security import verify_password, get_password_hash, create_access_token, get_current_user_payload
 from app.models.entities import User, CandidateProfile, Company, CompanyMember, UserRole
 from app.schemas.all_schemas import Token, LoginRequest, RegisterCandidateRequest, RegisterRecruiterRequest, UserResponse
 
@@ -119,4 +120,45 @@ async def register_recruiter(data: RegisterRecruiterRequest, db: AsyncSession = 
         user_id=user.id,
         full_name=user.full_name,
         email=user.email
+    )
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(
+    db: AsyncSession = Depends(get_db),
+    auth_payload: dict = Depends(get_current_user_payload)
+):
+    if not auth_payload or not auth_payload.get("sub"):
+        raise HTTPException(status_code=401, detail="Chưa xác thực người dùng.")
+    
+    user_id = auth_payload["sub"]
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Không tìm thấy người dùng.")
+    
+    company_id = None
+    company_name = None
+    if user.role == UserRole.RECRUITER:
+        mem_res = await db.execute(
+            select(CompanyMember, Company)
+            .join(Company, CompanyMember.company_id == Company.id)
+            .where(CompanyMember.user_id == user.id)
+        )
+        row = mem_res.first()
+        if row:
+            company_id = row[1].id
+            company_name = row[1].name
+
+    return UserResponse(
+        id=user.id,
+        email=user.email,
+        full_name=user.full_name,
+        phone=user.phone,
+        role=user.role,
+        is_active=user.is_active,
+        is_verified=user.is_verified,
+        company_id=company_id,
+        company_name=company_name,
+        created_at=user.created_at
     )
