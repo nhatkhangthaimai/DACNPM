@@ -25,7 +25,7 @@ class LoginRequest(BaseModel):
 
 
 class RegisterCandidateRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
     full_name: str
     phone: Optional[str] = None
@@ -33,7 +33,7 @@ class RegisterCandidateRequest(BaseModel):
 
 
 class RegisterRecruiterRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
     full_name: str
     phone: Optional[str] = None

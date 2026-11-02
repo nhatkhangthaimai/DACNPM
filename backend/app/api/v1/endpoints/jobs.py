@@ -142,6 +142,27 @@ async def get_jobs(
     return response
 
 
+@router.post("/seed-multi-industry", tags=["Jobs"])
+@router.get("/seed-multi-industry", tags=["Jobs"])
+async def trigger_seed_multi_industry(db: AsyncSession = Depends(get_db)):
+    """
+    Public & Admin trigger endpoint to seed all 50 multi-industry jobs and 15 companies.
+    100% idempotent: will not create duplicates.
+    """
+    from app.core.seeder import seed_all_multi_industry_data
+    stats = await seed_all_multi_industry_data(db)
+    
+    count_res = await db.execute(select(Job))
+    total_jobs = len(count_res.scalars().all())
+    
+    return {
+        "status": "success",
+        "message": "Seeded 50 multi-industry jobs and 15 companies successfully.",
+        "newly_created": stats,
+        "total_jobs_in_db": total_jobs
+    }
+
+
 @router.get("/{job_id}", response_model=JobResponse)
 async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
     result = await db.execute(

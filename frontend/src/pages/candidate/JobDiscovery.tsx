@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { apiService } from '../../services/api';
 import { Job, CV, MatchScoreBreakdown } from '../../types';
 import { PageHeader } from '../../components/layout/PageHeader';
@@ -46,6 +46,8 @@ export const JobDiscovery: React.FC = () => {
   const [isApplying, setIsApplying] = useState(false);
   const [applySuccess, setApplySuccess] = useState(false);
 
+  const hasAutoSeeded = useRef(false);
+
   const primaryCv = useMemo(() => {
     return cvs.find(c => c.isPrimary) || cvs[0] || null;
   }, [cvs]);
@@ -85,7 +87,21 @@ export const JobDiscovery: React.FC = () => {
       maxSalary,
       sortBy: sortBy === 'match' ? 'newest' : sortBy,
       limit: 100,
-    }).then((data) => {
+    }).then(async (data) => {
+      if (data.length <= 2 && !searchQuery && industryFilter === 'all' && locationFilter === 'all' && !hasAutoSeeded.current) {
+        hasAutoSeeded.current = true;
+        try {
+          await apiService.seedMultiIndustryJobs();
+          const refreshed = await apiService.getJobs({ limit: 100 });
+          if (refreshed && refreshed.length > data.length) {
+            setJobs(refreshed);
+            setIsLoading(false);
+            return;
+          }
+        } catch (e) {
+          console.warn('Auto-seed check notice:', e);
+        }
+      }
       setJobs(data);
       setIsLoading(false);
     }).catch(() => {
@@ -362,7 +378,24 @@ export const JobDiscovery: React.FC = () => {
       {/* Results Header */}
       <div className="flex items-center justify-between text-xs text-signal-slate px-1">
         <span>Hiển thị <strong className="text-signal-navy">{displayJobs.length}</strong> việc làm tuyển dụng</span>
-        <span>Cập nhật liên tục từ PostgreSQL Local</span>
+        <div className="flex items-center gap-2">
+          <span>Hệ thống tuyển dụng trực tuyến (PostgreSQL + Gemini AI)</span>
+          {jobs.length <= 2 && (
+            <button
+              type="button"
+              onClick={async () => {
+                setIsLoading(true);
+                await apiService.seedMultiIndustryJobs();
+                const refreshed = await apiService.getJobs({ limit: 100 });
+                setJobs(refreshed);
+                setIsLoading(false);
+              }}
+              className="text-signal-navy hover:underline font-semibold ml-2"
+            >
+              (Đồng bộ 50 việc làm)
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Job Cards Grid */}

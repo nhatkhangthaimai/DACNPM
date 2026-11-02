@@ -202,6 +202,21 @@ export const apiService = {
     }
   },
 
+  async seedMultiIndustryJobs(): Promise<any> {
+    try {
+      const res = await apiClient.post('/jobs/seed-multi-industry');
+      return res.data;
+    } catch {
+      try {
+        const res = await apiClient.get('/jobs/seed-multi-industry');
+        return res.data;
+      } catch (e) {
+        console.warn('Seeding failed or endpoint not reachable:', e);
+        return null;
+      }
+    }
+  },
+
   async getJobById(id: string): Promise<Job | null> {
     try {
       const res = await apiClient.get(`/jobs/${id}`);

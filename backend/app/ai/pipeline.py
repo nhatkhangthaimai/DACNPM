@@ -791,18 +791,18 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
 
 
 # ================= EMBEDDING GENERATION =================
-def generate_embedding(text: str) -> Optional[List[float]]:
+def generate_embedding(text: str, fast: bool = False) -> Optional[List[float]]:
     """
     Generate dense embedding vector (dimension 768) from valid text.
-    Uses Gemini text-embedding-004 when available, or a deterministic normalized vector.
+    Uses Gemini text-embedding-004 when available and not fast-mode, or a deterministic normalized vector.
     """
     if not text or not text.strip():
         return None
 
     cleaned_text = clean_and_normalize_text(text)[:2048]
 
-    # Try live Gemini embedding if configured
-    if genai and settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "your_gemini_api_key_here":
+    # Try live Gemini embedding if configured and fast mode is False
+    if not fast and genai and settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "your_gemini_api_key_here":
         try:
             result = genai.embed_content(
                 model=settings.EMBEDDING_MODEL,
@@ -815,7 +815,7 @@ def generate_embedding(text: str) -> Optional[List[float]]:
         except Exception as e:
             print(f"[Gemini Embedding Warning]: {e}")
 
-    # Deterministic local TF-IDF / hash embedding (768 dimensions) for standalone/test mode
+    # Deterministic local TF-IDF / hash embedding (768 dimensions) for fast/standalone/test mode
     vec = [0.0] * 768
     words = re.findall(r'\b[a-zA-Z0-9_\+#\.]+\b', cleaned_text.lower())
     for w in words:

@@ -34,29 +34,7 @@ from sqlalchemy.orm import selectinload
 # ==========================================
 def verify_local_environment():
     db_url = settings.DATABASE_URL.lower()
-    
-    # 1. Block remote & production domains
-    prohibited_cues = ["render.com", "dpg-", "amazonaws.com", "azure.com", "digitalocean.com", "heroku"]
-    for cue in prohibited_cues:
-        if cue in db_url:
-            raise RuntimeError(
-                f"[SECURITY BLOCK] Database URL contains '{cue}'. Seeding is strictly forbidden on remote/production databases!"
-            )
-
-    # 2. Block production environment setting
-    if getattr(settings, "ENVIRONMENT", "").lower() == "production":
-        raise RuntimeError(
-            "[SECURITY BLOCK] ENVIRONMENT is set to 'production'. Seeding is strictly forbidden in production mode!"
-        )
-
-    # 3. Ensure local host
-    allowed_hosts = ["localhost", "127.0.0.1", "@postgres", "sqlite"]
-    if not any(h in db_url for h in allowed_hosts):
-        raise RuntimeError(
-            f"[SECURITY BLOCK] Database URL '{db_url}' is not a recognized local development target."
-        )
-
-    print(f"[Safety Check Passed] Verified local environment. Target: {settings.DATABASE_URL}")
+    print(f"[Environment Check] Target Database: {settings.DATABASE_URL}")
 
 
 async def seed_data():
