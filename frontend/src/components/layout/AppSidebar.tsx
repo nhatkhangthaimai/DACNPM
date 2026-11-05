@@ -105,49 +105,27 @@ export const AppSidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) =>
             </NavLink>
           </div>
 
-          {/* Role Section: Demo Mode vs Production Authenticated */}
+          {/* Role Section: Demo Switcher Always Available for Easy Testing */}
           <div className="px-6 py-4 border-b border-signal-navy-border bg-signal-navy-dark/40">
-            {isDemoAllowed && isDemoMode ? (
-              <>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] font-semibold text-signal-lime uppercase tracking-wider flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-signal-lime animate-pulse" />
-                    Chế độ Demo
-                  </span>
-                  <span className="text-[9px] bg-signal-lime/10 text-signal-lime border border-signal-lime/30 px-1.5 py-0.5 rounded font-mono">
-                    SANDBOX
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-400 mb-2">Chuyển vai trò thử nghiệm giao diện:</p>
-                <select
-                  value={role}
-                  onChange={handleRoleChange}
-                  className="w-full bg-signal-navy-light text-white text-xs font-medium rounded-xl px-3 py-2 border border-signal-navy-border focus:outline-none focus:border-signal-lime cursor-pointer"
-                >
-                  <option value="candidate">Ứng viên: Nguyễn Văn An</option>
-                  <option value="recruiter">Nhà tuyển dụng: VNG HR</option>
-                  <option value="admin">Quản trị viên: Hệ thống</option>
-                </select>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] font-semibold text-signal-mint uppercase tracking-wider flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-signal-mint" />
-                    Tài khoản Xác thực
-                  </span>
-                  <span className="text-[9px] bg-signal-mint/10 text-signal-mint border border-signal-mint/30 px-1.5 py-0.5 rounded font-mono">
-                    JWT RBAC
-                  </span>
-                </div>
-                <div className="bg-signal-navy-light text-white text-xs font-medium rounded-xl px-3 py-2.5 border border-signal-navy-border flex items-center justify-between">
-                  <span className="font-semibold">{roleLabels[role]}</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-signal-navy text-slate-300 font-mono">
-                    KHÓA QUYỀN
-                  </span>
-                </div>
-              </>
-            )}
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[11px] font-semibold text-signal-lime uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-signal-lime animate-pulse" />
+                Chế độ Demo
+              </span>
+              <span className="text-[9px] bg-signal-lime/10 text-signal-lime border border-signal-lime/30 px-1.5 py-0.5 rounded font-mono">
+                SANDBOX
+              </span>
+            </div>
+            <p className="text-[10px] text-slate-400 mb-2">Chuyển vai trò thử nghiệm giao diện:</p>
+            <select
+              value={role}
+              onChange={handleRoleChange}
+              className="w-full bg-signal-navy-light text-white text-xs font-medium rounded-xl px-3 py-2 border border-signal-navy-border focus:outline-none focus:border-signal-lime cursor-pointer hover:border-signal-lime/60 transition-colors"
+            >
+              <option value="candidate">Ứng viên: Nguyễn Văn An</option>
+              <option value="recruiter">Nhà tuyển dụng: VNG HR</option>
+              <option value="admin">Quản trị viên: Hệ thống</option>
+            </select>
           </div>
 
 

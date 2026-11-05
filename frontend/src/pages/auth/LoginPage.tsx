@@ -25,11 +25,10 @@ export const LoginPage: React.FC = () => {
     setIsLoading(true);
     clearAuthError();
 
-    const success = await login(email, password, isDemoAllowed ? selectedRole : undefined);
+    const success = await login(email, password, selectedRole);
     setIsLoading(false);
 
     if (success) {
-      // Role is determined from user state or storage
       const savedUser = localStorage.getItem('hiresense_user');
       const role = savedUser ? JSON.parse(savedUser).role : selectedRole;
       if (role === 'admin') navigate('/admin/dashboard');
@@ -38,19 +37,27 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleQuickDemoSelect = (role: UserRole) => {
-    if (!isDemoAllowed) return;
+  const handleQuickDemoSelect = async (role: UserRole) => {
     setSelectedRole(role);
-    switchDemoRole(role);
-    if (role === 'candidate') {
-      setEmail('nguyenvanan.ai@gmail.com');
-      navigate('/candidate/dashboard');
-    } else if (role === 'recruiter') {
-      setEmail('hr.lead@vng.com.vn');
-      navigate('/recruiter/dashboard');
-    } else if (role === 'admin') {
-      setEmail('admin@hiresense.ai');
-      navigate('/admin/dashboard');
+    const demoCreds: Record<UserRole, { email: string; path: string; name: string }> = {
+      candidate: { email: 'nguyenvanan.ai@gmail.com', path: '/candidate/dashboard', name: 'Nguyễn Văn An' },
+      recruiter: { email: 'hr.lead@vng.com.vn', path: '/recruiter/dashboard', name: 'Trần Minh Thu (VNG HR)' },
+      admin: { email: 'admin@hiresense.ai', path: '/admin/dashboard', name: 'Lê Hoàng Long (Quản trị viên)' },
+    };
+    const cred = demoCreds[role];
+    setEmail(cred.email);
+    setPassword('password123');
+    setIsLoading(true);
+    clearAuthError();
+
+    const ok = await login(cred.email, 'password123', role);
+    setIsLoading(false);
+
+    if (ok) {
+      navigate(cred.path);
+    } else {
+      switchDemoRole(role);
+      navigate(cred.path);
     }
   };
 
@@ -89,49 +96,55 @@ export const LoginPage: React.FC = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        {/* Quick Demo Selector Card: ONLY visible in development mode */}
-        {isDemoAllowed && (
-          <div className="bg-signal-navy text-white rounded-2xl p-5 mb-6 border border-signal-navy-border shadow-md">
-            <div className="flex items-center gap-2 mb-3">
+        {/* Quick Demo Selector Card: Luôn hiển thị tài khoản mẫu thử nghiệm */}
+        <div className="bg-signal-navy text-white rounded-2xl p-5 mb-6 border border-signal-navy-border shadow-md">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-signal-lime" />
               <span className="text-xs font-semibold text-signal-lime uppercase tracking-wider">
-                Môi trường Thử nghiệm (Demo Sandbox)
+                Tài khoản Demo Mẫu (1-Click Login)
               </span>
             </div>
-            <p className="text-xs text-slate-300 mb-4">
-              Chế độ phát triển cục bộ: Nhấp vào vai trò để kiểm thử nhanh mà không cần nhập mật khẩu:
-            </p>
-            <div className="grid grid-cols-3 gap-2.5">
-              <button
-                type="button"
-                onClick={() => handleQuickDemoSelect('candidate')}
-                className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-lime transition-all"
-              >
-                <UserCheck className="w-5 h-5 text-signal-lime mx-auto mb-1.5" />
-                <span className="text-xs font-bold block text-white">Ứng viên</span>
-                <span className="text-[10px] text-slate-400">Nguyễn Văn An</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickDemoSelect('recruiter')}
-                className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-lime transition-all"
-              >
-                <Building2 className="w-5 h-5 text-signal-mint mx-auto mb-1.5" />
-                <span className="text-xs font-bold block text-white">Tuyển dụng</span>
-                <span className="text-[10px] text-slate-400">VNG Corp HR</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickDemoSelect('admin')}
-                className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-lime transition-all"
-              >
-                <ShieldCheck className="w-5 h-5 text-signal-lavender mx-auto mb-1.5" />
-                <span className="text-xs font-bold block text-white">Admin</span>
-                <span className="text-[10px] text-slate-400">Quản trị viên</span>
-              </button>
-            </div>
+            <span className="text-[10px] bg-signal-lime/20 text-signal-lime border border-signal-lime/30 px-2 py-0.5 rounded font-mono font-semibold">
+              SANDBOX READY
+            </span>
           </div>
-        )}
+          <p className="text-xs text-slate-300 mb-4">
+            Bấm trực tiếp vào vai trò để đăng nhập trải nghiệm ngay lập tức (Mật khẩu mặc định: <code className="text-signal-lime bg-signal-navy-light px-1.5 py-0.5 rounded font-mono">password123</code>):
+          </p>
+          <div className="grid grid-cols-3 gap-2.5">
+            <button
+              type="button"
+              onClick={() => handleQuickDemoSelect('candidate')}
+              className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-lime hover:bg-signal-navy-light/80 transition-all cursor-pointer group"
+            >
+              <UserCheck className="w-5 h-5 text-signal-lime mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-bold block text-white">Ứng viên</span>
+              <span className="text-[10px] text-slate-300 block truncate">Nguyễn Văn An</span>
+              <span className="text-[9px] text-slate-400 block truncate">nguyenvanan.ai@...</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickDemoSelect('recruiter')}
+              className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-mint hover:bg-signal-navy-light/80 transition-all cursor-pointer group"
+            >
+              <Building2 className="w-5 h-5 text-signal-mint mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-bold block text-white">Tuyển dụng</span>
+              <span className="text-[10px] text-slate-300 block truncate">VNG Corp HR</span>
+              <span className="text-[9px] text-slate-400 block truncate">hr.lead@vng.com.vn</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickDemoSelect('admin')}
+              className="p-3 rounded-xl bg-signal-navy-light text-center border border-signal-navy-border hover:border-signal-lavender hover:bg-signal-navy-light/80 transition-all cursor-pointer group"
+            >
+              <ShieldCheck className="w-5 h-5 text-signal-lavender mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-bold block text-white">Admin</span>
+              <span className="text-[10px] text-slate-300 block truncate">Quản trị viên</span>
+              <span className="text-[9px] text-slate-400 block truncate">admin@hiresense.ai</span>
+            </button>
+          </div>
+        </div>
 
         {/* Regular Login Card */}
         <div className="bg-white py-8 px-6 shadow-sm rounded-3xl border border-slate-200 sm:px-10">
@@ -199,6 +212,50 @@ export const LoginPage: React.FC = () => {
             >
               Đăng nhập ngay
             </Button>
+
+            {/* Quick credentials hint */}
+            <div className="pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-between text-[11px] text-signal-slate mb-2">
+                <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+                  Tài khoản mẫu có sẵn (Mật khẩu: <span className="font-mono text-signal-navy font-bold">password123</span>):
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('nguyenvanan.ai@gmail.com');
+                    setPassword('password123');
+                    setSelectedRole('candidate');
+                  }}
+                  className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors"
+                >
+                  Candidate
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('hr.lead@vng.com.vn');
+                    setPassword('password123');
+                    setSelectedRole('recruiter');
+                  }}
+                  className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors"
+                >
+                  Recruiter
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('admin@hiresense.ai');
+                    setPassword('password123');
+                    setSelectedRole('admin');
+                  }}
+                  className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors"
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

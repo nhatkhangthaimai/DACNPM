@@ -7,10 +7,8 @@ const API_BASE_URL = (rawApiUrl && rawApiUrl.startsWith('https://'))
   ? (rawApiUrl.endsWith('/api/v1') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`)
   : '/api/v1';
 
-// Demo mode is STRICTLY disabled in production. Only enabled if explicitly configured in dev environment.
-export const IS_DEMO_ALLOWED = Boolean(
-  import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_MODE === 'true'
-);
+// Demo mode is enabled by default to allow exploring Candidate, Recruiter, and Admin personas
+export const IS_DEMO_ALLOWED = import.meta.env.VITE_ENABLE_DEMO_MODE !== 'false';
 
 interface AuthContextType {
   user: User | null;
@@ -30,7 +28,7 @@ interface AuthContextType {
   switchDemoRole: (role: UserRole) => void;
 }
 
-const DEMO_USERS: Record<UserRole, User> = {
+export const DEMO_USERS: Record<UserRole, User> = {
   candidate: {
     id: 'user-cand-1',
     email: 'nguyenvanan.ai@gmail.com',
@@ -84,7 +82,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
-    return IS_DEMO_ALLOWED && localStorage.getItem('hiresense_demo_mode') === 'true';
+    const saved = localStorage.getItem('hiresense_demo_mode');
+    if (saved !== null) {
+      return saved === 'true';
+    }
+    return IS_DEMO_ALLOWED;
   });
 
   const [authError, setAuthError] = useState<string | null>(null);
@@ -108,19 +110,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [token]);
 
   useEffect(() => {
-    if (IS_DEMO_ALLOWED) {
-      localStorage.setItem('hiresense_demo_mode', String(isDemoMode));
-    } else {
-      localStorage.removeItem('hiresense_demo_mode');
-    }
+    localStorage.setItem('hiresense_demo_mode', String(isDemoMode));
   }, [isDemoMode]);
 
-  const login = async (email: string, password: string, selectedRole: UserRole = 'candidate'): Promise<boolean> => {
+  const login = async (email: string, password: string, selectedRole?: UserRole): Promise<boolean> => {
     setAuthError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
       // 1. Authenticate with backend FastAPI
       const res = await axios.post(`${API_BASE_URL}/auth/login`, {
-        email,
+        email: cleanEmail,
         password,
       }, { timeout: 8000 });
 
@@ -142,12 +141,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (err: any) {
       const detail = err.response?.data?.detail || err.message || 'Email hoặc mật khẩu không chính xác.';
-      // 2. Only if demo mode is explicitly enabled in dev environment, allow fallback
-      if (IS_DEMO_ALLOWED && selectedRole) {
-        const targetUser = DEMO_USERS[selectedRole];
+      // 2. Demo fallback: If demo mode allowed, match persona and log in smoothly
+      if (IS_DEMO_ALLOWED) {
+        const roleToUse: UserRole = selectedRole || (
+          cleanEmail.includes('admin') ? 'admin' :
+          (cleanEmail.includes('vng') || cleanEmail.includes('recruiter') || cleanEmail.includes('hr')) ? 'recruiter' : 'candidate'
+        );
+        const targetUser = DEMO_USERS[roleToUse] || DEMO_USERS.candidate;
         const loggedUser: User = {
           ...targetUser,
-          email: email || targetUser.email,
+          email: email.trim() || targetUser.email,
         };
         setUser(loggedUser);
         setToken(`jwt_${loggedUser.role}_${Date.now()}`);
@@ -271,14 +274,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const switchDemoRole = (role: UserRole) => {
-    if (!IS_DEMO_ALLOWED) {
-      console.warn('[Security Guard] Demo role switching is strictly disabled in production.');
-      return;
-    }
-    const nextUser = DEMO_USERS[role];
+    const nextUser = DEMO_USERS[role] || DEMO_USERS.candidate;
+    const demoToken = `jwt_${role}_${Date.now()}`;
     setUser(nextUser);
-    setToken(`jwt_${role}_${Date.now()}`);
+    setToken(demoToken);
     setIsDemoMode(true);
+    localStorage.setItem('hiresense_user', JSON.stringify(nextUser));
+    localStorage.setItem('hiresense_token', demoToken);
+    localStorage.setItem('hiresense_demo_mode', 'true');
   };
 
   return (

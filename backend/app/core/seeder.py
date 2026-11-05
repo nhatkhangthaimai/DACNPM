@@ -81,6 +81,29 @@ async def seed_all_multi_industry_data(session: AsyncSession) -> Dict[str, int]:
         )
         session.add(profile)
 
+    # Base Demo Recruiter (VNG HR)
+    vng_res = await session.execute(select(User).where(User.email == "hr.lead@vng.com.vn"))
+    vng_user = vng_res.scalars().first()
+    if not vng_user:
+        vng_user = User(
+            id="user-rec-1",
+            email="hr.lead@vng.com.vn",
+            hashed_password=demo_password_hash,
+            full_name="Trần Minh Thu (VNG HR)",
+            phone="0912 345 678",
+            role=UserRole.RECRUITER,
+            is_active=True,
+            is_verified=True,
+        )
+        session.add(vng_user)
+        await session.flush()
+
+    vng_mem = await session.execute(
+        select(CompanyMember).where(CompanyMember.user_id == vng_user.id)
+    )
+    if not vng_mem.scalars().first():
+        session.add(CompanyMember(company_id="comp-seed-01", user_id=vng_user.id, role="owner"))
+
     # ----------------------------------------------------
     # 1. 15 COMPANIES
     # ----------------------------------------------------
