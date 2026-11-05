@@ -7,6 +7,8 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { SkillBadge, StatusBadge } from '../../components/ui/SkillBadge';
 import { MatchScoreRing } from '../../components/ui/MatchScoreRing';
+import { useAuth } from '../../context/AuthContext';
+import { useJobs, useCandidateCVs, useInvalidateQueries } from '../../hooks/useQueries';
 import {
   Search,
   MapPin,
@@ -25,12 +27,12 @@ import {
 } from 'lucide-react';
 
 export const JobDiscovery: React.FC = () => {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [cvs, setCvs] = useState<CV[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const { invalidateJobs } = useInvalidateQueries();
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [industryFilter, setIndustryFilter] = useState('all');
   const [locationFilter, setLocationFilter] = useState('all');
   const [jobTypeFilter, setJobTypeFilter] = useState('all');
@@ -45,24 +47,20 @@ export const JobDiscovery: React.FC = () => {
   const [coverLetter, setCoverLetter] = useState<string>('');
   const [isApplying, setIsApplying] = useState(false);
   const [applySuccess, setApplySuccess] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
 
   const hasAutoSeeded = useRef(false);
 
-  const primaryCv = useMemo(() => {
-    return cvs.find(c => c.isPrimary) || cvs[0] || null;
-  }, [cvs]);
-
+  // Debounce search input (350ms) to avoid request storms
   useEffect(() => {
-    loadJobs();
-    apiService.getCandidateCVs('user-cand-1').then(data => {
-      setCvs(data);
-      if (data.length > 0) setSelectedCvId(data[0].id);
-    });
-  }, []);
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 350);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
-  const loadJobs = () => {
-    setIsLoading(true);
-
+  // Compute structured filters for useJobs query
+  const queryFilters = useMemo(() => {
     let minSalary: number | undefined;
     let maxSalary: number | undefined;
     if (salaryFilter === '<15') {
@@ -77,52 +75,59 @@ export const JobDiscovery: React.FC = () => {
       minSalary = 50000000;
     }
 
-    apiService.getJobs({
-      search: searchQuery,
-      location: locationFilter,
-      jobType: jobTypeFilter,
-      industry: industryFilter,
-      experienceLevel: experienceFilter,
+    return {
+      search: debouncedSearch.trim() || undefined,
+      location: locationFilter !== 'all' ? locationFilter : undefined,
+      jobType: jobTypeFilter !== 'all' ? jobTypeFilter : undefined,
+      industry: industryFilter !== 'all' ? industryFilter : undefined,
+      experienceLevel: experienceFilter !== 'all' ? experienceFilter : undefined,
       minSalary,
       maxSalary,
       sortBy: sortBy === 'match' ? 'newest' : sortBy,
       limit: 100,
-    }).then(async (data) => {
-      if (data.length <= 2 && !searchQuery && industryFilter === 'all' && locationFilter === 'all' && !hasAutoSeeded.current) {
-        hasAutoSeeded.current = true;
-        try {
-          await apiService.seedMultiIndustryJobs();
-          const refreshed = await apiService.getJobs({ limit: 100 });
-          if (refreshed && refreshed.length > data.length) {
-            setJobs(refreshed);
-            setIsLoading(false);
-            return;
-          }
-        } catch (e) {
-          console.warn('Auto-seed check notice:', e);
-        }
-      }
-      setJobs(data);
-      setIsLoading(false);
-    }).catch(() => {
-      setIsLoading(false);
-    });
-  };
+    };
+  }, [debouncedSearch, locationFilter, jobTypeFilter, industryFilter, experienceFilter, salaryFilter, sortBy]);
+
+  // Use TanStack Query hooks (cached 3 mins, AbortController support)
+  const { data: jobs = [], isLoading: isJobsLoading } = useJobs(queryFilters);
+  const { data: cvs = [] } = useCandidateCVs(user?.id);
+
+  // Sync selected CV for apply modal
+  useEffect(() => {
+    if (cvs.length > 0 && !selectedCvId) {
+      const primary = cvs.find(c => c.isPrimary) || cvs[0];
+      setSelectedCvId(primary.id);
+    }
+  }, [cvs, selectedCvId]);
+
+  // Auto-seed check if DB is empty on first visit
+  useEffect(() => {
+    if (!isJobsLoading && jobs.length <= 2 && !debouncedSearch && industryFilter === 'all' && !hasAutoSeeded.current) {
+      hasAutoSeeded.current = true;
+      apiService.seedMultiIndustryJobs()
+        .then(() => invalidateJobs())
+        .catch(err => console.warn('Auto-seed check notice:', err));
+    }
+  }, [jobs.length, isJobsLoading, debouncedSearch, industryFilter, invalidateJobs]);
+
+  const primaryCv = useMemo(() => {
+    return cvs.find(c => c.isPrimary) || cvs[0] || null;
+  }, [cvs]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loadJobs();
+    setDebouncedSearch(searchQuery);
   };
 
   const handleResetFilters = () => {
     setSearchQuery('');
+    setDebouncedSearch('');
     setIndustryFilter('all');
     setLocationFilter('all');
     setJobTypeFilter('all');
     setExperienceFilter('all');
     setSalaryFilter('all');
     setSortBy('newest');
-    apiService.getJobs({ limit: 100 }).then(setJobs);
   };
 
   // Pre-calculate match scores for all loaded jobs against candidate's primary CV
@@ -238,7 +243,7 @@ export const JobDiscovery: React.FC = () => {
             )}
           </div>
 
-          <Button type="submit" variant="primary" size="md" isLoading={isLoading}>
+          <Button type="submit" variant="primary" size="md" isLoading={isJobsLoading}>
             Tìm việc làm
           </Button>
         </div>
@@ -383,16 +388,21 @@ export const JobDiscovery: React.FC = () => {
           {jobs.length <= 2 && (
             <button
               type="button"
+              disabled={isSeeding}
               onClick={async () => {
-                setIsLoading(true);
-                await apiService.seedMultiIndustryJobs();
-                const refreshed = await apiService.getJobs({ limit: 100 });
-                setJobs(refreshed);
-                setIsLoading(false);
+                setIsSeeding(true);
+                try {
+                  await apiService.seedMultiIndustryJobs();
+                  invalidateJobs();
+                } catch (e) {
+                  console.error('Seed error:', e);
+                } finally {
+                  setIsSeeding(false);
+                }
               }}
-              className="text-signal-navy hover:underline font-semibold ml-2"
+              className="text-signal-navy hover:underline font-semibold ml-2 disabled:opacity-50"
             >
-              (Đồng bộ 50 việc làm)
+              {isSeeding ? '(Đang đồng bộ...)' : '(Đồng bộ 50 việc làm)'}
             </button>
           )}
         </div>
@@ -400,7 +410,29 @@ export const JobDiscovery: React.FC = () => {
 
       {/* Job Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayJobs.length > 0 ? (
+        {isJobsLoading && jobs.length === 0 ? (
+          // Fast pulse skeletons
+          Array.from({ length: 6 }).map((_, idx) => (
+            <div key={idx} className="bg-white rounded-3xl border border-slate-200/80 p-6 space-y-4 animate-pulse">
+              <div className="flex items-start justify-between">
+                <div className="w-12 h-12 bg-slate-100 rounded-2xl" />
+                <div className="w-16 h-6 bg-slate-100 rounded-full" />
+              </div>
+              <div className="space-y-2">
+                <div className="w-3/4 h-5 bg-slate-100 rounded-lg" />
+                <div className="w-1/2 h-4 bg-slate-100 rounded-lg" />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <div className="w-16 h-5 bg-slate-100 rounded-full" />
+                <div className="w-20 h-5 bg-slate-100 rounded-full" />
+              </div>
+              <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                <div className="w-24 h-4 bg-slate-100 rounded" />
+                <div className="w-20 h-8 bg-slate-100 rounded-xl" />
+              </div>
+            </div>
+          ))
+        ) : displayJobs.length > 0 ? (
           displayJobs.map((job) => {
             const breakdown = jobMatchMap.get(job.id);
             const score = breakdown?.overallScore;

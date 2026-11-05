@@ -258,6 +258,7 @@ class TestCVAIMatchingMasterSuite:
         # Verify match record exists in DB
         res = await db_session.execute(select(MatchResult).where(MatchResult.cv_id == cv1_id))
         assert res.scalars().first() is not None
+        await db_session.commit()
 
         # Re-upload updated CV with same filename
         pdf2 = create_sample_pdf_bytes(name="Vu Van Hai (Updated)", email="hai.updated@example.com")

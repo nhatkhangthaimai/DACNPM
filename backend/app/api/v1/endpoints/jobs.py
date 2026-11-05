@@ -12,25 +12,46 @@ from app.core.audit import log_audit_event
 from app.core.scam_detector import analyze_job_scam_risk
 from app.models.entities import Job, JobSkill, Skill, JobStatus, Company, CompanyMember, JobReport
 from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse, GenericMessageResponse
+import time
+from functools import lru_cache
 from app.ai.pipeline import COMMON_MULTI_INDUSTRY_SKILLS, normalize_skill
 
+# Pre-compile regexes once for high-throughput job listing
+_COMPILED_SKILLS = [
+    (s, s.lower(), re.compile(r'(?:\b|\s|^)' + re.escape(s.lower()) + r'(?:\b|\s|$|[,\.\:\;\(\)])'))
+    for s in COMMON_MULTI_INDUSTRY_SKILLS
+]
 
+@lru_cache(maxsize=1000)
 def extract_job_skills(title: str, requirements: str, description: str):
-    """Fallback skill extractor across multiple industries if job_skills relation is empty."""
+    """Fallback skill extractor across multiple industries with precompiled regexes & LRU cache."""
     text = f"{title or ''} {requirements or ''} {description or ''}"
     reqs = []
     prefs = []
     text_lower = text.lower()
-    for s in COMMON_MULTI_INDUSTRY_SKILLS:
-        pattern = r'(?:\b|\s|^)' + re.escape(s.lower()) + r'(?:\b|\s|$|[,\.\:\;\(\)])'
-        if re.search(pattern, text_lower):
-            if "ưu tiên" in text_lower and s.lower() in text_lower.split("ưu tiên")[-1]:
+    has_uu_tien = "ưu tiên" in text_lower
+    split_uu_tien = text_lower.split("ưu tiên")[-1] if has_uu_tien else ""
+
+    for s, s_low, pat in _COMPILED_SKILLS:
+        if pat.search(text_lower):
+            if has_uu_tien and s_low in split_uu_tien:
                 prefs.append(s)
             else:
                 reqs.append(s)
     reqs = list(dict.fromkeys(reqs))
     prefs = [p for p in dict.fromkeys(prefs) if p not in reqs]
     return reqs or ["Chuyên môn"], prefs
+
+
+# In-memory short-lived cache for GET /jobs responses (TTL: 30s)
+_JOBS_CACHE: Dict[str, Any] = {}
+_JOBS_CACHE_TIMESTAMP = 0.0
+_JOBS_CACHE_TTL = 30.0  # seconds
+
+def invalidate_jobs_cache():
+    global _JOBS_CACHE, _JOBS_CACHE_TIMESTAMP
+    _JOBS_CACHE.clear()
+    _JOBS_CACHE_TIMESTAMP = 0.0
 
 
 router = APIRouter()
@@ -52,6 +73,13 @@ async def get_jobs(
     skip: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db)
 ):
+    global _JOBS_CACHE, _JOBS_CACHE_TIMESTAMP
+    now = time.time()
+    cache_key = f"{search}_{location}_{job_type}_{experience_level}_{status_filter}_{company_id}_{industry}_{min_salary}_{max_salary}_{sort_by}_{limit}_{skip}"
+
+    if now - _JOBS_CACHE_TIMESTAMP < _JOBS_CACHE_TTL and cache_key in _JOBS_CACHE:
+        return _JOBS_CACHE[cache_key]
+
     query = select(Job).options(
         selectinload(Job.company),
         selectinload(Job.job_skills).selectinload(JobSkill.skill)
@@ -141,6 +169,11 @@ async def get_jobs(
             preferred_skills=p_skills,
             created_at=j.created_at
         ))
+
+    if now - _JOBS_CACHE_TIMESTAMP >= _JOBS_CACHE_TTL:
+        _JOBS_CACHE.clear()
+        _JOBS_CACHE_TIMESTAMP = now
+    _JOBS_CACHE[cache_key] = response
     return response
 
 
@@ -151,6 +184,7 @@ async def trigger_seed_multi_industry(db: AsyncSession = Depends(get_db)):
     Public & Admin trigger endpoint to seed all 50 multi-industry jobs and 15 companies.
     100% idempotent: will not create duplicates.
     """
+    invalidate_jobs_cache()
     from app.core.seeder import seed_all_multi_industry_data
     stats = await seed_all_multi_industry_data(db)
     
@@ -351,6 +385,7 @@ async def create_job(
         db.add(JobSkill(job_id=job.id, skill_id=skill_obj.id, is_required=False, importance_weight=0.5))
 
     await db.commit()
+    invalidate_jobs_cache()
     await db.refresh(job)
 
     return JobResponse(
@@ -404,6 +439,7 @@ async def update_job(
     if data.status is not None: job.status = data.status
 
     await db.commit()
+    invalidate_jobs_cache()
     await db.refresh(job)
 
     r_skills, p_skills = extract_job_skills(job.title, job.requirements, job.description)

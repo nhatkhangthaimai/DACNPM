@@ -161,7 +161,7 @@ export const apiService = {
     status?: string;
     limit?: number;
     skip?: number;
-  }): Promise<Job[]> {
+  }, signal?: AbortSignal): Promise<Job[]> {
     try {
       const params: Record<string, any> = {};
       if (filters?.search) params.search = filters.search;
@@ -177,9 +177,12 @@ export const apiService = {
       if (filters?.limit) params.limit = filters.limit;
       if (filters?.skip) params.skip = filters.skip;
 
-      const res = await apiClient.get('/jobs', { params });
+      const res = await apiClient.get('/jobs', { params, signal });
       return Array.isArray(res.data) ? res.data.map(mapServerJob) : [];
-    } catch {
+    } catch (err: any) {
+      if (axios.isCancel(err)) {
+        throw err;
+      }
       // Fallback to local storage
       let jobs = getStored<Job[]>('hiresense_jobs', INITIAL_JOBS).map(mapServerJob);
       if (filters?.search) {
@@ -279,14 +282,17 @@ export const apiService = {
   },
 
   // CVS
-  async getCandidateCVs(candidateId: string): Promise<CV[]> {
+  async getCandidateCVs(candidateId: string, signal?: AbortSignal): Promise<CV[]> {
     let serverCvs: CV[] = [];
     try {
-      const res = await apiClient.get(`/cvs?candidate_id=${candidateId}`);
+      const res = await apiClient.get(`/cvs?candidate_id=${candidateId}`, { signal });
       if (Array.isArray(res.data)) {
         serverCvs = res.data.map(mapServerCV);
       }
-    } catch {
+    } catch (err: any) {
+      if (axios.isCancel(err)) {
+        throw err;
+      }
       // offline fallback
     }
 
@@ -296,7 +302,8 @@ export const apiService = {
       combinedMap.set(cv.id, cv);
     }
     for (const cv of localCvs) {
-      if (!combinedMap.has(cv.id)) {
+      // Isolate CVs strictly to candidateId to prevent cross-account data leaks
+      if (cv.candidateId === candidateId && !combinedMap.has(cv.id)) {
         combinedMap.set(cv.id, cv);
       }
     }
@@ -443,21 +450,30 @@ export const apiService = {
     return true;
   },
 
-  // MATCHING
+  // MATCHING IN-MEMORY CACHE
+  // Key format: match_v2_{userId}_{cvId}_{jobId}_{cvSkillsHash}_{jobSkillsHash}
   calculateMatchScore(cv: CV, job: Job): MatchScoreBreakdown {
     // If CV extraction failed or is invalid, BLOCK calculation and return 0
-    if (cv.extractionStatus === 'failed' || cv.extractionStatus === 'extraction_failed' || !cv.parsedData) {
+    if (!cv || cv.extractionStatus === 'failed' || cv.extractionStatus === 'extraction_failed' || !cv.parsedData) {
       return {
         overallScore: 0,
         hardSkillsScore: 0,
         semanticScore: 0,
         experienceScore: 0,
         matchedSkills: [],
-        missingRequiredSkills: job.requiredSkills || [],
-        missingPreferredSkills: job.preferredSkills || [],
+        missingRequiredSkills: job?.requiredSkills || [],
+        missingPreferredSkills: job?.preferredSkills || [],
         aiExplanation: 'Không thể tính điểm do dữ liệu CV chưa được trích xuất chính xác hoặc bị lỗi.',
         recommendations: ['Vui lòng tải lên file CV hợp lệ để hệ thống phân tích.'],
       };
+    }
+
+    // Check memory cache first
+    const cvSkillsStr = (cv.parsedData.hardSkills || []).join('|');
+    const jobSkillsStr = (job.requiredSkills || []).join('|');
+    const cacheKey = `match_cache_${cv.id}_${job.id}_${cvSkillsStr}_${jobSkillsStr}`;
+    if ((apiService as any)._matchCache?.has(cacheKey)) {
+      return (apiService as any)._matchCache.get(cacheKey)!;
     }
 
     const cvSkills = cv.parsedData.hardSkills.map(s => s.toLowerCase());
@@ -518,7 +534,7 @@ export const apiService = {
       recommendations.push(`Tìm hiểu thêm về ${missingPref.slice(0, 2).join(', ')} để nâng cao tính cạnh tranh so với các ứng viên khác.`);
     }
 
-    return {
+    const result: MatchScoreBreakdown = {
       overallScore,
       hardSkillsScore,
       semanticScore,
@@ -529,6 +545,30 @@ export const apiService = {
       aiExplanation,
       recommendations,
     };
+
+    if (!(apiService as any)._matchCache) {
+      (apiService as any)._matchCache = new Map<string, MatchScoreBreakdown>();
+    }
+    (apiService as any)._matchCache.set(cacheKey, result);
+    return result;
+  },
+
+  async getStoredMatchResult(jobId: string, cvId: string): Promise<MatchScoreBreakdown | null> {
+    try {
+      const res = await apiClient.get('/matching/result', { params: { job_id: jobId, cv_id: cvId } });
+      return res.data;
+    } catch {
+      return null;
+    }
+  },
+
+  async getStoredCvMatchResults(cvId: string): Promise<Array<{ job_id: string; overall_score: number; hard_skills_score?: number }>> {
+    try {
+      const res = await apiClient.get('/matching/results', { params: { cv_id: cvId } });
+      return Array.isArray(res.data) ? res.data : [];
+    } catch {
+      return [];
+    }
   },
 
   async calculateMatchViaBackend(cvId: string, jobId: string): Promise<MatchScoreBreakdown> {

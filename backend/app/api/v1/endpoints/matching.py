@@ -139,3 +139,59 @@ async def calculate_match(data: MatchRequest, db: AsyncSession = Depends(get_db)
     await db.commit()
 
     return MatchScoreBreakdown(**result)
+
+
+@router.get("/result", response_model=MatchScoreBreakdown)
+async def get_match_result(
+    job_id: str,
+    cv_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Retrieve stored MatchResult from DB cache without re-invoking calculation.
+    Returns 404 if not yet calculated.
+    """
+    res = await db.execute(
+        select(MatchResult).where(MatchResult.job_id == job_id, MatchResult.cv_id == cv_id)
+    )
+    m = res.scalars().first()
+    if not m:
+        raise HTTPException(status_code=404, detail="Chưa có kết quả so khớp được lưu.")
+
+    return MatchScoreBreakdown(
+        overall_score=m.overall_score,
+        hard_skills_score=m.hard_skills_score,
+        semantic_score=m.semantic_score,
+        experience_score=m.experience_score,
+        matched_skills=m.matched_skills or [],
+        missing_required_skills=m.missing_required_skills or [],
+        missing_preferred_skills=m.missing_preferred_skills or [],
+        ai_explanation=m.ai_explanation or "",
+        recommendations=m.recommendations or []
+    )
+
+
+@router.get("/results")
+async def get_all_cv_match_results(
+    cv_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Retrieve all stored match results for a given CV to rank jobs instantly.
+    """
+    res = await db.execute(
+        select(MatchResult).where(MatchResult.cv_id == cv_id)
+    )
+    records = res.scalars().all()
+    return [
+        {
+            "job_id": r.job_id,
+            "cv_id": r.cv_id,
+            "overall_score": r.overall_score,
+            "hard_skills_score": r.hard_skills_score,
+            "matched_skills": r.matched_skills or [],
+            "missing_required_skills": r.missing_required_skills or [],
+            "ai_explanation": r.ai_explanation or ""
+        }
+        for r in records
+    ]
