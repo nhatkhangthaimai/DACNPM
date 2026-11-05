@@ -1,7 +1,8 @@
 import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models.entities import CV, Job, Application
+from app.models.entities import CV, Job, Application, UserRole
+from app.core.security import create_access_token
 
 
 @pytest.mark.anyio
@@ -13,7 +14,9 @@ class TestAdminAndApplicationsAPI:
 
     async def test_admin_list_users(self, client: AsyncClient):
         """TC-ADM-01: Admin can retrieve list of registered users."""
-        resp = await client.get("/api/v1/admin/users")
+        admin_token = create_access_token(subject="test-admin-1", role=UserRole.ADMIN)
+        headers = {"Authorization": f"Bearer {admin_token}"}
+        resp = await client.get("/api/v1/admin/users", headers=headers)
         assert resp.status_code == 200
         data = resp.json()
         assert len(data) >= 3  # Admin, recruiter, candidate seeded in conftest
@@ -22,27 +25,35 @@ class TestAdminAndApplicationsAPI:
 
     async def test_admin_toggle_user_active_status(self, client: AsyncClient):
         """TC-ADM-02: Admin can deactivate and activate user accounts."""
+        admin_token = create_access_token(subject="test-admin-1", role=UserRole.ADMIN)
+        headers = {"Authorization": f"Bearer {admin_token}"}
         # Deactivate candidate
-        resp = await client.put("/api/v1/admin/users/test-cand-1/toggle-active")
+        resp = await client.put("/api/v1/admin/users/test-cand-1/toggle-active", headers=headers)
         assert resp.status_code == 200
         assert resp.json()["is_active"] is False
 
         # Reactivate candidate
-        resp2 = await client.put("/api/v1/admin/users/test-cand-1/toggle-active")
+        resp2 = await client.put("/api/v1/admin/users/test-cand-1/toggle-active", headers=headers)
         assert resp2.status_code == 200
         assert resp2.json()["is_active"] is True
 
     async def test_admin_moderate_job_approve_and_reject(self, client: AsyncClient):
         """TC-ADM-03: Admin can moderate jobs (approve or reject with reason)."""
+        admin_token = create_access_token(subject="test-admin-1", role=UserRole.ADMIN)
+        headers = {"Authorization": f"Bearer {admin_token}"}
         # Reject job with reason
         resp_reject = await client.put(
-            "/api/v1/admin/jobs/test-job-1/moderate?status=rejected&rejection_reason=Yêu+cầu+lương+chưa+rõ+ràng"
+            "/api/v1/admin/jobs/test-job-1/moderate?status=rejected&rejection_reason=Yêu+cầu+lương+chưa+rõ+ràng",
+            headers=headers
         )
         assert resp_reject.status_code == 200
         assert resp_reject.json()["status"] == "rejected"
 
         # Approve job
-        resp_approve = await client.put("/api/v1/admin/jobs/test-job-1/moderate?status=published")
+        resp_approve = await client.put(
+            "/api/v1/admin/jobs/test-job-1/moderate?status=published",
+            headers=headers
+        )
         assert resp_approve.status_code == 200
         assert resp_approve.json()["status"] == "published"
 

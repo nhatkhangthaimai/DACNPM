@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /privacy
+Allow: /terms
+Allow: /login
+Allow: /register/candidate
+Allow: /register/recruiter
+
+# Private & Authenticated Portals - Do NOT Index
+Disallow: /candidate/
+Disallow: /recruiter/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /uploads/
+
+Sitemap: https://hiresense.ai/sitemap.xml
+

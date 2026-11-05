@@ -1,14 +1,22 @@
 import os
 import uuid
+import time
+import hmac
+import hashlib
 from typing import List, Optional, Dict, Any
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Body, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Body, status, Request, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import delete
 from app.core.database import get_db
 from app.core.config import settings
+from app.core.security import get_current_user_payload
+from app.core.rate_limiter import upload_rate_limiter
+from app.core.audit import log_audit_event
+from app.core.storage import get_storage_service
 from app.models.entities import CV, CandidateProfile, MatchResult, User, Company
-from app.schemas.all_schemas import CVResponse, CVExtractedData
+from app.schemas.all_schemas import CVResponse, CVExtractedData, GenericMessageResponse
 from app.ai.pipeline import (
     validate_cv_file,
     extract_text_from_cv,
@@ -380,5 +388,121 @@ async def upload_company_logo(
         "logo_url": img_url,
         "message": "Tải logo công ty thành công."
     }
+
+
+# ================= CV MANAGEMENT & SECURE DOWNLOAD =================
+@router.delete("/{cv_id}", response_model=GenericMessageResponse)
+async def delete_cv(
+    cv_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    auth_payload: Optional[dict] = Depends(get_current_user_payload)
+):
+    """
+    Deletes CV, associated match results, and physical storage object.
+    Complies with Phase 5 candidate control & Phase 3 right to erasure.
+    """
+    res = await db.execute(select(CV).where(CV.id == cv_id))
+    cv = res.scalars().first()
+    if not cv:
+        raise HTTPException(status_code=404, detail="Không tìm thấy CV.")
+
+    # Remove physical storage file
+    if cv.file_url:
+        storage = get_storage_service()
+        await storage.delete_file(cv.file_url.replace("/uploads/", ""))
+
+    await db.execute(delete(MatchResult).where(MatchResult.cv_id == cv.id))
+    await db.delete(cv)
+
+    await log_audit_event(
+        db,
+        action="cv.deleted",
+        user_id=auth_payload.get("sub") if auth_payload else None,
+        target_type="cv",
+        target_id=cv_id,
+        details={"file_name": cv.file_name},
+        request=request
+    )
+    await db.commit()
+    return GenericMessageResponse(message="Đã xóa CV thành công.", status="success")
+
+
+@router.put("/{cv_id}/primary", response_model=CVResponse)
+async def set_primary_cv(
+    cv_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    auth_payload: Optional[dict] = Depends(get_current_user_payload)
+):
+    """Sets the designated CV as the primary CV for automatic job matching."""
+    res = await db.execute(select(CV).where(CV.id == cv_id))
+    cv = res.scalars().first()
+    if not cv:
+        raise HTTPException(status_code=404, detail="Không tìm thấy CV.")
+
+    all_cand_cvs = await db.execute(select(CV).where(CV.candidate_id == cv.candidate_id))
+    for c in all_cand_cvs.scalars().all():
+        c.is_primary = (c.id == cv.id)
+
+    await log_audit_event(
+        db,
+        action="cv.set_primary",
+        user_id=auth_payload.get("sub") if auth_payload else None,
+        target_type="cv",
+        target_id=cv_id,
+        request=request
+    )
+    await db.commit()
+    await db.refresh(cv)
+
+    return CVResponse(
+        id=cv.id,
+        candidate_id=cv.candidate_id,
+        file_name=cv.file_name,
+        file_url=cv.file_url,
+        file_size=cv.file_size,
+        is_primary=cv.is_primary,
+        extraction_status=cv.extraction_status,
+        extraction_error=cv.extraction_error,
+        content_validated=cv.content_validated or False,
+        parsed_data=CVExtractedData(**cv.parsed_data) if cv.parsed_data and "error" not in cv.parsed_data else None,
+        created_at=cv.created_at
+    )
+
+
+@router.get("/download/{storage_key}")
+async def download_cv_file(
+    storage_key: str,
+    expires: int = Query(...),
+    sig: str = Query(...)
+):
+    """
+    OWASP secure token-protected CV download.
+    Validates HMAC-SHA256 signature and expiration timestamp.
+    """
+    now = int(time.time())
+    if now > expires:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Liên kết tải tệp tin đã hết hạn (quá 15 phút). Vui lòng yêu cầu liên kết mới."
+        )
+
+    sig_data = f"{storage_key}:{expires}".encode("utf-8")
+    expected_sig = hmac.new(settings.SECRET_KEY.encode("utf-8"), sig_data, hashlib.sha256).hexdigest()[:16]
+
+    if not hmac.compare_digest(sig, expected_sig):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Chữ ký xác thực tệp không hợp lệ."
+        )
+
+    safe_name = os.path.basename(storage_key)
+    file_path = os.path.join(settings.UPLOAD_DIR, safe_name)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Tệp tin không tồn tại trên hệ thống.")
+
+    return FileResponse(file_path, filename=safe_name)
+
 
 

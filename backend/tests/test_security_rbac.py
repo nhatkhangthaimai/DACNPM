@@ -57,3 +57,36 @@ class TestSecurityAndRBAC:
         assert resp.status_code == 200
         assert isinstance(resp.json(), list)
 
+    @pytest.mark.anyio
+    async def test_unauthenticated_request_blocked_401(self, client):
+        """TC-SEC-06: Request with no Authorization header receives 401 Unauthorized."""
+        resp = await client.get("/api/v1/admin/users")
+        assert resp.status_code == 401
+        assert "yêu cầu đăng nhập" in resp.json()["detail"].lower()
+
+    @pytest.mark.anyio
+    async def test_password_reset_flow(self, client):
+        """TC-SEC-07: Forgot password and reset password flow."""
+        from app.core.security import create_password_reset_token
+
+        # 1. Forgot password request (generic message)
+        forgot_resp = await client.post("/api/v1/auth/forgot-password", json={"email": "admin@hiresense.ai"})
+        assert forgot_resp.status_code == 200
+        assert "hướng dẫn đặt lại mật khẩu" in forgot_resp.json()["message"].lower()
+
+        # 2. Reset password with generated token
+        valid_token = create_password_reset_token("admin@hiresense.ai")
+        reset_resp = await client.post("/api/v1/auth/reset-password", json={
+            "token": valid_token,
+            "new_password": "NewSecurePassword#2026"
+        })
+        assert reset_resp.status_code == 200
+        assert "thành công" in reset_resp.json()["message"].lower()
+
+        # 3. Invalid token returns 400
+        bad_resp = await client.post("/api/v1/auth/reset-password", json={
+            "token": "invalid_fake_token",
+            "new_password": "AnotherPassword#2026"
+        })
+        assert bad_resp.status_code == 400
+

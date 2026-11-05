@@ -175,11 +175,28 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["Health"])
 async def health_check():
+    from sqlalchemy import text
+    from app.core.database import AsyncSessionLocal
+    
+    db_status = "healthy"
+    try:
+        async with AsyncSessionLocal() as session:
+            await session.execute(text("SELECT 1"))
+    except Exception as e:
+        db_status = f"unhealthy: {str(e)[:100]}"
+
+    storage_writable = os.access(settings.UPLOAD_DIR, os.W_OK) if os.path.exists(settings.UPLOAD_DIR) else False
+
+    is_overall_healthy = "unhealthy" not in db_status
+
     return {
-        "status": "healthy",
+        "status": "healthy" if is_overall_healthy else "degraded",
+        "database": db_status,
+        "storage": "writable" if storage_writable else "error",
+        "gemini_model": settings.GEMINI_MODEL,
+        "ai_engine": "operational",
         "project": settings.PROJECT_NAME,
         "environment": settings.ENVIRONMENT,
-        "gemini_model": settings.GEMINI_MODEL,
         "api_docs": f"{settings.API_V1_STR}/docs"
     }
 

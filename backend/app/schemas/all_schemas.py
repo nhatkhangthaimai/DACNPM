@@ -42,6 +42,20 @@ class RegisterRecruiterRequest(BaseModel):
     company_industry: Optional[str] = None
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+class GenericMessageResponse(BaseModel):
+    message: str
+    status: str = "success"
+
+
 # ================= USER SCHEMAS =================
 class UserResponse(BaseModel):
     id: str

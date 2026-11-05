@@ -12,14 +12,17 @@ Validates:
 
 import os
 import pytest
-from httpx import AsyncClient
+from contextlib import asynccontextmanager
+from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import StaticPool
 from sqlalchemy.future import select
 
 from app.core.config import settings
-from app.core.security import verify_password
+from app.core.security import verify_password, get_password_hash
 from app.models.entities import Company, User, CompanyMember, Job, UserRole, JobStatus
+from app.core.database import Base, get_db
+from app.main import app
 from app.ai.pipeline import (
     calculate_hybrid_match,
     normalize_skill,
@@ -29,16 +32,109 @@ from app.ai.pipeline import (
 )
 from scripts.data_definitions import COMPANIES_DATA, RECRUITERS_DATA, JOBS_DATA, CANDIDATES_DATA
 
-# NullPool engine avoids holding event-loop-bound connections across tests
-test_db_url = settings.DATABASE_URL.replace("@postgres:", "@localhost:")
-isolated_engine = create_async_engine(test_db_url, poolclass=NullPool, echo=False)
-IsolatedSession = async_sessionmaker(bind=isolated_engine, class_=AsyncSession, expire_on_commit=False)
+# In-memory SQLite engine with StaticPool for reliable isolated tests without external Postgres daemon
+test_sqlite_engine = create_async_engine(
+    "sqlite+aiosqlite:///:memory:",
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+    echo=False
+)
+TestSqliteSession = async_sessionmaker(bind=test_sqlite_engine, class_=AsyncSession, expire_on_commit=False)
+
+_SEEDED = False
+
+
+async def ensure_test_db_seeded():
+    global _SEEDED
+    if _SEEDED:
+        return
+    async with test_sqlite_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    demo_pw = get_password_hash("password123")
+    async with TestSqliteSession() as session:
+        # 1. Seed 15 companies
+        for c in COMPANIES_DATA:
+            comp = Company(
+                id=c["id"],
+                name=c["name"],
+                slug=c["slug"],
+                industry=c["industry"],
+                company_size=c["company_size"],
+                address=c["address"],
+                website=c.get("website", ""),
+                logo_url=c.get("logo_url", ""),
+                description=c.get("description", ""),
+                status=c.get("status", "approved")
+            )
+            session.add(comp)
+
+        # 2. Seed 15 recruiters + company memberships
+        for r in RECRUITERS_DATA:
+            rec = User(
+                id=r["id"],
+                email=r["email"],
+                hashed_password=demo_pw,
+                full_name=r["full_name"],
+                phone=r.get("phone", ""),
+                role=UserRole.RECRUITER,
+                is_active=True,
+                is_verified=True
+            )
+            session.add(rec)
+            session.add(CompanyMember(
+                company_id=r["company_id"],
+                user_id=r["id"],
+                role="owner"
+            ))
+
+        # 3. Seed 50 jobs
+        for j in JOBS_DATA:
+            job = Job(
+                id=j["id"],
+                company_id=j["company_id"],
+                creator_id=j.get("creator_id", "user-rec-seed-01"),
+                title=j["title"],
+                description=j["description"],
+                requirements=j["requirements"],
+                benefits=j.get("benefits", ""),
+                job_type=j.get("job_type", "full_time"),
+                location=j["location"],
+                salary_min=j.get("salary_min"),
+                salary_max=j.get("salary_max"),
+                currency=j.get("currency", "VND"),
+                experience_level=j.get("experience_level", "mid"),
+                status=j.get("status", JobStatus.PUBLISHED)
+            )
+            session.add(job)
+
+        # 4. Seed admin user for security test
+        admin = User(
+            id="user-admin-seed",
+            email="admin@hiresense.ai",
+            hashed_password=demo_pw,
+            full_name="Admin Test",
+            role=UserRole.ADMIN,
+            is_active=True,
+            is_verified=True
+        )
+        session.add(admin)
+
+        await session.commit()
+    _SEEDED = True
+
+
+@asynccontextmanager
+async def get_test_session():
+    await ensure_test_db_seeded()
+    async with TestSqliteSession() as session:
+        yield session
 
 
 @pytest.mark.asyncio
 async def test_15_simulated_companies_present():
-    """Verify that all 15 simulated companies exist in PostgreSQL with expected fields."""
-    async with IsolatedSession() as session:
+    """Verify that all 15 simulated companies exist with expected fields."""
+    async with get_test_session() as session:
         result = await session.execute(
             select(Company).where(Company.id.like("comp-seed-%"))
         )
@@ -62,7 +158,7 @@ async def test_15_simulated_companies_present():
 @pytest.mark.asyncio
 async def test_15_recruiters_and_memberships():
     """Verify 15 recruiters exist, password is validly hashed, and each owns their company."""
-    async with IsolatedSession() as session:
+    async with get_test_session() as session:
         result = await session.execute(
             select(User).where(User.id.like("user-rec-seed-%"))
         )
@@ -88,7 +184,7 @@ async def test_15_recruiters_and_memberships():
 @pytest.mark.asyncio
 async def test_50_multi_industry_jds():
     """Verify at least 50 JDs exist across at least 12 distinct industries."""
-    async with IsolatedSession() as session:
+    async with get_test_session() as session:
         result = await session.execute(
             select(Job).where(Job.id.like("job-seed-%"))
         )
@@ -119,8 +215,17 @@ async def test_50_multi_industry_jds():
 
 @pytest.mark.asyncio
 async def test_recruiter_and_admin_security_rbac():
-    """Verify Recruiter login, RBAC restrictions, and company isolation on live local API."""
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as client:
+    """Verify Recruiter login, RBAC restrictions, and company isolation on test client."""
+    await ensure_test_db_seeded()
+
+    async def override_get_db():
+        async with TestSqliteSession() as session:
+            yield session
+
+    app.dependency_overrides[get_db] = override_get_db
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
         # 1. Login as recruiter01
         login_res = await client.post(
             "/api/v1/auth/login",
@@ -169,12 +274,7 @@ async def test_recruiter_and_admin_security_rbac():
         assert created["company_id"] == "comp-seed-01"
         assert created["company_name"] == "NovaTech Solutions"
 
-        # Clean up created test job
-        async with IsolatedSession() as session:
-            job_obj = (await session.execute(select(Job).where(Job.id == created["id"]))).scalars().first()
-            if job_obj:
-                await session.delete(job_obj)
-                await session.commit()
+    app.dependency_overrides.clear()
 
 
 @pytest.mark.asyncio

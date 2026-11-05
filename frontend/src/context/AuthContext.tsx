@@ -7,15 +7,25 @@ const API_BASE_URL = (rawApiUrl && rawApiUrl.startsWith('https://'))
   ? (rawApiUrl.endsWith('/api/v1') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api/v1`)
   : '/api/v1';
 
+// Demo mode is STRICTLY disabled in production. Only enabled if explicitly configured in dev environment.
+export const IS_DEMO_ALLOWED = Boolean(
+  import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_MODE === 'true'
+);
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
   role: UserRole;
   isAuthenticated: boolean;
   isDemoMode: boolean;
+  isDemoAllowed: boolean;
+  authError: string | null;
+  clearAuthError: () => void;
   login: (email: string, password: string, selectedRole?: UserRole) => Promise<boolean>;
   registerCandidate: (data: { email: string; fullName: string; phone?: string; title?: string; password?: string }) => Promise<boolean>;
   registerRecruiter: (data: { email: string; fullName: string; companyName: string; phone?: string; password?: string }) => Promise<boolean>;
+  forgotPassword: (email: string) => Promise<{ success: boolean; message: string }>;
+  resetPassword: (token: string, newPassword: string) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
 }
@@ -74,8 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
-    return localStorage.getItem('hiresense_demo_mode') === 'true';
+    return IS_DEMO_ALLOWED && localStorage.getItem('hiresense_demo_mode') === 'true';
   });
+
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const clearAuthError = () => setAuthError(null);
 
   useEffect(() => {
     if (user) {
@@ -94,16 +108,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [token]);
 
   useEffect(() => {
-    localStorage.setItem('hiresense_demo_mode', String(isDemoMode));
+    if (IS_DEMO_ALLOWED) {
+      localStorage.setItem('hiresense_demo_mode', String(isDemoMode));
+    } else {
+      localStorage.removeItem('hiresense_demo_mode');
+    }
   }, [isDemoMode]);
 
   const login = async (email: string, password: string, selectedRole: UserRole = 'candidate'): Promise<boolean> => {
+    setAuthError(null);
     try {
-      // 1. Try authenticating with backend FastAPI first
+      // 1. Authenticate with backend FastAPI
       const res = await axios.post(`${API_BASE_URL}/auth/login`, {
         email,
         password,
-      }, { timeout: 4000 });
+      }, { timeout: 8000 });
 
       if (res.data && res.data.access_token) {
         const data = res.data;
@@ -122,39 +141,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
       }
     } catch (err: any) {
-      console.warn('Backend login attempt encountered error, checking demo credentials fallback:', err?.message);
+      const detail = err.response?.data?.detail || err.message || 'Email hoặc mật khẩu không chính xác.';
+      // 2. Only if demo mode is explicitly enabled in dev environment, allow fallback
+      if (IS_DEMO_ALLOWED && selectedRole) {
+        const targetUser = DEMO_USERS[selectedRole];
+        const loggedUser: User = {
+          ...targetUser,
+          email: email || targetUser.email,
+        };
+        setUser(loggedUser);
+        setToken(`jwt_${loggedUser.role}_${Date.now()}`);
+        setIsDemoMode(true);
+        return true;
+      }
+      setAuthError(detail);
+      return false;
     }
 
-    // 2. Fallback to Demo persona login if demo credentials match
-    const targetUser = DEMO_USERS[selectedRole];
-    const loggedUser: User = {
-      ...targetUser,
-      email: email || targetUser.email,
-    };
-    const isDemoEmail = Object.values(DEMO_USERS).some(u => u.email === email);
-    if (!isDemoEmail) {
-      const realUser: User = {
-        id: `user-${selectedRole}-${btoa(email).replace(/[^a-z0-9]/gi, '').slice(0, 8)}`,
-        email,
-        fullName: email.split('@')[0],
-        role: selectedRole,
-        isActive: true,
-        isVerified: true,
-        createdAt: new Date().toISOString(),
-      };
-      setUser(realUser);
-      setToken(`jwt_${selectedRole}_${Date.now()}`);
-      setIsDemoMode(false);
-      return true;
-    }
-
-    setUser(loggedUser);
-    setToken(`jwt_${loggedUser.role}_${Date.now()}`);
-    setIsDemoMode(true);
-    return true;
+    setAuthError('Đăng nhập không thành công.');
+    return false;
   };
 
   const registerCandidate = async (data: { email: string; fullName: string; phone?: string; title?: string; password?: string }): Promise<boolean> => {
+    setAuthError(null);
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/register/candidate`, {
         email: data.email,
@@ -162,7 +171,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         full_name: data.fullName,
         phone: data.phone,
         title: data.title,
-      }, { timeout: 5000 });
+      }, { timeout: 8000 });
 
       if (res.data && res.data.access_token) {
         const ret = res.data;
@@ -182,27 +191,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
       }
     } catch (err: any) {
-      console.warn('Backend candidate register error, falling back locally:', err?.message);
+      const detail = err.response?.data?.detail || err.message || 'Đăng ký tài khoản ứng viên thất bại.';
+      setAuthError(detail);
+      return false;
     }
-
-    const userId = `cand-${Date.now()}`;
-    const newUser: User = {
-      id: userId,
-      email: data.email,
-      fullName: data.fullName,
-      phone: data.phone,
-      role: 'candidate',
-      isActive: true,
-      isVerified: true,
-      createdAt: new Date().toISOString(),
-    };
-    setUser(newUser);
-    setToken(`jwt_candidate_${Date.now()}`);
-    setIsDemoMode(false);
-    return true;
+    return false;
   };
 
   const registerRecruiter = async (data: { email: string; fullName: string; companyName: string; phone?: string; password?: string }): Promise<boolean> => {
+    setAuthError(null);
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/register/recruiter`, {
         email: data.email,
@@ -210,7 +207,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         full_name: data.fullName,
         company_name: data.companyName,
         phone: data.phone,
-      }, { timeout: 5000 });
+      }, { timeout: 8000 });
 
       if (res.data && res.data.access_token) {
         const ret = res.data;
@@ -230,35 +227,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
       }
     } catch (err: any) {
-      console.warn('Backend recruiter register error, falling back locally:', err?.message);
+      const detail = err.response?.data?.detail || err.message || 'Đăng ký tài khoản nhà tuyển dụng thất bại.';
+      setAuthError(detail);
+      return false;
     }
+    return false;
+  };
 
-    const newUser: User = {
-      id: `rec-${Date.now()}`,
-      email: data.email,
-      fullName: `${data.fullName} (${data.companyName})`,
-      phone: data.phone,
-      role: 'recruiter',
-      isActive: true,
-      isVerified: true,
-      createdAt: new Date().toISOString(),
-    };
-    setUser(newUser);
-    setToken(`jwt_recruiter_${Date.now()}`);
-    setIsDemoMode(false);
-    return true;
+  const forgotPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+      return { success: true, message: res.data?.message || 'Yêu cầu đặt lại mật khẩu đã được xử lý.' };
+    } catch (err: any) {
+      return { success: false, message: err.response?.data?.detail || 'Không thể gửi yêu cầu đặt lại mật khẩu.' };
+    }
+  };
+
+  const resetPassword = async (resetToken: string, newPassword: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}/auth/reset-password`, { token: resetToken, new_password: newPassword });
+      return { success: true, message: res.data?.message || 'Mật khẩu đã được cập nhật thành công.' };
+    } catch (err: any) {
+      return { success: false, message: err.response?.data?.detail || 'Mã xác nhận không hợp lệ hoặc đã hết hạn.' };
+    }
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    setIsDemoMode(false);
-    localStorage.removeItem('hiresense_user');
-    localStorage.removeItem('hiresense_token');
-    localStorage.removeItem('hiresense_demo_mode');
+    try {
+      if (token) {
+        axios.post(`${API_BASE_URL}/auth/logout`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(() => {});
+      }
+    } finally {
+      setUser(null);
+      setToken(null);
+      setIsDemoMode(false);
+      setAuthError(null);
+      localStorage.removeItem('hiresense_user');
+      localStorage.removeItem('hiresense_token');
+      localStorage.removeItem('hiresense_demo_mode');
+    }
   };
 
   const switchDemoRole = (role: UserRole) => {
+    if (!IS_DEMO_ALLOWED) {
+      console.warn('[Security Guard] Demo role switching is strictly disabled in production.');
+      return;
+    }
     const nextUser = DEMO_USERS[role];
     setUser(nextUser);
     setToken(`jwt_${role}_${Date.now()}`);
@@ -273,9 +289,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: user?.role || 'candidate',
         isAuthenticated: !!user,
         isDemoMode,
+        isDemoAllowed: IS_DEMO_ALLOWED,
+        authError,
+        clearAuthError,
         login,
         registerCandidate,
         registerRecruiter,
+        forgotPassword,
+        resetPassword,
         logout,
         switchDemoRole,
       }}
@@ -284,7 +305,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

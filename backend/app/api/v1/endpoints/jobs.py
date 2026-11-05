@@ -1,15 +1,17 @@
 import re
 import uuid
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from typing import List, Optional, Dict, Any
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.security import get_current_user_payload
-from app.models.entities import Job, JobSkill, Skill, JobStatus, Company, CompanyMember
-from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse
+from app.core.audit import log_audit_event
+from app.core.scam_detector import analyze_job_scam_risk
+from app.models.entities import Job, JobSkill, Skill, JobStatus, Company, CompanyMember, JobReport
+from app.schemas.all_schemas import JobCreate, JobUpdate, JobResponse, GenericMessageResponse
 from app.ai.pipeline import COMMON_MULTI_INDUSTRY_SKILLS, normalize_skill
 
 
@@ -209,9 +211,57 @@ async def get_job_detail(job_id: str, db: AsyncSession = Depends(get_db)):
     )
 
 
+@router.post("/{job_id}/report", response_model=GenericMessageResponse)
+async def report_job(
+    job_id: str,
+    report_data: Dict[str, Any],
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    auth_payload: Optional[dict] = Depends(get_current_user_payload)
+):
+    """
+    Submits a trust & safety report for a suspicious or fraudulent job posting.
+    Complies with Phase 4 recruitment safety standards.
+    """
+    res = await db.execute(select(Job).where(Job.id == job_id))
+    job = res.scalars().first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tin tuyển dụng.")
+
+    reporter_id = auth_payload.get("sub") if auth_payload else None
+    reason = report_data.get("reason", "scam")
+    details = report_data.get("details", "")
+
+    report = JobReport(
+        job_id=job_id,
+        reporter_id=reporter_id,
+        reason=reason,
+        details=details,
+        status="pending"
+    )
+    db.add(report)
+
+    await log_audit_event(
+        db,
+        action="job.reported_suspicious",
+        user_id=reporter_id,
+        target_type="job",
+        target_id=job_id,
+        details={"reason": reason, "details": details[:200]},
+        request=request
+    )
+    await db.commit()
+
+    return GenericMessageResponse(
+        message="Báo cáo của bạn đã được ghi nhận. Quản trị viên sẽ kiểm tra và xử lý theo quy định.",
+        status="success"
+    )
+
+
 @router.post("", response_model=JobResponse)
 async def create_job(
     data: JobCreate,
+    request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: Optional[dict] = Depends(get_current_user_payload)
 ):
@@ -242,6 +292,14 @@ async def create_job(
         if not company:
             raise HTTPException(status_code=400, detail="Doanh nghiệp không tồn tại.")
 
+    # Phase 4 Scam Risk Analysis
+    scam_eval = analyze_job_scam_risk(data.title, data.description, data.requirements)
+    initial_status = JobStatus.PUBLISHED
+    quarantine_reason = None
+    if scam_eval["is_suspicious"]:
+        initial_status = JobStatus.PENDING_APPROVAL
+        quarantine_reason = f"Tự động giữ duyệt: {', '.join(scam_eval['detected_signals'])}"
+
     job = Job(
         company_id=target_company_id,
         creator_id=creator_id,
@@ -255,10 +313,21 @@ async def create_job(
         salary_max=data.salary_max,
         currency=data.currency,
         experience_level=data.experience_level,
-        status=JobStatus.PUBLISHED,
+        status=initial_status,
+        rejection_reason=quarantine_reason,
     )
     db.add(job)
     await db.flush()
+
+    await log_audit_event(
+        db,
+        action="job.created",
+        user_id=creator_id,
+        target_type="job",
+        target_id=job.id,
+        details={"status": initial_status, "scam_risk": scam_eval["risk_score"]},
+        request=request
+    )
 
     # Save skills
     for skill_name in (data.required_skills or []):

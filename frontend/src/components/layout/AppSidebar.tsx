@@ -27,7 +27,7 @@ interface SidebarProps {
 }
 
 export const AppSidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
-  const { user, role, isDemoMode, switchDemoRole, logout } = useAuth();
+  const { user, role, isDemoMode, isDemoAllowed, switchDemoRole, logout } = useAuth();
   const navigate = useNavigate();
 
   const candidateNav = [
@@ -107,7 +107,7 @@ export const AppSidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) =>
 
           {/* Role Section: Demo Mode vs Production Authenticated */}
           <div className="px-6 py-4 border-b border-signal-navy-border bg-signal-navy-dark/40">
-            {isDemoMode ? (
+            {isDemoAllowed && isDemoMode ? (
               <>
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[11px] font-semibold text-signal-lime uppercase tracking-wider flex items-center gap-1.5">

@@ -43,6 +43,31 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 
+def create_password_reset_token(email: str, expires_delta: Optional[timedelta] = None) -> str:
+    """Generate a short-lived signed JWT specifically for password reset (15 minutes)."""
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode = {
+        "exp": expire,
+        "sub": email,
+        "type": "pwd_reset"
+    }
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+
+def decode_password_reset_token(token: str) -> Optional[str]:
+    """Validate password reset token and return user email if valid."""
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("type") != "pwd_reset":
+            return None
+        return payload.get("sub")
+    except JWTError:
+        return None
+
+
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import HTTPException, status, Depends
 
@@ -61,10 +86,24 @@ def get_current_user_payload(credentials: Optional[HTTPAuthorizationCredentials]
     return payload
 
 
+def get_authenticated_user_payload(payload: Optional[dict] = Depends(get_current_user_payload)) -> dict:
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Yêu cầu đăng nhập để truy cập tài nguyên này.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return payload
+
+
 def require_role(*allowed_roles: str):
-    def role_checker(payload: Optional[dict] = Depends(get_current_user_payload)) -> Optional[dict]:
+    def role_checker(payload: Optional[dict] = Depends(get_current_user_payload)) -> dict:
         if payload is None:
-            return None
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Yêu cầu đăng nhập để truy cập tài nguyên này.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         role = payload.get("role")
         if role not in allowed_roles:
             raise HTTPException(

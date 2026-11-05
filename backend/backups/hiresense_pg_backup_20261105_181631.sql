@@ -1,0 +1,2 @@
+-- PostgreSQL HireSense AI Backup Generated at 20261105_181631
+-- Target DB URL: localhost:5432/hiresense_db

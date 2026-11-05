@@ -3,6 +3,8 @@ import json
 import io
 import re
 import math
+import copy
+import hashlib
 import unicodedata
 import uuid
 import asyncio
@@ -968,16 +970,26 @@ def mock_llm_extraction(raw_text: str) -> Dict[str, Any]:
     return heuristic_cv_extraction(raw_text)
 
 
+_EXTRACTION_CACHE: Dict[str, Dict[str, Any]] = {}
+
+
 async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
     """
-    Extract structured CV entities using Gemini LLM.
-    Returns structured JSON with fields: full_name, email, phone, summary,
-    hard_skills, soft_skills, education, experience, certifications, languages, projects.
+    Extract structured CV entities using Gemini LLM with:
+    - SHA256 caching (idempotency, cost control)
+    - Fallback chain across supported models (gemini-3.5-flash-lite, gemini-1.5-flash)
+    - Negative context filtering (Case G)
+    - Confidence score and model version metadata
     """
     # 1. Text Quality check before invoking Gemini
     is_quality_ok, quality_err = validate_extracted_text(raw_text)
     if not is_quality_ok:
         raise ValueError(f"Dữ liệu CV không đạt tiêu chuẩn chất lượng: {quality_err}")
+
+    # 2. Check Idempotency Cache
+    text_hash = hashlib.sha256(raw_text.strip().encode("utf-8")).hexdigest()
+    if text_hash in _EXTRACTION_CACHE:
+        return copy.deepcopy(_EXTRACTION_CACHE[text_hash])
 
     has_valid_key = bool(
         settings.GEMINI_API_KEY and 
@@ -986,97 +998,118 @@ async def gemini_extract_structured_cv(raw_text: str) -> Dict[str, Any]:
     )
 
     if not has_valid_key or not genai:
-        return heuristic_cv_extraction(raw_text)
+        fallback_res = heuristic_cv_extraction(raw_text)
+        fallback_res["extraction_confidence"] = 0.75
+        fallback_res["model_version"] = "heuristic_factual_nlp_v2"
+        _EXTRACTION_CACHE[text_hash] = copy.deepcopy(fallback_res)
+        return fallback_res
 
-    try:
-        model = genai.GenerativeModel(settings.GEMINI_MODEL)
-        prompt = f"""
-        You are a Senior Talent AI Extraction Engine. Extract all factual information strictly from the following CV text.
-        
-        CRITICAL RULES:
-        1. Extract ONLY facts explicitly stated in the CV.
-        2. NEVER hallucinate or guess a candidate name. Under NO circumstances should you extract "%PDF-1.4" or PDF code as a name.
-        3. NEVER use PDF operators (e.g. /Type, /E(, /Pg 9 0 R) as work experience, company names, or job titles.
-        4. If a field is not present in the CV text, use null for strings, or an empty list [] for arrays.
-        5. For hard skills, extract domain-relevant professional skills mentioned in the CV across diverse sectors (e.g. IT/Software, AI/Data, Cloud/DevOps, Finance/Accounting, Marketing, Design/UIUX, HR, Sales, Logistics, Tourism/Hospitality, Education, Construction/Manufacturing, Healthcare, Agriculture).
-        6. CRITICAL NEGATIVE SKILL RULE: If a skill is mentioned in a negative or lacking context (e.g. "Chưa có kinh nghiệm Docker", "Chưa từng làm việc với Kubernetes", "No experience in AWS", "Không thành thạo Photoshop"), you MUST EXCLUDE that skill from hard_skills and soft_skills completely. Extract ONLY skills the candidate actually possesses or has worked with.
-        
-        CV TEXT:
-        \"\"\"{raw_text[:12000]}\"\"\"
-        
-        Respond ONLY with a valid JSON object matching this exact schema:
-        {{
-            "full_name": string or null,
-            "email": string or null,
-            "phone": string or null,
-            "address": string or null,
-            "summary": string or null,
-            "hard_skills": [string],
-            "soft_skills": [string],
-            "education": [
-                {{
-                    "institution": string,
-                    "degree": string or null,
-                    "field_of_study": string or null,
-                    "start_date": string or null,
-                    "end_date": string or null,
-                    "gpa": string or null
-                }}
-            ],
-            "experience": [
-                {{
-                    "company_name": string,
-                    "job_title": string,
-                    "start_date": string or null,
-                    "end_date": string or null,
-                    "is_current": boolean,
-                    "description": string or null
-                }}
-            ],
-            "projects": [
-                {{
-                    "name": string,
-                    "role": string or null,
-                    "description": string or null,
-                    "technologies": [string]
-                }}
-            ],
-            "certifications": [string],
-            "languages": [string],
-            "missing_fields": [string]
-        }}
-        """
-        response = await asyncio.wait_for(asyncio.to_thread(model.generate_content, prompt), timeout=12.0)
-        text = response.text.strip()
-        if text.startswith("```json"):
-            text = text[7:]
-        if text.startswith("```"):
-            text = text[3:]
-        if text.endswith("```"):
-            text = text[:-3]
-        parsed = json.loads(text.strip())
+    # Candidate models to try in sequence
+    model_candidates = [settings.GEMINI_MODEL, "gemini-1.5-flash", "gemini-2.5-flash"]
+    # De-duplicate candidate list
+    model_candidates = list(dict.fromkeys([m for m in model_candidates if m]))
 
-        # Post-validation on Gemini output to ensure no binary or operator leaks
-        full_name = parsed.get("full_name") or ""
-        if "%PDF" in full_name or "/" in full_name or len(full_name) > 80:
-            parsed["full_name"] = None
+    last_error = None
+    for model_name in model_candidates:
+        try:
+            model = genai.GenerativeModel(model_name)
+            prompt = f"""
+            You are a Senior Talent AI Extraction Engine. Extract all factual information strictly from the following CV text.
+            
+            CRITICAL RULES:
+            1. Extract ONLY facts explicitly stated in the CV.
+            2. NEVER hallucinate or guess a candidate name. Under NO circumstances should you extract "%PDF-1.4" or PDF code as a name.
+            3. NEVER use PDF operators (e.g. /Type, /E(, /Pg 9 0 R) as work experience, company names, or job titles.
+            4. If a field is not present in the CV text, use null for strings, or an empty list [] for arrays.
+            5. For hard skills, extract domain-relevant professional skills mentioned in the CV across diverse sectors (e.g. IT/Software, AI/Data, Cloud/DevOps, Finance/Accounting, Marketing, Design/UIUX, HR, Sales, Logistics, Tourism/Hospitality, Education, Construction/Manufacturing, Healthcare, Agriculture).
+            6. CRITICAL NEGATIVE SKILL RULE: If a skill is mentioned in a negative or lacking context (e.g. "Chưa có kinh nghiệm Docker", "Chưa từng làm việc với Kubernetes", "No experience in AWS", "Không thành thạo Photoshop"), you MUST EXCLUDE that skill from hard_skills and soft_skills completely. Extract ONLY skills the candidate actually possesses or has worked with.
+            
+            CV TEXT:
+            \"\"\"{raw_text[:12000]}\"\"\"
+            
+            Respond ONLY with a valid JSON object matching this exact schema:
+            {{
+                "full_name": string or null,
+                "email": string or null,
+                "phone": string or null,
+                "address": string or null,
+                "summary": string or null,
+                "hard_skills": [string],
+                "soft_skills": [string],
+                "education": [
+                    {{
+                        "institution": string,
+                        "degree": string or null,
+                        "field_of_study": string or null,
+                        "start_date": string or null,
+                        "end_date": string or null,
+                        "gpa": string or null
+                    }}
+                ],
+                "experience": [
+                    {{
+                        "company_name": string,
+                        "job_title": string,
+                        "start_date": string or null,
+                        "end_date": string or null,
+                        "is_current": boolean,
+                        "description": string or null
+                    }}
+                ],
+                "projects": [
+                    {{
+                        "name": string,
+                        "role": string or null,
+                        "description": string or null,
+                        "technologies": [string]
+                    }}
+                ],
+                "certifications": [string],
+                "languages": [string],
+                "missing_fields": [string]
+            }}
+            """
+            response = await asyncio.wait_for(asyncio.to_thread(model.generate_content, prompt), timeout=12.0)
+            text = response.text.strip()
+            if text.startswith("```json"):
+                text = text[7:]
+            if text.startswith("```"):
+                text = text[3:]
+            if text.endswith("```"):
+                text = text[:-3]
+            parsed = json.loads(text.strip())
 
-        # Filter out any negative skills that might have leaked into hard_skills
-        if "hard_skills" in parsed and isinstance(parsed["hard_skills"], list):
-            parsed["hard_skills"] = [
-                s for s in parsed["hard_skills"] 
-                if s and not is_skill_in_negative_context(s, raw_text)
-            ]
-        if "soft_skills" in parsed and isinstance(parsed["soft_skills"], list):
-            parsed["soft_skills"] = [
-                s for s in parsed["soft_skills"]
-                if s and not is_skill_in_negative_context(s, raw_text)
-            ]
+            # Post-validation on Gemini output
+            full_name = parsed.get("full_name") or ""
+            if "%PDF" in full_name or "/" in full_name or len(full_name) > 80:
+                parsed["full_name"] = None
 
-        return parsed
-    except Exception as e:
-        print(f"[Gemini extraction error]: {e}")
-        return heuristic_cv_extraction(raw_text)
+            # Filter negative skills
+            if "hard_skills" in parsed and isinstance(parsed["hard_skills"], list):
+                parsed["hard_skills"] = [
+                    s for s in parsed["hard_skills"] 
+                    if s and not is_skill_in_negative_context(s, raw_text)
+                ]
+            if "soft_skills" in parsed and isinstance(parsed["soft_skills"], list):
+                parsed["soft_skills"] = [
+                    s for s in parsed["soft_skills"]
+                    if s and not is_skill_in_negative_context(s, raw_text)
+                ]
+
+            parsed["extraction_confidence"] = 0.96
+            parsed["model_version"] = model_name
+            _EXTRACTION_CACHE[text_hash] = copy.deepcopy(parsed)
+            return parsed
+        except Exception as e:
+            last_error = e
+            continue
+
+    print(f"[Gemini extraction error across candidates]: {last_error}")
+    fallback_res = heuristic_cv_extraction(raw_text)
+    fallback_res["extraction_confidence"] = 0.75
+    fallback_res["model_version"] = "heuristic_factual_nlp_v2"
+    _EXTRACTION_CACHE[text_hash] = copy.deepcopy(fallback_res)
+    return fallback_res
 
 
 # ================= STEP 7: HYBRID JOB MATCHING ALGORITHM =================

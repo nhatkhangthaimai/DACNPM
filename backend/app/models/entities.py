@@ -107,6 +107,9 @@ class Company(Base):
     address = Column(String(500), nullable=True)
     description = Column(Text, nullable=True)
     status = Column(String(50), default="approved", nullable=False)  # pending, approved, rejected
+    tax_id = Column(String(50), nullable=True)
+    verification_status = Column(String(50), default="unverified", nullable=False)  # unverified, pending, verified, rejected
+    verified_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
 
@@ -233,6 +236,7 @@ class Job(Base):
     job_skills = relationship("JobSkill", back_populates="job", cascade="all, delete-orphan")
     applications = relationship("Application", back_populates="job", cascade="all, delete-orphan")
     match_results = relationship("MatchResult", back_populates="job", cascade="all, delete-orphan")
+    reports = relationship("JobReport", back_populates="job", cascade="all, delete-orphan")
 
 
 class JobSkill(Base):
@@ -258,6 +262,8 @@ class Application(Base):
     status = Column(String(50), default=ApplicationStatus.SUBMITTED, nullable=False, index=True)
     cover_letter = Column(Text, nullable=True)
     internal_notes = Column(Text, nullable=True)
+    interview_time = Column(DateTime(timezone=True), nullable=True)
+    interview_location = Column(String(255), nullable=True)
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
 
@@ -302,3 +308,64 @@ class AuditLog(Base):
     created_at = Column(DateTime(timezone=True), default=utc_now)
 
     user = relationship("User", back_populates="audit_logs")
+
+
+class DataConsent(Base):
+    __tablename__ = "data_consents"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    consent_type = Column(String(100), nullable=False)  # cv_ai_processing, recruiter_sharing, privacy_policy
+    granted = Column(Boolean, default=True, nullable=False)
+    ip_address = Column(String(50), nullable=True)
+    granted_at = Column(DateTime(timezone=True), default=utc_now)
+    revoked_at = Column(DateTime(timezone=True), nullable=True)
+
+    user = relationship("User")
+
+
+class DataRequest(Base):
+    __tablename__ = "data_requests"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    request_type = Column(String(50), nullable=False)  # export_data, delete_all_data, rectify_data
+    status = Column(String(50), default="pending", nullable=False)  # pending, completed, rejected
+    details = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+    user = relationship("User")
+
+
+class JobReport(Base):
+    __tablename__ = "job_reports"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    job_id = Column(String(36), ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False, index=True)
+    reporter_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    reason = Column(String(100), nullable=False)  # scam, fake_company, illegal_fee, inappropriate, other
+    details = Column(Text, nullable=True)
+    status = Column(String(50), default="pending", nullable=False)  # pending, reviewed, action_taken, dismissed
+    action_taken = Column(String(100), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+
+    job = relationship("Job", back_populates="reports")
+    reporter = relationship("User")
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    message = Column(Text, nullable=False)
+    type = Column(String(50), default="system", nullable=False)  # application_update, cv_processed, interview, job_moderated, system
+    link = Column(String(255), nullable=True)
+    is_read = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+
+    user = relationship("User")
+
