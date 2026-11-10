@@ -1,0 +1,234 @@
+// =====================================================================================
+// HIRESENSE AI - DATABASE SCHEMA CHO DBDATABASE.IO / DBDiagram.io
+// Copy toan bo noi dung file nay va dan vao https://dbdiagram.io de ve so do tu dong
+// Co phan chia mau sac truc quan theo tung Module!
+// =====================================================================================
+
+// --- MODULE 1: AUTH & IDENTITY (Mau Xanh Duong) ---
+Table users as U [headercolor: #1e3a8a] {
+  id varchar [pk]
+  email varchar [unique, not null]
+  hashed_password varchar [not null]
+  full_name varchar [not null]
+  phone varchar
+  role varchar [note: 'candidate | recruiter | admin']
+  is_active boolean [default: true]
+  is_verified boolean [default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table candidate_profiles as CP [headercolor: #1e3a8a] {
+  id varchar [pk]
+  user_id varchar [ref: - U.id, unique, not null]
+  title varchar
+  bio text
+  location varchar
+  years_of_experience float
+  expected_salary int
+  github_url varchar
+  linkedin_url varchar
+  portfolio_url varchar
+  created_at timestamp
+}
+
+Table companies as C [headercolor: #1e3a8a] {
+  id varchar [pk]
+  name varchar [not null]
+  slug varchar [unique, not null]
+  logo_url varchar
+  website varchar
+  industry varchar
+  company_size varchar
+  address varchar
+  description text
+  status varchar
+  tax_id varchar
+  verification_status varchar
+  created_at timestamp
+}
+
+Table company_members as CM [headercolor: #1e3a8a] {
+  id varchar [pk]
+  company_id varchar [ref: > C.id, not null]
+  user_id varchar [ref: > U.id, not null]
+  role varchar [note: 'owner | recruiter | interviewer']
+  created_at timestamp
+}
+
+// --- MODULE 2: CV PROCESSING & OCR (Mau Xanh La) ---
+Table cvs as CV [headercolor: #065f46] {
+  id varchar [pk]
+  candidate_id varchar [ref: > CP.id, not null]
+  file_name varchar [not null]
+  file_url varchar [not null]
+  file_size int [not null]
+  mime_type varchar [not null]
+  raw_text text
+  is_primary boolean [default: false]
+  extraction_status varchar [note: 'pending | processing | completed | failed']
+  extraction_error text
+  content_validated boolean [default: false]
+  parsed_data json
+  embedding vector_768
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table education_records as EDU [headercolor: #065f46] {
+  id varchar [pk]
+  cv_id varchar [ref: > CV.id, not null]
+  institution varchar [not null]
+  degree varchar
+  field_of_study varchar
+  start_date varchar
+  end_date varchar
+  gpa varchar
+  description text
+}
+
+Table experience_records as EXP [headercolor: #065f46] {
+  id varchar [pk]
+  cv_id varchar [ref: > CV.id, not null]
+  company_name varchar [not null]
+  job_title varchar [not null]
+  start_date varchar
+  end_date varchar
+  is_current boolean [default: false]
+  description text
+}
+
+Table skills as SK [headercolor: #065f46] {
+  id varchar [pk]
+  name varchar [unique, not null]
+  category varchar [note: 'hard | soft | tool | lang']
+  normalized_name varchar [not null]
+}
+
+Table cv_skills as CVSK [headercolor: #065f46] {
+  id varchar [pk]
+  cv_id varchar [ref: > CV.id, not null]
+  skill_id varchar [ref: > SK.id, not null]
+  proficiency_level varchar
+  years_of_experience float
+}
+
+// --- MODULE 3: JOB MANAGEMENT (Mau Cam) ---
+Table jobs as J [headercolor: #9a3412] {
+  id varchar [pk]
+  company_id varchar [ref: > C.id, not null]
+  creator_id varchar [ref: > U.id]
+  title varchar [not null]
+  description text [not null]
+  requirements text [not null]
+  benefits text
+  job_type varchar
+  location varchar [not null]
+  salary_min int
+  salary_max int
+  currency varchar [default: 'VND']
+  experience_level varchar
+  status varchar [note: 'draft | published | closed']
+  rejection_reason text
+  embedding vector_768
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table job_skills as JSK [headercolor: #9a3412] {
+  id varchar [pk]
+  job_id varchar [ref: > J.id, not null]
+  skill_id varchar [ref: > SK.id, not null]
+  is_required boolean [default: true]
+  importance_weight float [default: 1.0]
+}
+
+Table job_reports as JR [headercolor: #9a3412] {
+  id varchar [pk]
+  job_id varchar [ref: > J.id, not null]
+  reporter_id varchar [ref: > U.id]
+  reason varchar [not null]
+  details text
+  status varchar [default: 'pending']
+  action_taken varchar
+  created_at timestamp
+}
+
+// --- MODULE 4: AI HYBRID MATCHING (Mau Tim) ---
+Table match_results as MR [headercolor: #581c87] {
+  id varchar [pk]
+  job_id varchar [ref: > J.id, not null]
+  cv_id varchar [ref: > CV.id, not null]
+  application_id varchar [unique]
+  overall_score float [not null]
+  hard_skills_score float [default: 0.0]
+  semantic_score float [default: 0.0]
+  experience_score float [default: 0.0]
+  matched_skills json
+  missing_required_skills json
+  missing_preferred_skills json
+  ai_explanation text
+  recommendations json
+  created_at timestamp
+}
+
+// --- MODULE 5: ATS & APPLICATIONS (Mau Xanh Mint) ---
+Table applications as APP [headercolor: #0f766e] {
+  id varchar [pk]
+  job_id varchar [ref: > J.id, not null]
+  candidate_id varchar [ref: > U.id, not null]
+  cv_id varchar [ref: > CV.id, not null]
+  status varchar [note: 'submitted | reviewing | shortlisted | interviewed | offered | rejected']
+  cover_letter text
+  internal_notes text
+  interview_time timestamp
+  interview_location varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table notifications as N [headercolor: #0f766e] {
+  id varchar [pk]
+  user_id varchar [ref: > U.id, not null]
+  title varchar [not null]
+  message text [not null]
+  type varchar [default: 'system']
+  link varchar
+  is_read boolean [default: false]
+  created_at timestamp
+}
+
+Ref: MR.application_id - APP.id
+
+// --- MODULE 6: SECURITY & PRIVACY (Mau Xam Dam) ---
+Table audit_logs as AL [headercolor: #334155] {
+  id varchar [pk]
+  user_id varchar [ref: > U.id]
+  action varchar [not null]
+  target_type varchar
+  target_id varchar
+  details json
+  ip_address varchar
+  created_at timestamp
+}
+
+Table data_consents as DC [headercolor: #334155] {
+  id varchar [pk]
+  user_id varchar [ref: > U.id, not null]
+  consent_type varchar [not null]
+  granted boolean [default: true]
+  ip_address varchar
+  granted_at timestamp
+  revoked_at timestamp
+}
+
+Table data_requests as DR [headercolor: #334155] {
+  id varchar [pk]
+  user_id varchar [ref: > U.id, not null]
+  request_type varchar [not null]
+  status varchar [default: 'pending']
+  details json
+  created_at timestamp
+  completed_at timestamp
+}
+

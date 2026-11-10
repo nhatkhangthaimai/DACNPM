@@ -1,0 +1,121 @@
+<mxfile host="app.diagrams.net" modified="2026-11-10T00:00:00.000Z" agent="HireSense AI" version="21.0.0">
+  <diagram id="erd_mod6" name="7. Module 6 - Security &amp; Privacy">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="980" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_erd_mod6" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 6: BẢO MẬT &amp; QUYỀN RIÊNG TƯ DỮ LIỆU (SECURITY &amp; PRIVACY)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Tuân thủ Nghị định 13/2023/NĐ-CP &amp; GDPR: Nhật ký bảo mật (audit_logs), Chấp thuận (data_consents), Quyền DSR (data_requests)&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="880" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_users" value="users (auth)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="250" height="253" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_1" value="[UQ] email : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_2" value="        hashed_password : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_3" value="        full_name : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_4" value="        phone : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_5" value="        role : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_6" value="        is_active : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_7" value="        is_verified : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_8" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_audit_logs" value="audit_logs (sec)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="100" width="250" height="203" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_1" value="[FK] user_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_2" value="        action : varchar(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_3" value="        target_type : varchar(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_4" value="        target_id : varchar(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_5" value="        ip_address : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_audit_logs_6" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_audit_logs">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_data_consents" value="data_consents (sec)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="390" width="250" height="203" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_1" value="[FK] user_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_2" value="        consent_type : varchar(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_3" value="        granted : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_4" value="        ip_address : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_5" value="        granted_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_consents_6" value="        revoked_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_consents">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_data_requests" value="data_requests (sec)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="680" width="250" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_1" value="[FK] user_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_2" value="        request_type : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_3" value="        status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_4" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_data_requests_5" value="        completed_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_data_requests">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_users" target="tbl_audit_logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_users" target="tbl_data_consents">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_users" target="tbl_data_requests">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

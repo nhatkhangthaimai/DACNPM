@@ -1,0 +1,130 @@
+<mxfile host="app.diagrams.net" modified="2026-11-10T00:00:00.000Z" agent="HireSense AI" version="21.0.0">
+  <diagram id="erd_mod1" name="2. Module 1 - Auth &amp; Identity">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_erd_mod1" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 1: XÁC THỰC &amp; HỒ SƠ NGƯỜI DÙNG (AUTH &amp; IDENTITY)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Quản lý Tài khoản (users), Hồ sơ ứng viên (candidate_profiles), Doanh nghiệp (companies), Thành viên (company_members)&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="880" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_users" value="users (auth)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="250" height="253" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_1" value="[UQ] email : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_2" value="        hashed_password : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_3" value="        full_name : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_4" value="        phone : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_5" value="        role : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_6" value="        is_active : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_7" value="        is_verified : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_users_8" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_users">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_candidate_profiles" value="candidate_profiles (auth)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="110" width="250" height="253" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_1" value="[FK] user_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_2" value="        title : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_3" value="        bio : nvarchar(max)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_4" value="        location : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_5" value="        years_of_experience : float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_6" value="        expected_salary : int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_7" value="        github_url : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_candidate_profiles_8" value="        linkedin_url : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_candidate_profiles">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_company_members" value="company_members (auth)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="500" width="250" height="153" as="geometry" />
+        </mxCell>
+        <mxCell id="col_company_members_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_company_members">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_company_members_1" value="[FK] company_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_company_members">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_company_members_2" value="[FK] user_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_company_members">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_company_members_3" value="        role : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_company_members">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_company_members_4" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_company_members">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_companies" value="companies (auth)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="500" width="250" height="253" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_1" value="[UQ] slug : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_2" value="        name : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_3" value="        industry : varchar(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_4" value="        company_size : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_5" value="        address : varchar(500)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_6" value="        status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_7" value="        verification_status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_companies_8" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_companies">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c1" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_users" target="tbl_candidate_profiles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.35;exitY=1;exitDx=0;exitDy=0;entryX=0.35;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_users" target="tbl_company_members">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_companies" target="tbl_company_members">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

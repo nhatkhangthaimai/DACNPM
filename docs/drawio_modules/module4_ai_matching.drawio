@@ -1,0 +1,166 @@
+<mxfile host="app.diagrams.net" modified="2026-11-10T00:00:00.000Z" agent="HireSense AI" version="21.0.0">
+  <diagram id="erd_mod4" name="5. Module 4 - AI Matching">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_erd_mod4" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 4: SO KHỚP AI HYBRID (AI MATCHING &amp; SCORING)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Thuật toán Hybrid: Hard Skills (50%) + Semantic Embedding (30%) + Experience (20%) &amp; Giải thích AI&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="930" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_cvs" value="cvs (cv)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="250" height="303" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_1" value="[FK] candidate_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_2" value="        file_name : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_3" value="        file_url : varchar(500)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_4" value="        file_size : int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_5" value="        is_primary : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_6" value="        extraction_status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_7" value="        content_validated : boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_8" value="        parsed_data : json" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_9" value="        embedding : vector(768)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="253" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_cvs_10" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_cvs">
+          <mxGeometry y="278" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_match_results" value="match_results (matching)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="110" width="260" height="303" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="28" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_1" value="[FK] job_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="53" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_2" value="[FK] cv_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="78" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_3" value="[FK] application_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="103" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_4" value="        overall_score : float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="128" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_5" value="        hard_skills_score : float (50%)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="153" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_6" value="        semantic_score : float (30%)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="178" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_7" value="        experience_score : float (20%)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="203" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_8" value="        ai_explanation : nvarchar(max)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="228" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_9" value="        recommendations : json" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="253" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_match_results_10" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_match_results">
+          <mxGeometry y="278" width="260" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_jobs" value="jobs (job)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="250" height="353" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_1" value="[FK] company_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_2" value="[FK] creator_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_3" value="        title : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_4" value="        job_type : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_5" value="        location : varchar(255)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_6" value="        salary_min : int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_7" value="        salary_max : int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_8" value="        currency : varchar(10)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="228" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_9" value="        experience_level : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="253" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_10" value="        status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="278" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_11" value="        embedding : vector(768)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="303" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_jobs_12" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_jobs">
+          <mxGeometry y="328" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_applications" value="applications (ats)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="540" width="250" height="228" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_0" value="[PK] id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="28" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_1" value="[FK] job_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="53" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_2" value="[FK] candidate_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="78" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_3" value="[FK] cv_id : varchar(36)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=1;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="103" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_4" value="        status : varchar(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="128" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_5" value="        cover_letter : nvarchar(max)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="153" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_6" value="        interview_time : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="178" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col_applications_7" value="        created_at : datetime2" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=6;overflow=hidden;rotatable=0;fontStyle=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="tbl_applications">
+          <mxGeometry y="203" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_cvs" target="tbl_match_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_jobs" target="tbl_match_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c3" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_applications" target="tbl_match_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;" edge="1" parent="1" source="tbl_jobs" target="tbl_applications">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

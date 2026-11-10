@@ -1,0 +1,791 @@
+<mxfile host="app.diagrams.net" modified="2026-11-10T00:00:00.000Z" agent="HireSense AI" version="21.0.0">
+  <diagram id="uml_overview_perfect" name="1. UML Tổng thể Hệ thống">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1820" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_overview_perfect" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;HIRESENSE AI — BIỂU ĐỒ LỚP UML TỔNG THỂ HỆ THỐNG&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Bố cục 3 Cột: Phân hệ Ứng viên (Trái) — So khớp AI &amp; ATS (Giữa) — Phân hệ Tuyển dụng (Phải)&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1700" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_EducationRecord" value="EducationRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_EducationRecord" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ institution : String&#xa;+ degree : String&#xa;+ field_of_study : String&#xa;+ start_date : String&#xa;+ end_date : String&#xa;+ gpa : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_EducationRecord" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_EducationRecord" value="+ get_study_duration_years() : Float&#xa;+ is_completed() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="196" width="270" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_ExperienceRecord" value="ExperienceRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="430" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_ExperienceRecord" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ company_name : String&#xa;+ job_title : String&#xa;+ start_date : String&#xa;+ end_date : String&#xa;+ is_current : Boolean&#xa;+ description : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_ExperienceRecord" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_ExperienceRecord" value="+ calculate_duration_months() : Integer&#xa;+ extract_key_achievements() : List&lt;String&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="196" width="270" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Notification" value="Notification" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="780" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Notification" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ title : String&#xa;+ message : String&#xa;+ type : NotificationType&#xa;+ is_read : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Notification">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Notification" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Notification">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Notification" value="+ mark_as_read() : void&#xa;+ send_push_alert() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Notification">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CandidateProfile" value="CandidateProfile" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="120" width="270" height="282" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CandidateProfile" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ title : String&#xa;+ bio : String&#xa;+ location : String&#xa;+ years_of_experience : Float&#xa;+ expected_salary : Integer&#xa;+ github_url : String&#xa;+ linkedin_url : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CandidateProfile" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CandidateProfile" value="+ update_profile(data) : void&#xa;+ get_primary_cv() : CV&#xa;+ calculate_profile_completeness() : Int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="215" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CV" value="CV" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="430" width="270" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CV" value="+ id : UUID [PK]&#xa;+ candidate_id : UUID [FK]&#xa;+ file_name : String&#xa;+ file_url : String&#xa;+ file_size : Integer&#xa;+ mime_type : String&#xa;+ is_primary : Boolean&#xa;+ extraction_status : ExtractionStatus&#xa;+ parsed_data : JSON&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="26" width="270" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CV" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CV">
+          <mxGeometry y="226" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CV" value="+ set_as_primary() : void&#xa;+ is_valid_for_matching() : Boolean&#xa;+ get_embedding_vector() : Float[]&#xa;+ trigger_re_extraction() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="234" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CVSkill" value="CVSkill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="800" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CVSkill" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ skill_id : UUID [FK]&#xa;+ proficiency_level : String&#xa;+ years_of_experience : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="26" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CVSkill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="131" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CVSkill" value="+ get_proficiency_weight() : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="139" width="250" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="class_User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="120" width="270" height="301" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_User" value="+ id : UUID [PK]&#xa;+ email : String [UQ]&#xa;- hashed_password : String&#xa;+ full_name : String&#xa;+ phone : String&#xa;+ role : UserRole&#xa;+ is_active : Boolean&#xa;+ is_verified : Boolean&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_User" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_User">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_User" value="+ verify_password(plain) : Boolean&#xa;+ has_role(required_role) : Boolean&#xa;+ change_password(new_pwd) : Boolean&#xa;+ update_profile(data) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="215" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_MatchResult" value="MatchResult" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="430" width="280" height="282" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_MatchResult" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ cv_id : UUID [FK]&#xa;+ application_id : UUID [FK]&#xa;+ overall_score : Float&#xa;+ hard_skills_score : Float (50%)&#xa;+ semantic_score : Float (30%)&#xa;+ experience_score : Float (20%)&#xa;+ ai_explanation : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="26" width="280" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_MatchResult" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="207" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_MatchResult" value="+ compute_hybrid_score() : Float&#xa;+ generate_explanation() : String&#xa;+ get_skills_gap_analysis() : Dict" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="215" width="280" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Application" value="Application" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="800" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Application" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ candidate_id : UUID [FK]&#xa;+ cv_id : UUID [FK]&#xa;+ status : ApplicationStatus&#xa;+ interview_time : DateTime&#xa;+ cover_letter : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="26" width="270" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Application" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Application">
+          <mxGeometry y="169" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Application" value="+ advance_status(new_status) : void&#xa;+ schedule_interview(time, loc) : void&#xa;+ reject_application(feedback) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="177" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Skill" value="Skill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1080" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Skill" value="+ id : UUID [PK]&#xa;+ name : String [UQ]&#xa;+ category : SkillCategory&#xa;+ normalized_name : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="26" width="250" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Skill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Skill">
+          <mxGeometry y="112" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Skill" value="+ normalize_name(raw) : String&#xa;+ is_hard_skill() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="120" width="250" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CompanyMember" value="CompanyMember" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="120" width="270" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CompanyMember" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ user_id : UUID [FK]&#xa;+ role : MemberRole&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="26" width="270" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CompanyMember" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="131" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CompanyMember" value="+ has_admin_permission() : Boolean&#xa;+ can_post_jobs() : Boolean&#xa;+ can_review_applications() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="139" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Job" value="Job" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="430" width="270" height="339" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Job" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ creator_id : UUID [FK]&#xa;+ title : String&#xa;+ job_type : JobType&#xa;+ location : String&#xa;+ salary_min : Integer&#xa;+ salary_max : Integer&#xa;+ experience_level : String&#xa;+ status : JobStatus&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="26" width="270" height="219" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Job" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Job">
+          <mxGeometry y="245" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Job" value="+ publish() : void&#xa;+ close() : void&#xa;+ is_accepting_applications() : Boolean&#xa;+ get_required_skills() : List&lt;Skill&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="253" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_JobSkill" value="JobSkill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="840" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_JobSkill" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ skill_id : UUID [FK]&#xa;+ is_required : Boolean&#xa;+ importance_weight : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="26" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_JobSkill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="131" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_JobSkill" value="+ calculate_weighted_score() : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="139" width="250" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Company" value="Company" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="120" width="270" height="263" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Company" value="+ id : UUID [PK]&#xa;+ name : String&#xa;+ slug : String [UQ]&#xa;+ logo_url : String&#xa;+ website : String&#xa;+ industry : String&#xa;+ company_size : String&#xa;+ verification_status : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Company" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Company">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Company" value="+ is_verified() : Boolean&#xa;+ verify_company() : void&#xa;+ get_active_jobs() : List&lt;Job&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="196" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_JobReport" value="JobReport" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="430" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_JobReport" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ reporter_id : UUID [FK]&#xa;+ reason : String&#xa;+ status : ReportStatus&#xa;+ action_taken : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_JobReport" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_JobReport" value="+ resolve(action, note) : void&#xa;+ dismiss() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_AuditLog" value="AuditLog" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="680" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_AuditLog" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ action : String&#xa;+ target_type : String&#xa;+ target_id : String&#xa;+ ip_address : String&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="26" width="260" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_AuditLog" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="169" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_AuditLog" value="+ log_event(action, target) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="177" width="260" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="class_DataConsent" value="DataConsent" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="930" width="260" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_DataConsent" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ consent_type : String&#xa;+ granted : Boolean&#xa;+ granted_at : DateTime&#xa;+ revoked_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_DataConsent" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_DataConsent" value="+ grant_consent() : void&#xa;+ revoke_consent() : void&#xa;+ is_active() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="158" width="260" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_DataRequest" value="DataRequest" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="1180" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_DataRequest" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ request_type : RequestType&#xa;+ status : RequestStatus&#xa;+ created_at : DateTime&#xa;+ completed_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_DataRequest" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_DataRequest" value="+ execute_data_export() : JSON&#xa;+ execute_erasure() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp1" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_User" target="class_CandidateProfile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CandidateProfile" target="class_CV">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.2;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_EducationRecord">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.6;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_ExperienceRecord">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp5" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_CVSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.35;exitDx=0;exitDy=0;entryX=1;entryY=0.35;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_Company" target="class_CompanyMember">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_agg1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=0;startSize=12;endArrow=none;" edge="1" parent="1" source="class_User" target="class_CompanyMember">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Company" target="class_Job">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_comp6" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_Job" target="class_JobSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_rep" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_JobReport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc5" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CV" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_app_match" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Application" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_cv_app" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CV" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_job_app" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.85;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Skill" target="class_CVSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_jsk" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Skill" target="class_JobSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc6" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.2;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_Notification">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+            <mxPoint x="760" y="80" />
+            <mxPoint x="185" y="80" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u_assoc_audit" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_AuditLog">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+            <mxPoint x="910" y="80" />
+            <mxPoint x="1505" y="80" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u_assoc_consent" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_AuditLog" target="class_DataConsent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u_assoc_req" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_DataConsent" target="class_DataRequest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod1" name="2. Module 1 - Auth &amp; Identity">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod1" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 1: BIỂU ĐỒ LỚP PHÂN HỆ XÁC THỰC &amp; HỒ SƠ (AUTH &amp; IDENTITY)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp User, CandidateProfile, Company, CompanyMember cùng các phương thức kiểm tra mật khẩu, phân quyền RBAC&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="880" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="270" height="301" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_User" value="+ id : UUID [PK]&#xa;+ email : String [UQ]&#xa;- hashed_password : String&#xa;+ full_name : String&#xa;+ phone : String&#xa;+ role : UserRole&#xa;+ is_active : Boolean&#xa;+ is_verified : Boolean&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_User" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_User">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_User" value="+ verify_password(plain) : Boolean&#xa;+ has_role(required_role) : Boolean&#xa;+ change_password(new_pwd) : Boolean&#xa;+ update_profile(data) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="215" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CandidateProfile" value="CandidateProfile" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="110" width="270" height="282" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CandidateProfile" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ title : String&#xa;+ bio : String&#xa;+ location : String&#xa;+ years_of_experience : Float&#xa;+ expected_salary : Integer&#xa;+ github_url : String&#xa;+ linkedin_url : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CandidateProfile" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CandidateProfile" value="+ update_profile(data) : void&#xa;+ get_primary_cv() : CV&#xa;+ calculate_profile_completeness() : Int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="215" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CompanyMember" value="CompanyMember" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="270" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CompanyMember" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ user_id : UUID [FK]&#xa;+ role : MemberRole&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="26" width="270" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CompanyMember" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="131" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CompanyMember" value="+ has_admin_permission() : Boolean&#xa;+ can_post_jobs() : Boolean&#xa;+ can_review_applications() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CompanyMember">
+          <mxGeometry y="139" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Company" value="Company" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="520" width="270" height="263" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Company" value="+ id : UUID [PK]&#xa;+ name : String&#xa;+ slug : String [UQ]&#xa;+ logo_url : String&#xa;+ website : String&#xa;+ industry : String&#xa;+ company_size : String&#xa;+ verification_status : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Company" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Company">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Company" value="+ is_verified() : Boolean&#xa;+ verify_company() : void&#xa;+ get_active_jobs() : List&lt;Job&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="196" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c1" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_User" target="class_CandidateProfile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.35;exitY=1;exitDx=0;exitDy=0;entryX=0.35;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=0;startSize=12;endArrow=none;" edge="1" parent="1" source="class_User" target="class_CompanyMember">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_Company" target="class_CompanyMember">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod2" name="3. Module 2 - CV &amp; OCR Pipeline">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1260" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod2" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 2: BIỂU ĐỒ LỚP PHÂN HỆ XỬ LÝ &amp; TRÍCH XUẤT CV (CV PROCESSING &amp; OCR)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp CV, EducationRecord, ExperienceRecord, Skill, CVSkill cùng trích xuất thực thể AI và Embeddings&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1140" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CandidateProfile" value="CandidateProfile" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="270" height="282" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CandidateProfile" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ title : String&#xa;+ bio : String&#xa;+ location : String&#xa;+ years_of_experience : Float&#xa;+ expected_salary : Integer&#xa;+ github_url : String&#xa;+ linkedin_url : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CandidateProfile" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CandidateProfile" value="+ update_profile(data) : void&#xa;+ get_primary_cv() : CV&#xa;+ calculate_profile_completeness() : Int" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CandidateProfile">
+          <mxGeometry y="215" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CV" value="CV" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="110" width="270" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CV" value="+ id : UUID [PK]&#xa;+ candidate_id : UUID [FK]&#xa;+ file_name : String&#xa;+ file_url : String&#xa;+ file_size : Integer&#xa;+ mime_type : String&#xa;+ is_primary : Boolean&#xa;+ extraction_status : ExtractionStatus&#xa;+ parsed_data : JSON&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="26" width="270" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CV" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CV">
+          <mxGeometry y="226" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CV" value="+ set_as_primary() : void&#xa;+ is_valid_for_matching() : Boolean&#xa;+ get_embedding_vector() : Float[]&#xa;+ trigger_re_extraction() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="234" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_EducationRecord" value="EducationRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="110" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_EducationRecord" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ institution : String&#xa;+ degree : String&#xa;+ field_of_study : String&#xa;+ start_date : String&#xa;+ end_date : String&#xa;+ gpa : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_EducationRecord" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_EducationRecord" value="+ get_study_duration_years() : Float&#xa;+ is_completed() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_EducationRecord">
+          <mxGeometry y="196" width="270" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_ExperienceRecord" value="ExperienceRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="450" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_ExperienceRecord" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ company_name : String&#xa;+ job_title : String&#xa;+ start_date : String&#xa;+ end_date : String&#xa;+ is_current : Boolean&#xa;+ description : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_ExperienceRecord" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_ExperienceRecord" value="+ calculate_duration_months() : Integer&#xa;+ extract_key_achievements() : List&lt;String&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_ExperienceRecord">
+          <mxGeometry y="196" width="270" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Skill" value="Skill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="580" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Skill" value="+ id : UUID [PK]&#xa;+ name : String [UQ]&#xa;+ category : SkillCategory&#xa;+ normalized_name : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="26" width="250" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Skill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Skill">
+          <mxGeometry y="112" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Skill" value="+ normalize_name(raw) : String&#xa;+ is_hard_skill() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="120" width="250" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CVSkill" value="CVSkill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="580" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CVSkill" value="+ id : UUID [PK]&#xa;+ cv_id : UUID [FK]&#xa;+ skill_id : UUID [FK]&#xa;+ proficiency_level : String&#xa;+ years_of_experience : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="26" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CVSkill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="131" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CVSkill" value="+ get_proficiency_weight() : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CVSkill">
+          <mxGeometry y="139" width="250" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CandidateProfile" target="class_CV">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_EducationRecord">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_ExperienceRecord">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_c4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_CV" target="class_CVSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_c5" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Skill" target="class_CVSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod3" name="4. Module 3 - Job Management">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1260" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod3" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 3: BIỂU ĐỒ LỚP QUẢN LÝ VIỆC LÀM &amp; KIỂM DUYỆT (JOB &amp; MODERATION)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp Job, JobSkill, Skill, JobReport, Company hỗ trợ xuất bản tin và đánh giá trọng số kỹ năng&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1140" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Company" value="Company" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="270" height="263" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Company" value="+ id : UUID [PK]&#xa;+ name : String&#xa;+ slug : String [UQ]&#xa;+ logo_url : String&#xa;+ website : String&#xa;+ industry : String&#xa;+ company_size : String&#xa;+ verification_status : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="26" width="270" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Company" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Company">
+          <mxGeometry y="188" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Company" value="+ is_verified() : Boolean&#xa;+ verify_company() : void&#xa;+ get_active_jobs() : List&lt;Job&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Company">
+          <mxGeometry y="196" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Job" value="Job" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="110" width="270" height="339" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Job" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ creator_id : UUID [FK]&#xa;+ title : String&#xa;+ job_type : JobType&#xa;+ location : String&#xa;+ salary_min : Integer&#xa;+ salary_max : Integer&#xa;+ experience_level : String&#xa;+ status : JobStatus&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="26" width="270" height="219" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Job" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Job">
+          <mxGeometry y="245" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Job" value="+ publish() : void&#xa;+ close() : void&#xa;+ is_accepting_applications() : Boolean&#xa;+ get_required_skills() : List&lt;Skill&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="253" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_JobSkill" value="JobSkill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="110" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_JobSkill" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ skill_id : UUID [FK]&#xa;+ is_required : Boolean&#xa;+ importance_weight : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="26" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_JobSkill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="131" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_JobSkill" value="+ calculate_weighted_score() : Float" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobSkill">
+          <mxGeometry y="139" width="250" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Skill" value="Skill" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="420" width="250" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Skill" value="+ id : UUID [PK]&#xa;+ name : String [UQ]&#xa;+ category : SkillCategory&#xa;+ normalized_name : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="26" width="250" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Skill" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Skill">
+          <mxGeometry y="112" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Skill" value="+ normalize_name(raw) : String&#xa;+ is_hard_skill() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Skill">
+          <mxGeometry y="120" width="250" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="270" height="301" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_User" value="+ id : UUID [PK]&#xa;+ email : String [UQ]&#xa;- hashed_password : String&#xa;+ full_name : String&#xa;+ phone : String&#xa;+ role : UserRole&#xa;+ is_active : Boolean&#xa;+ is_verified : Boolean&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_User" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_User">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_User" value="+ verify_password(plain) : Boolean&#xa;+ has_role(required_role) : Boolean&#xa;+ change_password(new_pwd) : Boolean&#xa;+ update_profile(data) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="215" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_JobReport" value="JobReport" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="580" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_JobReport" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ reporter_id : UUID [FK]&#xa;+ reason : String&#xa;+ status : ReportStatus&#xa;+ action_taken : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_JobReport" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_JobReport" value="+ resolve(action, note) : void&#xa;+ dismiss() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_JobReport">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Company" target="class_Job">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_Job">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;startArrow=diamond;startFill=1;startSize=12;endArrow=none;" edge="1" parent="1" source="class_Job" target="class_JobSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Skill" target="class_JobSkill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c5" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_JobReport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3_c6" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_JobReport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod4" name="5. Module 4 - AI Matching Engine">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod4" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 4: BIỂU ĐỒ LỚP SO KHỚP AI HYBRID (AI MATCHING &amp; SCORING)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp MatchResult: Tính điểm 3 thành phần (Hard Skills 50% + Semantic 30% + Experience 20%) &amp; Giải thích AI&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="930" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CV" value="CV" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="270" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CV" value="+ id : UUID [PK]&#xa;+ candidate_id : UUID [FK]&#xa;+ file_name : String&#xa;+ file_url : String&#xa;+ file_size : Integer&#xa;+ mime_type : String&#xa;+ is_primary : Boolean&#xa;+ extraction_status : ExtractionStatus&#xa;+ parsed_data : JSON&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="26" width="270" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CV" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CV">
+          <mxGeometry y="226" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CV" value="+ set_as_primary() : void&#xa;+ is_valid_for_matching() : Boolean&#xa;+ get_embedding_vector() : Float[]&#xa;+ trigger_re_extraction() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="234" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_MatchResult" value="MatchResult" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="110" width="280" height="282" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_MatchResult" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ cv_id : UUID [FK]&#xa;+ application_id : UUID [FK]&#xa;+ overall_score : Float&#xa;+ hard_skills_score : Float (50%)&#xa;+ semantic_score : Float (30%)&#xa;+ experience_score : Float (20%)&#xa;+ ai_explanation : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="26" width="280" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_MatchResult" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="207" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_MatchResult" value="+ compute_hybrid_score() : Float&#xa;+ generate_explanation() : String&#xa;+ get_skills_gap_analysis() : Dict" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_MatchResult">
+          <mxGeometry y="215" width="280" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Job" value="Job" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="270" height="339" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Job" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ creator_id : UUID [FK]&#xa;+ title : String&#xa;+ job_type : JobType&#xa;+ location : String&#xa;+ salary_min : Integer&#xa;+ salary_max : Integer&#xa;+ experience_level : String&#xa;+ status : JobStatus&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="26" width="270" height="219" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Job" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Job">
+          <mxGeometry y="245" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Job" value="+ publish() : void&#xa;+ close() : void&#xa;+ is_accepting_applications() : Boolean&#xa;+ get_required_skills() : List&lt;Skill&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="253" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Application" value="Application" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="540" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Application" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ candidate_id : UUID [FK]&#xa;+ cv_id : UUID [FK]&#xa;+ status : ApplicationStatus&#xa;+ interview_time : DateTime&#xa;+ cover_letter : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="26" width="270" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Application" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Application">
+          <mxGeometry y="169" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Application" value="+ advance_status(new_status) : void&#xa;+ schedule_interview(time, loc) : void&#xa;+ reject_application(feedback) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="177" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CV" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c3" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Application" target="class_MatchResult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4_c4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod5" name="6. Module 5 - ATS Recruitment">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod5" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 5: BIỂU ĐỒ LỚP QUẢN LÝ TUYỂN DỤNG &amp; PHỄU ATS (ATS RECRUITMENT)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp Application, Notification, User, Job: Quản lý vòng đời ứng tuyển và gửi thông báo trạng thái&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1160" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="270" height="301" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_User" value="+ id : UUID [PK]&#xa;+ email : String [UQ]&#xa;- hashed_password : String&#xa;+ full_name : String&#xa;+ phone : String&#xa;+ role : UserRole&#xa;+ is_active : Boolean&#xa;+ is_verified : Boolean&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_User" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_User">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_User" value="+ verify_password(plain) : Boolean&#xa;+ has_role(required_role) : Boolean&#xa;+ change_password(new_pwd) : Boolean&#xa;+ update_profile(data) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="215" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Application" value="Application" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="490" y="110" width="270" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Application" value="+ id : UUID [PK]&#xa;+ job_id : UUID [FK]&#xa;+ candidate_id : UUID [FK]&#xa;+ cv_id : UUID [FK]&#xa;+ status : ApplicationStatus&#xa;+ interview_time : DateTime&#xa;+ cover_letter : String" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="26" width="270" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Application" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Application">
+          <mxGeometry y="169" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Application" value="+ advance_status(new_status) : void&#xa;+ schedule_interview(time, loc) : void&#xa;+ reject_application(feedback) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Application">
+          <mxGeometry y="177" width="270" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Job" value="Job" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="900" y="110" width="270" height="339" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Job" value="+ id : UUID [PK]&#xa;+ company_id : UUID [FK]&#xa;+ creator_id : UUID [FK]&#xa;+ title : String&#xa;+ job_type : JobType&#xa;+ location : String&#xa;+ salary_min : Integer&#xa;+ salary_max : Integer&#xa;+ experience_level : String&#xa;+ status : JobStatus&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="26" width="270" height="219" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Job" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Job">
+          <mxGeometry y="245" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Job" value="+ publish() : void&#xa;+ close() : void&#xa;+ is_accepting_applications() : Boolean&#xa;+ get_required_skills() : List&lt;Skill&gt;" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Job">
+          <mxGeometry y="253" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_CV" value="CV" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="270" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_CV" value="+ id : UUID [PK]&#xa;+ candidate_id : UUID [FK]&#xa;+ file_name : String&#xa;+ file_url : String&#xa;+ file_size : Integer&#xa;+ mime_type : String&#xa;+ is_primary : Boolean&#xa;+ extraction_status : ExtractionStatus&#xa;+ parsed_data : JSON&#xa;+ embedding : Vector[768]" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="26" width="270" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_CV" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_CV">
+          <mxGeometry y="226" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_CV" value="+ set_as_primary() : void&#xa;+ is_valid_for_matching() : Boolean&#xa;+ get_embedding_vector() : Float[]&#xa;+ trigger_re_extraction() : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_CV">
+          <mxGeometry y="234" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_Notification" value="Notification" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="490" y="540" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_Notification" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ title : String&#xa;+ message : String&#xa;+ type : NotificationType&#xa;+ is_read : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Notification">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_Notification" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_Notification">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_Notification" value="+ mark_as_read() : void&#xa;+ send_push_alert() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_Notification">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="m5_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m5_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_Job" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m5_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_CV" target="class_Application">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m5_c4" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_Notification">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml_mod6" name="7. Module 6 - Security &amp; Privacy">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="980" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="banner_uml_mod6" value="&lt;b style=&quot;font-size: 15px; color: #0f172a;&quot;&gt;MODULE 6: BIỂU ĐỒ LỚP BẢO MẬT &amp; QUYỀN RIÊNG TƯ (SECURITY &amp; PRIVACY)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;Lớp AuditLog, DataConsent, DataRequest: Tuân thủ Nghị định 13/2023/NĐ-CP và tiêu chuẩn GDPR quốc tế&lt;/span&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#334155;strokeWidth=1.5;align=center;verticalAlign=middle;spacingTop=4;spacingBottom=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="880" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="class_User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="270" height="301" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_User" value="+ id : UUID [PK]&#xa;+ email : String [UQ]&#xa;- hashed_password : String&#xa;+ full_name : String&#xa;+ phone : String&#xa;+ role : UserRole&#xa;+ is_active : Boolean&#xa;+ is_verified : Boolean&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="26" width="270" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_User" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_User">
+          <mxGeometry y="207" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_User" value="+ verify_password(plain) : Boolean&#xa;+ has_role(required_role) : Boolean&#xa;+ change_password(new_pwd) : Boolean&#xa;+ update_profile(data) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_User">
+          <mxGeometry y="215" width="270" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="class_AuditLog" value="AuditLog" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="100" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_AuditLog" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ action : String&#xa;+ target_type : String&#xa;+ target_id : String&#xa;+ ip_address : String&#xa;+ created_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="26" width="260" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_AuditLog" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="169" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_AuditLog" value="+ log_event(action, target) : void" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_AuditLog">
+          <mxGeometry y="177" width="260" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="class_DataConsent" value="DataConsent" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="390" width="260" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_DataConsent" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ consent_type : String&#xa;+ granted : Boolean&#xa;+ granted_at : DateTime&#xa;+ revoked_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_DataConsent" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_DataConsent" value="+ grant_consent() : void&#xa;+ revoke_consent() : void&#xa;+ is_active() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataConsent">
+          <mxGeometry y="158" width="260" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="class_DataRequest" value="DataRequest" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8fafc;fontColor=#0f172a;strokeColor=#334155;strokeWidth=1.5;rounded=1;arcSize=6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="680" width="260" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="attrs_DataRequest" value="+ id : UUID [PK]&#xa;+ user_id : UUID [FK]&#xa;+ request_type : RequestType&#xa;+ status : RequestStatus&#xa;+ created_at : DateTime&#xa;+ completed_at : DateTime" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="26" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="sep_DataRequest" value="" style="line;strokeWidth=1.2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;elemStyle=curve;points=[];portConstraint=eastwest;strokeColor=#334155;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="150" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="methods_DataRequest" value="+ execute_data_export() : JSON&#xa;+ execute_erasure() : Boolean" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=6;spacingBottom=6;overflow=hidden;rotatable=0;fontColor=#0f172a;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="class_DataRequest">
+          <mxGeometry y="158" width="260" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c1" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_AuditLog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c2" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_DataConsent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6_c3" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#cbd5e1;endArrow=open;endSize=8;" edge="1" parent="1" source="class_User" target="class_DataRequest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
